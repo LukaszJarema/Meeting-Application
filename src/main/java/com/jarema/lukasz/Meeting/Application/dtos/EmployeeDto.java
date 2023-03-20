@@ -1,4 +1,4 @@
-package com.jarema.lukasz.Meeting.Application.dto;
+package com.jarema.lukasz.Meeting.Application.dtos;
 
 import lombok.Builder;
 import lombok.Data;
