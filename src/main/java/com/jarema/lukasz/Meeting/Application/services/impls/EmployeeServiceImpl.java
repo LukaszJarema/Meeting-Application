@@ -5,10 +5,12 @@ import com.jarema.lukasz.Meeting.Application.models.Employee;
 import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepository;
 
@@ -29,6 +31,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .name(employee.getName())
                 .surname(employee.getSurname())
                 .emailAddress(employee.getEmailAddress())
+                .department(employee.getDepartment())
                 .telephoneNumber(employee.getTelephoneNumber())
                 .password(employee.getPassword())
                 .build();
