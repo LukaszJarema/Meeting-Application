@@ -3,9 +3,11 @@ package com.jarema.lukasz.Meeting.Application.controllers;
 import com.jarema.lukasz.Meeting.Application.dtos.EmployeeDto;
 import com.jarema.lukasz.Meeting.Application.models.Employee;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,8 +52,11 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees/{employeeId}/edit")
-    public String updateEmployee(@PathVariable("employeeId") Long employeeId, @ModelAttribute("employee")
-    EmployeeDto employee) {
+    public String updateEmployee(@PathVariable("employeeId") Long employeeId, @Valid @ModelAttribute("employee")
+    EmployeeDto employee, BindingResult result) {
+        if (result.hasErrors()) {
+            return "employees-edit";
+        }
         employee.setId(employeeId);
         employeeService.updateEmployee(employee);
         return "redirect:/employees";
