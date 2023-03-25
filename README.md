@@ -19,6 +19,8 @@ Lombok
 
 Git
 
+Maven
+
 ## Authors
 
 - [@lukaszjarema](https://github.com/LukaszJarema)
