@@ -38,8 +38,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void updateEmployee(EmployeeDto employeeDto) {
-        Employee emloyee = mapToEmployee(employeeDto);
-        employeeRepository.save(emloyee);
+        Employee employee = mapToEmployee(employeeDto);
+        employeeRepository.save(employee);
     }
 
     private Employee mapToEmployee(EmployeeDto employee) {

@@ -50,9 +50,9 @@ public class EmployeeController {
     }
 
     @PostMapping("/employyes/{employeeId}/edit")
-    public String updateEmployee(@PathVariable("employeeId") Long employeId, @ModelAttribute("employee")
+    public String updateEmployee(@PathVariable("employeeId") Long employeeId, @ModelAttribute("employee")
     EmployeeDto employee) {
-        employee.setId(employeId);
+        employee.setId(employeeId);
         employeeService.updateEmployee(employee);
         return "redirect:/employees";
     }
