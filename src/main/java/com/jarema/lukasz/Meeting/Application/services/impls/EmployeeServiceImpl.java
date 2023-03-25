@@ -25,6 +25,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employees.stream().map((employee) -> mapToEmployeeDto(employee)).collect(Collectors.toList());
     }
 
+    @Override
+    public Employee saveEmployee(Employee employee) {
+        return employeeRepository.save(employee);
+    }
+
     private EmployeeDto mapToEmployeeDto(Employee employee) {
         EmployeeDto employeeDto = EmployeeDto.builder()
                 .id(employee.getId())
