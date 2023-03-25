@@ -6,9 +6,9 @@ import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
@@ -37,8 +37,23 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees/new")
-    public String saveEmployee(@ModelAttribute ("employee") Employee employee) {
+    public String saveEmployee(@ModelAttribute("employee") Employee employee) {
         employeeService.saveEmployee(employee);
+        return "redirect:/employees";
+    }
+
+    @GetMapping("/employees/{employeeId}/edit")
+    public String editEmployeeForm(@PathVariable("employeeId") Long employeeId, Model model) {
+        EmployeeDto employee = employeeService.findEmployeeById(employeeId);
+        model.addAttribute("employee", employee);
+        return "employees-edit";
+    }
+
+    @PostMapping("/employyes/{employeeId}/edit")
+    public String updateEmployee(@PathVariable("employeeId") Long employeId, @ModelAttribute("employee")
+    EmployeeDto employee) {
+        employee.setId(employeId);
+        employeeService.updateEmployee(employee);
         return "redirect:/employees";
     }
 }

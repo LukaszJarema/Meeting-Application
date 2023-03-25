@@ -30,6 +30,31 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.save(employee);
     }
 
+    @Override
+    public EmployeeDto findEmployeeById(long employeeId) {
+        Employee employee = employeeRepository.findById(employeeId).get();
+        return mapToEmployeeDto(employee);
+    }
+
+    @Override
+    public void updateEmployee(EmployeeDto employeeDto) {
+        Employee emloyee = mapToEmployee(employeeDto);
+        employeeRepository.save(emloyee);
+    }
+
+    private Employee mapToEmployee(EmployeeDto employee) {
+        Employee employeeDto = Employee.builder()
+                .id(employee.getId())
+                .name(employee.getName())
+                .surname(employee.getSurname())
+                .emailAddress(employee.getEmailAddress())
+                .department(employee.getDepartment())
+                .telephoneNumber(employee.getTelephoneNumber())
+                .password(employee.getPassword())
+                .build();
+        return employeeDto;
+    }
+
     private EmployeeDto mapToEmployeeDto(Employee employee) {
         EmployeeDto employeeDto = EmployeeDto.builder()
                 .id(employee.getId())
