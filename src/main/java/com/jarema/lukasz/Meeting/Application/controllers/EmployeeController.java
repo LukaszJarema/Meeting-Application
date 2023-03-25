@@ -49,7 +49,7 @@ public class EmployeeController {
         return "employees-edit";
     }
 
-    @PostMapping("/employyes/{employeeId}/edit")
+    @PostMapping("/employees/{employeeId}/edit")
     public String updateEmployee(@PathVariable("employeeId") Long employeeId, @ModelAttribute("employee")
     EmployeeDto employee) {
         employee.setId(employeeId);
