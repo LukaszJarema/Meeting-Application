@@ -10,4 +10,6 @@ public interface EmployeeService {
     Employee saveEmployee(EmployeeDto employeeDto);
     EmployeeDto findEmployeeById(long employeeId);
     void updateEmployee(EmployeeDto employee);
+
+    void delete(Long employeeId);
 }

@@ -43,6 +43,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.save(employee);
     }
 
+    @Override
+    public void delete(Long employeeId) {
+        employeeRepository.deleteById(employeeId);
+    }
+
     private Employee mapToEmployee(EmployeeDto employee) {
         Employee employeeDto = Employee.builder()
                 .id(employee.getId())
