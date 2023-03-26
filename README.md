@@ -17,6 +17,10 @@ PostgreSQL
 
 Lombok
 
+HTML
+
+Thymeleaf
+
 Git
 
 Maven
