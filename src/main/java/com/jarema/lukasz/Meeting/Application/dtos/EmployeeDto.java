@@ -18,7 +18,6 @@ public class EmployeeDto {
     private String department;
     @Size(min = 6, message = "Password should be at least 6 characters long")
     private String password;
-    //@Size(min = 9, max = 9)
-    //@Pattern(regexp = "\\[0-9]{9}")
-    private int telephoneNumber;
+    @Pattern(regexp = "^[0-9]{9}$", message = "Telephone number should be contains 9 digits")
+    private String telephoneNumber;
 }

@@ -21,5 +21,5 @@ public class Employee {
     private String emailAddress;
     private String department;
     private String password;
-    private int telephoneNumber;
+    private String telephoneNumber;
 }
