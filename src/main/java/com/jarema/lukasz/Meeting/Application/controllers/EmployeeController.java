@@ -39,8 +39,13 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees/new")
-    public String saveEmployee(@ModelAttribute("employee") Employee employee) {
-        employeeService.saveEmployee(employee);
+    public String saveEmployee(@Valid @ModelAttribute("employee") EmployeeDto employeeDto, BindingResult result,
+                               Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("employee", employeeDto);
+            return "employees-create";
+        }
+        employeeService.saveEmployee(employeeDto);
         return "redirect:/employees";
     }
 
