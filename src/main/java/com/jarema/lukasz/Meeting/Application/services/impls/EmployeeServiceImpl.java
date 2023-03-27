@@ -48,6 +48,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.deleteById(employeeId);
     }
 
+    @Override
+    public List<EmployeeDto> searchEmployeesBySurname(String query) {
+        List<Employee> employees = employeeRepository.searchEmployeesBySurname(query);
+        return employees.stream().map(employee -> mapToEmployeeDto(employee)).collect(Collectors.toList());
+    }
+
     private Employee mapToEmployee(EmployeeDto employee) {
         Employee employeeDto = Employee.builder()
                 .id(employee.getId())
