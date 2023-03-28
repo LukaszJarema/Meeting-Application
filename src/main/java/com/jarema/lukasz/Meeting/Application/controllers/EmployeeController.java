@@ -71,8 +71,8 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees/search")
-    public String searchEmployeesBySurname(@RequestParam(value = "query") String query, Model model) {
-        List<EmployeeDto> employees = employeeService.searchEmployeesBySurname(query);
+    public String searchEmployeesByNameOrSurname(@RequestParam(value = "query") String query, Model model) {
+        List<EmployeeDto> employees = employeeService.searchEmployeesByNameOrSurname(query);
         model.addAttribute("employees", employees);
         return "employees-list";
     }

@@ -11,5 +11,5 @@ public interface EmployeeService {
     EmployeeDto findEmployeeById(long employeeId);
     void updateEmployee(EmployeeDto employee);
     void delete(Long employeeId);
-    List<EmployeeDto> searchEmployeesBySurname(String query);
+    List<EmployeeDto> searchEmployeesByNameOrSurname(String query);
 }
