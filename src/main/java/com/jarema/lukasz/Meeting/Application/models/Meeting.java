@@ -1,7 +1,6 @@
 package com.jarema.lukasz.Meeting.Application.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
