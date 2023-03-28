@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,4 +25,6 @@ public class Employee {
     private String department;
     private String password;
     private String telephoneNumber;
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE)
+    private Set<Meeting> meetings = new HashSet<>();
 }
