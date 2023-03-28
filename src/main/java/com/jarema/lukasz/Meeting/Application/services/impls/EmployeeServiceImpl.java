@@ -50,7 +50,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeDto> searchEmployeesByNameOrSurname(String query) {
-        List<Employee> employees = employeeRepository.searchEmployeesByNameOrSurname(query);
+        List<Employee> employees = employeeRepository.searchEmployeesByNameOrSurname(query.toLowerCase());
         return employees.stream().map(employee -> mapToEmployeeDto(employee)).collect(Collectors.toList());
     }
 

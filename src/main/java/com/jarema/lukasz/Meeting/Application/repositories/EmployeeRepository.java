@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     Optional<Employee> findBySurname(String surname);
-    @Query("SELECT e FROM Employee e WHERE e.surname LIKE CONCAT('%', :query, '%') OR e.name LIKE CONCAT('%', :query, '%')")
+    @Query("SELECT e FROM Employee e WHERE LOWER(e.surname) LIKE CONCAT('%', :query, '%') OR LOWER(e.name) LIKE CONCAT('%', :query, '%')")
     List<Employee> searchEmployeesByNameOrSurname(String query);
 
 }
