@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Meeting application</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+        crossorigin="anonymous" />
+</head>
+<body>
+<div class="container">
+  <br>
+  <h3>Welcome in meeting application of company</h3>
+  <br>
+  <a th:href="@{/employees}" class="btn btn-large btn-success">Login as an employee</a>
+  <a th:href="@{/employees}" class="btn btn-large btn-success">Login as a visitor</a>
+  <a th:href="@{employees/new}" class="btn btn-large btn-success">Register as a visitor</a>
+  <br>
+  <hr/>
+</div>
+</body>
+</html>
