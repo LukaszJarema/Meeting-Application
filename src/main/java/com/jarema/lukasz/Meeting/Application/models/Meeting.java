@@ -24,4 +24,7 @@ public class Meeting {
     @ManyToOne
     @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
+    @ManyToOne
+    @JoinColumn(name = "visitor_id", nullable = false)
+    private Visitor visitor;
 }

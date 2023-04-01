@@ -24,4 +24,6 @@ public class Visitor {
     private String emailAddress;
     private String password;
     private String telephoneNumber;
+    @OneToMany(mappedBy = "visitor", cascade = CascadeType.REMOVE)
+    private Set<Meeting> meetings = new HashSet<>();
 }
