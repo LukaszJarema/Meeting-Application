@@ -1,0 +1,43 @@
+package com.jarema.lukasz.Meeting.Application.services.impls;
+
+import com.jarema.lukasz.Meeting.Application.dtos.MeetingDto;
+import com.jarema.lukasz.Meeting.Application.models.Employee;
+import com.jarema.lukasz.Meeting.Application.models.Meeting;
+import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
+import com.jarema.lukasz.Meeting.Application.repositories.MeetingRepository;
+import com.jarema.lukasz.Meeting.Application.services.MeetingService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class MeetingServiceImpl implements MeetingService {
+    private MeetingRepository meetingRepository;
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
+    public MeetingServiceImpl(MeetingRepository meetingRepository, EmployeeRepository employeeRepository) {
+        this.meetingRepository = meetingRepository;
+        this.employeeRepository = employeeRepository;
+    }
+
+    @Override
+    public void createMeeting(Long employeeId, MeetingDto meetingDto) {
+        Employee employee = employeeRepository.findById(employeeId).get();
+        Meeting meeting = mapToMeeting(meetingDto);
+        meeting.setEmployee(employee);
+        meetingRepository.save(meeting);
+    }
+
+    private Meeting mapToMeeting(MeetingDto meetingDto) {
+        return Meeting.builder()
+                .id(meetingDto.getId())
+                .nameOfVisitor(meetingDto.getNameOfVisitor())
+                .surnameOfVisitor(meetingDto.getSurnameOfVisitor())
+                .contentOfMeeting(meetingDto.getContentOfMeeting())
+                .visitorEmailAddress(meetingDto.getVisitorEmailAddress())
+                .visitorTelephoneNumber(meetingDto.getVisitorTelephoneNumber())
+                .startOfMeeting(meetingDto.getStartOfMeeting())
+                .endOfMeeting(meetingDto.getEndOfMeeting())
+                .build();
+    }
+}

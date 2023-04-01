@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Create a meeting</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+        crossorigin="anonymous" />
+</head>
+<body>
+<div class="container">
+  <h3>Create a meeting</h3>
+  <hr/>
+
+  <form action="#" th:action="@{/meeting}" method="post" th:object="${meeting}">
+    <label>Employee</label>
+    <select th:field="*{employee}">
+      <option th:each="${employeeList}" th:value="${employeeList}" th:text="${employeeList}"/>
+    </select>
+  </form>
+
+</div>
+</body>
+</html>
