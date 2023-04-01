@@ -31,11 +31,7 @@ public class MeetingServiceImpl implements MeetingService {
     private Meeting mapToMeeting(MeetingDto meetingDto) {
         return Meeting.builder()
                 .id(meetingDto.getId())
-                .nameOfVisitor(meetingDto.getNameOfVisitor())
-                .surnameOfVisitor(meetingDto.getSurnameOfVisitor())
                 .contentOfMeeting(meetingDto.getContentOfMeeting())
-                .visitorEmailAddress(meetingDto.getVisitorEmailAddress())
-                .visitorTelephoneNumber(meetingDto.getVisitorTelephoneNumber())
                 .startOfMeeting(meetingDto.getStartOfMeeting())
                 .endOfMeeting(meetingDto.getEndOfMeeting())
                 .build();

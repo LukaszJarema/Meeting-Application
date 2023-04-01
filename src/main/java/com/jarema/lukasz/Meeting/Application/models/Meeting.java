@@ -13,15 +13,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "meeting")
 public class Meeting {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nameOfVisitor;
-    private String surnameOfVisitor;
     private String contentOfMeeting;
-    private String visitorEmailAddress;
-    private String visitorTelephoneNumber;
     private LocalDateTime startOfMeeting;
     private LocalDateTime endOfMeeting;
     @ManyToOne

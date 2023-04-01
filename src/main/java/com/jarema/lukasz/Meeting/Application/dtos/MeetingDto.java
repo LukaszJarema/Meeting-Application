@@ -13,11 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MeetingDto {
     private Long id;
-    private String nameOfVisitor;
-    private String surnameOfVisitor;
     private String contentOfMeeting;
-    private String visitorEmailAddress;
-    private String visitorTelephoneNumber;
     private LocalDateTime startOfMeeting;
     private LocalDateTime endOfMeeting;
 }
