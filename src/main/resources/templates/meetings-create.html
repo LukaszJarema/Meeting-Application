@@ -12,14 +12,28 @@
 <div class="container">
   <h3>Create a meeting</h3>
   <hr/>
-
-  <form action="#" th:action="@{/meeting}" method="post" th:object="${meeting}">
-    <label>Employee</label>
-    <select th:field="*{employee}">
-      <option th:each="${employeeList}" th:value="${employeeList}" th:text="${employeeList}"/>
+  <form action="#" th:action="@{/meeting}" th:object="${meeting}" method="post">
+    <p>Name: <input type="text" id="nameOfVisitor" name="nameOfVisitor" th:field="*{nameOfVisitor}" placeholder="Name of visitor"></p>
+    <p th:if="${#fields.hasErrors('nameOfVisitor')}" class="text-danger" th:errors="*{nameOfVisitor}"></p>
+    <p>Surname: <input type="text" id="surnameOfVisitor" name="surnameOfVisitor" th:field="*{surnameOfVisitor}" placeholder="Surname of visitor"></p>
+    <p th:if="${#fields.hasErrors('surnameOfVisitor')}" class="text-danger" th:errors="*{surnameOfVisitor}"></p>
+    <p>Content of meeting: <input type="text" id="contentOfMeeting" name="surnameOfVisitor" th:field="*{contentOfMeeting}" placeholder="Content of meeting"></p>
+    <p th:if="${#fields.hasErrors('contentOfMeeting')}" class="text-danger" th:errors="*{contentOfMeeting}"></p>
+    <p>Email address of visitor: <input type="text" id="visitorEmailAddress" name="visitorEmailAddress" th:field="*{visitorEmailAddress}" placeholder="Email address of visitor"></p>
+    <p th:if="${#fields.hasErrors('visitorEmailAddress')}" class="text-danger" th:errors="*{visitorEmailAddress}"></p>
+    <p>Telephone number of visitor: <input type="text" id="visitorTelephoneNumber" name="visitorTelephoneNumber" th:field="*{visitorTelephoneNumber}" placeholder="Telephone number of visitor"></p>
+    <p th:if="${#fields.hasErrors('visitorTelephoneNumber')}" class="text-danger" th:errors="*{visitorTelephoneNumber}"></p>
+    <p>Start of meeting: <input type="datetime-local" id="startOfMeeting" name="startOfMeeting" th:field="*{startOfMeeting}" placeholder="Start of meeting"></p>
+    <p th:if="${#fields.hasErrors('startOfMeeting')}" class="text-danger" th:errors="*{startOfMeeting}"></p>
+    <p>End of meeting: <input type="datetime-local" id="endOfMeeting" name="endOfMeeting" th:field="*{endOfMeeting}" placeholder="End of meeting"></p>
+    <p th:if="${#fields.hasErrors('endOfMeeting')}" class="text-danger" th:errors="*{endOfMeeting}"></p>
+    <p>Name and surname of employee: <select th:field="*{employee}" class="form-control" required>
+      <th:block th:each="employee : ${employeeList}">
+        <option th:text="${employee.name} + ' ' + ${employee.surname}" th:value="${employee.id}"></option>
+      </th:block>
     </select>
+    <p><input type="submit" value="Submit"/></p>
   </form>
-
 </div>
 </body>
 </html>
