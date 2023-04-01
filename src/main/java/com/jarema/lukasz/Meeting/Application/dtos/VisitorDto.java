@@ -15,6 +15,7 @@ public class VisitorDto {
     private String name;
     @NotEmpty(message = "Surname could not be empty")
     private String surname;
+    @NotEmpty(message = "Email address could not be empty")
     @Email(message = "Email is not valid")
     private String emailAddress;
     @Size(min = 6, message = "Password should be at least 6 characters long")
