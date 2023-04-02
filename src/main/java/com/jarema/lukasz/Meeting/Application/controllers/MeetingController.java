@@ -18,7 +18,6 @@ import java.util.List;
 public class MeetingController {
     private MeetingService meetingService;
 
-    @Autowired
     private EmployeeRepository employeeRepository;
 
     @Autowired

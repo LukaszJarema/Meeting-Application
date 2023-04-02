@@ -15,7 +15,7 @@
     <form action="#" th:action="@{/visitors/new}" th:object="${visitor}" method="post">
         <p>Name: <input type="text" id="name" name="name" th:field="*{name}" placeholder="Name"></p>
         <p th:if="${#fields.hasErrors('name')}" class="text-danger" th:errors="*{name}"></p>
-        <p>Surname: <input type="text" id="surnname" name="surnaname" th:field="*{surname}" placeholder="Surname"></p>
+        <p>Surname: <input type="text" id="surname" name="surname" th:field="*{surname}" placeholder="Surname"></p>
         <p th:if="${#fields.hasErrors('surname')}" class="text-danger" th:errors="*{surname}"></p>
         <p>Email: <input type="text" id="emailAddress" name="email" th:field="*{emailAddress}" placeholder="Email"></p>
         <p th:if="${#fields.hasErrors('emailAddress')}" class="text-danger" th:errors="*{emailAddress}"></p>
