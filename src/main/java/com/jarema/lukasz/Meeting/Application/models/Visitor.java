@@ -1,14 +1,14 @@
 package com.jarema.lukasz.Meeting.Application.models;
 
-import com.jarema.lukasz.Meeting.Application.models.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -26,6 +26,10 @@ public class Visitor {
     private String emailAddress;
     private String password;
     private String telephoneNumber;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "visitor_role", joinColumns = {@JoinColumn(name = "visitor_id", referencedColumnName = "id")},
+    inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
+    private List<Role> role = new ArrayList<>();
     @OneToMany(mappedBy = "visitor", cascade = CascadeType.REMOVE)
     private Set<Meeting> meetings = new HashSet<>();
 }

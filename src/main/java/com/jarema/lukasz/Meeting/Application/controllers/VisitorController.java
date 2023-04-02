@@ -1,9 +1,7 @@
 package com.jarema.lukasz.Meeting.Application.controllers;
 
-import com.jarema.lukasz.Meeting.Application.dtos.EmployeeDto;
 import com.jarema.lukasz.Meeting.Application.dtos.VisitorDto;
 import com.jarema.lukasz.Meeting.Application.models.Visitor;
-import com.jarema.lukasz.Meeting.Application.models.enums.Role;
 import com.jarema.lukasz.Meeting.Application.services.VisitorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +36,6 @@ public class VisitorController {
             return "visitors-create";
         }
         visitorService.saveVisitor(visitorDto);
-        return "redirect:/meetings-create";
+        return "redirect:/meeting";
     }
 }

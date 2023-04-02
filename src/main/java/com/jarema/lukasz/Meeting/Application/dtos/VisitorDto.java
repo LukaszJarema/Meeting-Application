@@ -1,6 +1,5 @@
 package com.jarema.lukasz.Meeting.Application.dtos;
 
-import com.jarema.lukasz.Meeting.Application.models.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
