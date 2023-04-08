@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,7 +69,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .department(employee.getDepartment())
                 .telephoneNumber(employee.getTelephoneNumber())
                 .password(employee.getPassword())
-                .role((List<Role>) employee.getRole())
+                .role((Set<Role>) employee.getRole())
                 .build();
         return employeeDto;
     }

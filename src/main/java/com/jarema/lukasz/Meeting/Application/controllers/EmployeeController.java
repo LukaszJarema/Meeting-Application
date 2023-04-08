@@ -3,6 +3,7 @@ package com.jarema.lukasz.Meeting.Application.controllers;
 import com.jarema.lukasz.Meeting.Application.dtos.EmployeeDto;
 import com.jarema.lukasz.Meeting.Application.models.Employee;
 import com.jarema.lukasz.Meeting.Application.models.Role;
+import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.RoleRepository;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
 import jakarta.validation.Valid;
@@ -16,14 +17,20 @@ import java.util.List;
 
 @Controller
 public class EmployeeController {
+    @Autowired
     public EmployeeService employeeService;
 
     @Autowired
     public RoleRepository roleRepository;
 
     @Autowired
-    public EmployeeController(EmployeeService employeeService) {
+    public EmployeeRepository employeeRepository;
+
+    @Autowired
+    public EmployeeController(EmployeeService employeeService, RoleRepository roleRepository, EmployeeRepository employeeRepository) {
         this.employeeService = employeeService;
+        this.roleRepository = roleRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     @GetMapping("/employees")
@@ -35,21 +42,20 @@ public class EmployeeController {
 
     @GetMapping("employees/new")
     public String createEmployeeForm(Model model) {
-        Employee employee = new Employee();
-        model.addAttribute("employee", employee);
         List<Role> roleList = roleRepository.findAll();
         model.addAttribute("roleList", roleList);
+        model.addAttribute("employee", new Employee());
         return "employees-create";
     }
 
-    @PostMapping("/employees/new")
-    public String saveEmployee(@Valid @ModelAttribute("employee") EmployeeDto employeeDto, BindingResult result,
-                               Model model) {
+    @PostMapping("employees/new")
+    public String saveEmployee(@Valid @ModelAttribute("employee") Employee employee, BindingResult result,
+            Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("employee", employeeDto);
+            model.addAttribute("employee", employee);
             return "employees-create";
         }
-        employeeService.saveEmployee(employeeDto);
+        employeeRepository.save(employee);
         return "redirect:/employees";
     }
 
@@ -57,6 +63,8 @@ public class EmployeeController {
     public String editEmployeeForm(@PathVariable("employeeId") Long employeeId, Model model) {
         EmployeeDto employee = employeeService.findEmployeeById(employeeId);
         model.addAttribute("employee", employee);
+        List<Role> roleList = roleRepository.findAll();
+        model.addAttribute("roleList", roleList);
         return "employees-edit";
     }
 
