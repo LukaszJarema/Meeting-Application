@@ -11,5 +11,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     Optional<Employee> findBySurname(String surname);
     @Query("SELECT e FROM Employee e WHERE LOWER(e.surname) LIKE CONCAT('%', :query, '%') OR LOWER(e.name) LIKE CONCAT('%', :query, '%')")
     List<Employee> searchEmployeesByNameOrSurname(String query);
-
+    Employee findByEmailAddress(String emailAddress);
+    Employee findByName(String name);
 }

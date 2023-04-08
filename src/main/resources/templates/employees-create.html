@@ -29,7 +29,6 @@
       <option value="0">Select role</option>
       <option th:each="role : ${roleList}" th:field="*{role}" th:value="${role.id}" th:text="${role.name}"></option>
     </select></p>
-
     <p><input type="submit" value="Submit"/></p>
   </form>
 </div>

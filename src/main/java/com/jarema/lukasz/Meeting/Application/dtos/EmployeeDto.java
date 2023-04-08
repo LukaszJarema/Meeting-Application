@@ -1,5 +1,6 @@
 package com.jarema.lukasz.Meeting.Application.dtos;
 
+import com.jarema.lukasz.Meeting.Application.models.Role;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Data;
@@ -21,4 +22,5 @@ public class EmployeeDto {
     private String password;
     @Pattern(regexp = "^[0-9]{9}$", message = "Telephone number should be contains 9 digits")
     private String telephoneNumber;
+    private Role role;
 }
