@@ -35,10 +35,10 @@ public class EmployeeController {
 
     @GetMapping("employees/new")
     public String createEmployeeForm(Model model) {
-        List<Role> roleList = roleRepository.findAll();
-        model.addAttribute("roleList", roleList);
         Employee employee = new Employee();
         model.addAttribute("employee", employee);
+        List<Role> roleList = roleRepository.findAll();
+        model.addAttribute("roleList", roleList);
         return "employees-create";
     }
 
