@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -69,7 +70,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .department(employee.getDepartment())
                 .telephoneNumber(employee.getTelephoneNumber())
                 .password(employee.getPassword())
-                .role((Set<Role>) employee.getRole())
+                .role(Collections.singleton(employee.getRole()))
                 .build();
         return employeeDto;
     }
