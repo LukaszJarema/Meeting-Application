@@ -29,7 +29,7 @@
         <div class="form-group row">
             <p><label class="col-form-label col-sm-4">Roles: </label>
             <div class="col-sm-8 text-left">
-                <p th:if="${#fields.hasErrors('role')}" class="text-danger" th:errors="*{role}"></p>
+                
                 <ul>
                     <li th:each="role : ${roleList}">
                         <input type="radio"

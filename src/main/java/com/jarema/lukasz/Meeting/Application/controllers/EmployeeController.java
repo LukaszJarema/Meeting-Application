@@ -79,6 +79,13 @@ public class EmployeeController {
         return "redirect:/employees";
     }
 
+    @GetMapping("/employees/{employeeId}/changePassword")
+    public String updateEmployeePassword(@PathVariable ("employeeId") Long employeeId, Model model) {
+        EmployeeDto employee = employeeService.findEmployeeById(employeeId);
+        model.addAttribute("employee", employee);
+        return "employees-changePassword";
+    }
+
     @GetMapping("/employees/{employeeId}/delete")
     public String deleteEmployee(@PathVariable("employeeId") Long employeeId) {
         employeeService.delete(employeeId);

@@ -24,7 +24,7 @@ public class EmployeeDto {
     private String password;
     @Pattern(regexp = "^[0-9]{9}$", message = "Telephone number should be contains 9 digits")
     private String telephoneNumber;
-    //@NotEmpty(message = "Choose one role for an employee")
+    @NotNull(message = "Choose one role for an employee")
     private Role role;
     private Meeting meeting;
 }

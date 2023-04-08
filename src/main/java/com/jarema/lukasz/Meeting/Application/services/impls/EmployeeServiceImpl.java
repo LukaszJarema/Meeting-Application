@@ -2,17 +2,14 @@ package com.jarema.lukasz.Meeting.Application.services.impls;
 
 import com.jarema.lukasz.Meeting.Application.dtos.EmployeeDto;
 import com.jarema.lukasz.Meeting.Application.models.Employee;
-import com.jarema.lukasz.Meeting.Application.models.Role;
 import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.RoleRepository;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service

@@ -40,6 +40,7 @@
                         <td th:text="${employee.department}"/>
                         <td>
                             <a th:href="@{employees/{employeeId}/edit(employeeId=${employee.id})}" class="btn btn-large btn-success">Edit</a>
+                            <a th:href="@{employees/{employeeId}/changePassword(employeeId=${employee.id})}" class="btn btn-large btn-success">Change password</a>
                             <a th:href="@{employees/{employeeId}/delete(employeeId=${employee.id})}" class="btn btn-large btn-success">Delete</a>
                         </td>
                     </tr>
