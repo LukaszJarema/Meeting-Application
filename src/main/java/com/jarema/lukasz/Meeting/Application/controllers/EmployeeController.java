@@ -80,12 +80,18 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees/{employeeId}/changePassword")
-    public String updateEmployeePassword(@PathVariable ("employeeId") Long employeeId, Model model) {
+    public String editEmployeePassword(@PathVariable ("employeeId") Long employeeId, Model model) {
         EmployeeDto employee = employeeService.findEmployeeById(employeeId);
         model.addAttribute("employee", employee);
         return "employees-changePassword";
     }
 
+    /*
+    @PutMapping("/employees/{employeeId}/changePassword")
+    public ResponseEntity<EmployeeDto> updateEmployeePassword(@PathVariable ("employeeId") Long employeeId, @RequestBody Employee employee) {
+
+    }
+     */
     @GetMapping("/employees/{employeeId}/delete")
     public String deleteEmployee(@PathVariable("employeeId") Long employeeId) {
         employeeService.delete(employeeId);
