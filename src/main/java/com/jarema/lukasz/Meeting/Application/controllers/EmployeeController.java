@@ -74,7 +74,6 @@ public class EmployeeController {
         if (result.hasErrors()) {
             return "employees-edit";
         }
-        employee.setId(employeeId);
         employeeService.updateEmployee(employee);
         return "redirect:/employees";
     }
