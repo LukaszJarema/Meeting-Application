@@ -6,7 +6,6 @@ import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.RoleRepository;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -61,7 +60,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void updateEmployeePassword(@Param("password") String password, @Param("id") Long employeeId) {
+    public void updateEmployeePassword(String password, Long employeeId) {
         Employee employee = mapToEmployee(employeeDto);
         employeeDto.setPassword(password);
         employeeRepository.save(employee);

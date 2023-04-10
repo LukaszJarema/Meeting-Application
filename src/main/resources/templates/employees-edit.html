@@ -29,14 +29,11 @@
         <div class="form-group row">
             <p><label class="col-form-label col-sm-4">Roles: </label>
             <div class="col-sm-8 text-left">
-                <ul>
-                    <li th:each="role : ${roleList}">
-                        <input type="radio"
-                               th:field="*{role}"
-                               th:value="${role.id}"/>
-                        <label
-                                th:text="${role.name}"></label>
-                </ul>
+                <th:block th:each="role : ${roleList}">
+                    <div>
+                        <input type="radio" th:field="*{role}" th:value="${role.id}" th:text="${role.name}">
+                    </div>
+                </th:block>
             </div>
         </div>
         <p><input type="submit" value="Submit"/></p>

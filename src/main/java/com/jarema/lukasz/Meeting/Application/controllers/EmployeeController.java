@@ -90,11 +90,9 @@ public class EmployeeController {
 
     @PostMapping("/employees/{employeeId}/changePassword")
     public String updateEmployeePassword(@PathVariable("employeeId") Long employeeId, @Valid
-    @RequestParam(value = "password") String password, BindingResult result) {
-        if (result.hasErrors()) {
-            return "employees-changePassword";
-        }
-        employeeService.updateEmployeePassword(password, employeeId);
+    @RequestParam(value = "password") String password, EmployeeDto employeeDto) {
+        employeeDto.setId(employeeId);
+        employeeRepository.updateEmployeePassword(password, employeeId);
         return "redirect:/employees";
     }
 
