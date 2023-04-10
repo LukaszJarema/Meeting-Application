@@ -6,6 +6,7 @@ import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.RoleRepository;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -57,6 +58,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<EmployeeDto> searchEmployeesByNameOrSurname(String query) {
         List<Employee> employees = employeeRepository.searchEmployeesByNameOrSurname(query.toLowerCase());
         return employees.stream().map(employee -> mapToEmployeeDto(employee)).collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateEmployeePassword(@Param("password") String password, @Param("id") Long employeeId) {
+        employeeDto.setPassword(password);
     }
 
     private Employee mapToEmployee(EmployeeDto employee) {

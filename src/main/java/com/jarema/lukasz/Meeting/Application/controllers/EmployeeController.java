@@ -71,10 +71,6 @@ public class EmployeeController {
     @PostMapping("/employees/{employeeId}/edit")
     public String updateEmployee(@PathVariable("employeeId") Long employeeId, @Valid @ModelAttribute("employee")
     EmployeeDto employee, BindingResult result) {
-        if (result.hasErrors()) {
-            return "employees-edit";
-        }
-        employeeService.updateEmployee(employee);
         return "redirect:/employees";
     }
 
@@ -82,15 +78,21 @@ public class EmployeeController {
     public String editEmployeePassword(@PathVariable ("employeeId") Long employeeId, Model model) {
         EmployeeDto employee = employeeService.findEmployeeById(employeeId);
         model.addAttribute("employee", employee);
+        List<Role> roleList = roleRepository.findAll();
+        model.addAttribute("roleList", roleList);
         return "employees-changePassword";
     }
 
-    /*
-    @PutMapping("/employees/{employeeId}/changePassword")
-    public ResponseEntity<EmployeeDto> updateEmployeePassword(@PathVariable ("employeeId") Long employeeId, @RequestBody Employee employee) {
-
+    @PostMapping("/employees/{employeeId}/changePassword")
+    public String updateEmployeePassword(@PathVariable("employeeId") Long employeeId, @Valid
+    @RequestParam(value = "password") String password, BindingResult result) {
+        if (result.hasErrors()) {
+            return "employees-changePassword";
+        }
+        employeeService.updateEmployeePassword(password, employeeId);
+        return "redirect:/employees";
     }
-     */
+
     @GetMapping("/employees/{employeeId}/delete")
     public String deleteEmployee(@PathVariable("employeeId") Long employeeId) {
         employeeService.delete(employeeId);
