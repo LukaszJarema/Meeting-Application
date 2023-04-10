@@ -13,6 +13,8 @@ Spring Boot
 
 Spring JPA
 
+Spring Security
+
 PostgreSQL
 
 Lombok
