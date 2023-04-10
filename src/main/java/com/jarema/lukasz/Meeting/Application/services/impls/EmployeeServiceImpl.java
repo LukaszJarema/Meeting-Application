@@ -62,7 +62,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void updateEmployeePassword(@Param("password") String password, @Param("id") Long employeeId) {
+        Employee employee = mapToEmployee(employeeDto);
         employeeDto.setPassword(password);
+        employeeRepository.save(employee);
     }
 
     private Employee mapToEmployee(EmployeeDto employee) {

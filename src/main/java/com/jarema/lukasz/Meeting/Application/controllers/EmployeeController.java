@@ -71,6 +71,11 @@ public class EmployeeController {
     @PostMapping("/employees/{employeeId}/edit")
     public String updateEmployee(@PathVariable("employeeId") Long employeeId, @Valid @ModelAttribute("employee")
     EmployeeDto employee, BindingResult result) {
+        if (result.hasErrors()) {
+            return "employees-edit";
+        }
+        employee.setId(employeeId);
+        employeeService.updateEmployee(employee);
         return "redirect:/employees";
     }
 

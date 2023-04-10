@@ -23,7 +23,6 @@
         <p>Department: <input type="text" id="department" name="department" th:field="*{department}" placeholder="Department"></p>
         <p th:if="${#fields.hasErrors('department')}" class="text-danger" th:errors="*{department}"></p>
         <input type="hidden" id="password" name="password" th:field="*{password}" placeholder="Password">
-        <p th:if="${#fields.hasErrors('password')}" class="text-danger" th:errors="*{password}"></p>
         <p>Telephone number: <input type="text" id="telephoneNumber" name="telephoneNumber" th:field="*{telephoneNumber}" placeholder="Telephone number"></p>
         <p th:if="${#fields.hasErrors('telephoneNumber')}" class="text-danger" th:errors="*{telephoneNumber}"></p>
         <div class="form-group row">
