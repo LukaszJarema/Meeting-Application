@@ -25,10 +25,10 @@
         <input type="hidden" id="password" name="password" th:field="*{password}" placeholder="Password">
         <p>Telephone number: <input type="text" id="telephoneNumber" name="telephoneNumber" th:field="*{telephoneNumber}" placeholder="Telephone number"></p>
         <p th:if="${#fields.hasErrors('telephoneNumber')}" class="text-danger" th:errors="*{telephoneNumber}"></p>
+        <p>Assigned role: <td th:text="${employee.role}"/></p>
         <div class="form-group row">
             <p><label class="col-form-label col-sm-4">Roles: </label>
             <div class="col-sm-8 text-left">
-                
                 <ul>
                     <li th:each="role : ${roleList}">
                         <input type="radio"
