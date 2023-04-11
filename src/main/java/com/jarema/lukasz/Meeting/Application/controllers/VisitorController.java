@@ -33,7 +33,7 @@ public class VisitorController {
                               Model model) {
         Visitor exsistingVisitorEmailAddress = visitorService.findByEmail(visitorDto.getEmailAddress());
         if(exsistingVisitorEmailAddress != null && exsistingVisitorEmailAddress.getEmailAddress() != null && !exsistingVisitorEmailAddress.getEmailAddress().isEmpty()) {
-            result.rejectValue("emailAddress", "There is already a Visitor with this email address or username");
+            result.rejectValue("emailAddress", "error.emailAddress", "There is already a Visitor with this email address or username");
         }
         if(result.hasErrors()) {
             model.addAttribute("visitor", visitorDto);
