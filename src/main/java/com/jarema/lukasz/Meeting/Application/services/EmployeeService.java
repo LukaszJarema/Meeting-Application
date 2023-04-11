@@ -12,5 +12,4 @@ public interface EmployeeService {
     void updateEmployee(EmployeeDto employee);
     void delete(Long employeeId);
     List<EmployeeDto> searchEmployeesByNameOrSurname(String query);
-    void updateEmployeePassword(String password, Long employeeId);
 }

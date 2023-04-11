@@ -59,13 +59,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employees.stream().map(employee -> mapToEmployeeDto(employee)).collect(Collectors.toList());
     }
 
-    @Override
-    public void updateEmployeePassword(String password, Long employeeId) {
-        Employee employee = mapToEmployee(employeeDto);
-        employeeDto.setPassword(password);
-        employeeRepository.save(employee);
-    }
-
     private Employee mapToEmployee(EmployeeDto employee) {
         Employee employeeDto = Employee.builder()
                 .id(employee.getId())
