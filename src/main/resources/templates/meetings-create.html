@@ -12,8 +12,11 @@
 <div class="container">
   <h3>Create a meeting</h3>
   <hr/>
+  <div th:if="${param.success}" class="alert alert-success">
+    You are registred successfully!
+  </div>
   <form action="#" th:action="@{/meeting}" th:object="${meeting}" method="post">
-    <p>Name: <input type="text" id="nameOfVisitor" name="nameOfVisitor" th:field="*{nameOfVisitor}" placeholder="Name of visitor"></p>
+    <p>Name: <input type="text" id="nameOfVisitor" name="nameOfVisitor" th:field="*{name}" placeholder="Name of visitor"></p>
     <p th:if="${#fields.hasErrors('nameOfVisitor')}" class="text-danger" th:errors="*{nameOfVisitor}"></p>
     <p>Surname: <input type="text" id="surnameOfVisitor" name="surnameOfVisitor" th:field="*{surnameOfVisitor}" placeholder="Surname of visitor"></p>
     <p th:if="${#fields.hasErrors('surnameOfVisitor')}" class="text-danger" th:errors="*{surnameOfVisitor}"></p>

@@ -31,11 +31,15 @@ public class VisitorController {
     @PostMapping("/visitors/new")
     public String saveVisitor(@Valid @ModelAttribute("visitor") VisitorDto visitorDto, BindingResult result,
                               Model model) {
-        if (result.hasErrors()) {
+        Visitor exsistingVisitorEmailAddress = visitorService.findByEmail(visitorDto.getEmailAddress());
+        if(exsistingVisitorEmailAddress != null && exsistingVisitorEmailAddress.getEmailAddress() != null && !exsistingVisitorEmailAddress.getEmailAddress().isEmpty()) {
+            result.rejectValue("emailAddress", "There is already a Visitor with this email address or username");
+        }
+        if(result.hasErrors()) {
             model.addAttribute("visitor", visitorDto);
             return "visitors-create";
         }
         visitorService.saveVisitor(visitorDto);
-        return "redirect:/meeting";
+        return "redirect:/meeting?success";
     }
 }

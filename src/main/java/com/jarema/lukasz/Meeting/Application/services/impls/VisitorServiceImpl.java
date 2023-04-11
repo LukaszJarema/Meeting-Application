@@ -30,6 +30,11 @@ public class VisitorServiceImpl implements VisitorService {
         return visitorRepository.save(visitor);
     }
 
+    @Override
+    public Visitor findByEmail(String emailAddress) {
+        return visitorRepository.findByEmailAddress(emailAddress);
+    }
+
     private Visitor mapToVisitor(VisitorDto visitor) {
         Visitor visitorDto = Visitor.builder()
                 .id(visitor.getId())
