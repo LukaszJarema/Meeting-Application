@@ -10,4 +10,9 @@ public class MainController {
     public String mainPage(){
         return "main-page";
     }
+
+    @GetMapping("/loginAsAVisitor")
+    public String loginAsAVisitorPage() {
+        return "visitors-login";
+    }
 }
