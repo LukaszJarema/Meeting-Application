@@ -21,6 +21,11 @@ public class VisitorController {
         this.visitorService = visitorService;
     }
 
+    @GetMapping("/visitors/login")
+    public String loginAsAVisitorPage() {
+        return "visitors-login";
+    }
+
     @GetMapping("/visitors/new")
     public String createVisitorForm(Model model) {
         Visitor visitor = new Visitor();
