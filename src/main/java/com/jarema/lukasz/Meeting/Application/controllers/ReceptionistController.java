@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ReceptionistController {
 
-    @GetMapping("/receptionist/login")
+    @GetMapping("/receptionists/login")
     public String loginAsAReceptionistPage() {
         return "receptionists-login";
     }
