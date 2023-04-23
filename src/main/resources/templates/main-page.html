@@ -9,13 +9,19 @@
         crossorigin="anonymous" />
 </head>
 <body>
-<div class="container">
+<div style="text-align: center">
   <br>
-  <h3>Welcome in meeting application of company</h3>
+  <h2>Welcome in meeting application of company</h2>
   <br>
-  <a th:href="@{/employees}" class="btn btn-large btn-success">Login as an employee</a>
-  <a th:href="@{/employees}" class="btn btn-large btn-success">Login as a visitor</a>
-  <a th:href="@{/visitors/new}" class="btn btn-large btn-success">Register as a visitor</a>
+  <h7><a th:href="@{/employees}">Login as an employee</a></h7>
+  <br>
+  <h7><a th:href="@{/employees}">Login as a receptionist</a></h7>
+  <br>
+  <h7><a th:href="@{/employees}">Login as an admin</a></h7>
+  <br>
+  <h7><a th:href="@{/employees}">Login as a visitor</a></h7>
+  <br>
+  <h7><a th:href="@{/visitors/new}">Register as a visitor</a></h7>
   <br>
   <hr/>
 </div>
