@@ -33,11 +33,6 @@ public class EmployeeController {
         this.employeeRepository = employeeRepository;
     }
 
-    @GetMapping("/employees/login")
-    public String loginAsAnEmployeePage() {
-        return "employees-login";
-    }
-
     @GetMapping("/employees")
     public String employessList(Model model) {
         List<EmployeeDto> employees = employeeService.findAllEmployees();

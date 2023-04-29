@@ -21,19 +21,14 @@ public class VisitorController {
         this.visitorService = visitorService;
     }
 
-    @GetMapping("/visitors/login")
-    public String loginAsAVisitorPage() {
-        return "visitors-login";
-    }
-
-    @GetMapping("/visitors/new")
+    @GetMapping("/register")
     public String createVisitorForm(Model model) {
         Visitor visitor = new Visitor();
         model.addAttribute("visitor", visitor);
         return "visitors-create";
     }
 
-    @PostMapping("/visitors/new")
+    @PostMapping("/register")
     public String saveVisitor(@Valid @ModelAttribute("visitor") VisitorDto visitorDto, BindingResult result,
                               Model model) {
         Visitor exsistingVisitorEmailAddress = visitorService.findByEmail(visitorDto.getEmailAddress());
