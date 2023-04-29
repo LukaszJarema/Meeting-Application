@@ -47,4 +47,9 @@ public class VisitorController {
         visitorService.saveVisitor(visitorDto);
         return "redirect:/meeting?success";
     }
+
+    @GetMapping("/visitors/home")
+    public String viewVisitorHomePage() {
+        return "visitors-home";
+    }
 }
