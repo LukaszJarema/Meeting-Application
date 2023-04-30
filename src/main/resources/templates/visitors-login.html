@@ -15,15 +15,27 @@
     <h4 style="color: red">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</h4>
   </div>
   <br>
-  <form th:action="@{/loginAsAVisitor}" method="post">
+  <form th:action="@{/loginAsAVisitor}" method="post" role="form">
     <table>
       <tr>
         <td>Email address: </td>
-        <td><input type="email" name="emailAddress" required></td>
+        <td><input
+                id="emailAddress"
+                type="email"
+                class="form-control"
+                placeholder="Email address"
+                name="emailAddress"
+                required></td>
       </tr>
       <tr>
         <td>Password: </td>
-        <td><input type="password" name="password" required></td>
+        <td><input
+                id="password"
+                type="password"
+                class="form-control"
+                placeholder="Password"
+                name="password"
+                required></td>
       </tr>
       <tr><td>&nbsp;</td></tr>
       <tr>

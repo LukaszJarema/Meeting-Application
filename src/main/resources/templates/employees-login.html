@@ -12,7 +12,7 @@
 <div align = "center">
   <h2>Employee Login - Meeting Application of Company</h2>
   <br>
-  <form th:action="@{/loginAsAnEmployee}" method="post">
+  <form th:action="@{/loginAsAnEmployee}" th:object="${employee}" method="post">
     <table>
       <tr>
         <td>Email address: </td>

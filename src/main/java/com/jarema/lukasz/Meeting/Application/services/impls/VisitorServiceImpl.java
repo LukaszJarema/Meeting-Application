@@ -7,6 +7,7 @@ import com.jarema.lukasz.Meeting.Application.repositories.RoleRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.VisitorRepository;
 import com.jarema.lukasz.Meeting.Application.services.VisitorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -15,11 +16,14 @@ import java.util.Arrays;
 public class VisitorServiceImpl implements VisitorService {
     private VisitorRepository visitorRepository;
     private RoleRepository roleRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public VisitorServiceImpl(VisitorRepository visitorRepository, RoleRepository roleRepository) {
+    public VisitorServiceImpl(VisitorRepository visitorRepository, RoleRepository roleRepository,
+                              PasswordEncoder passwordEncoder) {
         this.visitorRepository = visitorRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -41,7 +45,7 @@ public class VisitorServiceImpl implements VisitorService {
                 .name(visitor.getName())
                 .surname(visitor.getSurname())
                 .emailAddress(visitor.getEmailAddress())
-                .password(visitor.getPassword())
+                .password(passwordEncoder.encode(visitor.getPassword()))
                 .telephoneNumber(visitor.getTelephoneNumber())
                 .build();
         return visitorDto;

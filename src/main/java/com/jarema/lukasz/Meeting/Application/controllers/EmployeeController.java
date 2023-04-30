@@ -33,7 +33,7 @@ public class EmployeeController {
         this.employeeRepository = employeeRepository;
     }
 
-    @GetMapping("/employees")
+    @GetMapping("/employees/list")
     public String employessList(Model model) {
         List<EmployeeDto> employees = employeeService.findAllEmployees();
         model.addAttribute("employees", employees);
