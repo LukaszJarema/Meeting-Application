@@ -14,7 +14,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query("SELECT e FROM Employee e WHERE LOWER(e.surname) LIKE CONCAT('%', :query, '%') OR LOWER(e.name) LIKE CONCAT('%', :query, '%')")
     List<Employee> searchEmployeesByNameOrSurname(String query);
     Employee findByEmailAddress(String emailAddress);
-    Employee findByName(String name);
     @Modifying
     @Transactional
     @Query("UPDATE Employee e SET e.password=:password WHERE e.id=:id")

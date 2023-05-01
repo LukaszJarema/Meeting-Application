@@ -6,6 +6,7 @@ import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.RoleRepository;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepository;
     private RoleRepository roleRepository;
-    private EmployeeDto employeeDto;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     public EmployeeServiceImpl(EmployeeRepository employeeRepository, RoleRepository roleRepository) {
@@ -67,7 +68,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .emailAddress(employee.getEmailAddress())
                 .department(employee.getDepartment())
                 .telephoneNumber(employee.getTelephoneNumber())
-                .password(employee.getPassword())
+                .password(passwordEncoder.encode(employee.getPassword()))
                 .role(Collections.singleton(employee.getRole()))
                 .build();
         return employeeDto;
@@ -81,7 +82,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .emailAddress(employee.getEmailAddress())
                 .department(employee.getDepartment())
                 .telephoneNumber(employee.getTelephoneNumber())
-                .password(employee.getPassword())
+                .password(passwordEncoder.encode(employee.getPassword()))
                 .build();
         return employeeDto;
     }

@@ -19,11 +19,9 @@ public class VisitorServiceImpl implements VisitorService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public VisitorServiceImpl(VisitorRepository visitorRepository, RoleRepository roleRepository,
-                              PasswordEncoder passwordEncoder) {
+    public VisitorServiceImpl(VisitorRepository visitorRepository, RoleRepository roleRepository) {
         this.visitorRepository = visitorRepository;
         this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
