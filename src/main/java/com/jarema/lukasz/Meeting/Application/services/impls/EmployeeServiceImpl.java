@@ -21,9 +21,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, RoleRepository roleRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, RoleRepository roleRepository,
+                               PasswordEncoder passwordEncoder) {
         this.employeeRepository = employeeRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -74,7 +76,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .emailAddress(employee.getEmailAddress())
                 .department(employee.getDepartment())
                 .telephoneNumber(employee.getTelephoneNumber())
-                .password(employee.getPassword())
+                .password(passwordEncoder.encode(employee.getPassword()))
                 .role(Collections.singleton(employee.getRole()))
                 .build();
         return employeeDto;
@@ -88,7 +90,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .emailAddress(employee.getEmailAddress())
                 .department(employee.getDepartment())
                 .telephoneNumber(employee.getTelephoneNumber())
-                .password(employee.getPassword())
+                .password(passwordEncoder.encode(employee.getPassword()))
                 .role((Role) Collections.singleton(employee.getRole()))
                 .build();
         return employeeDto;

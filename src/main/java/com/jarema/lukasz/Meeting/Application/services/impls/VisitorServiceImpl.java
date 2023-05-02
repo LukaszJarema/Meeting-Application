@@ -19,9 +19,11 @@ public class VisitorServiceImpl implements VisitorService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public VisitorServiceImpl(VisitorRepository visitorRepository, RoleRepository roleRepository) {
+    public VisitorServiceImpl(VisitorRepository visitorRepository, RoleRepository roleRepository,
+                              PasswordEncoder passwordEncoder) {
         this.visitorRepository = visitorRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -43,7 +45,7 @@ public class VisitorServiceImpl implements VisitorService {
                 .name(visitor.getName())
                 .surname(visitor.getSurname())
                 .emailAddress(visitor.getEmailAddress())
-                .password(visitor.getPassword())
+                .password(passwordEncoder.encode(visitor.getPassword()))
                 .telephoneNumber(visitor.getTelephoneNumber())
                 .build();
         return visitorDto;
