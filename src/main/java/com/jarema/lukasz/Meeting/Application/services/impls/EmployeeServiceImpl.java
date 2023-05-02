@@ -2,6 +2,7 @@ package com.jarema.lukasz.Meeting.Application.services.impls;
 
 import com.jarema.lukasz.Meeting.Application.dtos.EmployeeDto;
 import com.jarema.lukasz.Meeting.Application.models.Employee;
+import com.jarema.lukasz.Meeting.Application.models.Role;
 import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.RoleRepository;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
@@ -60,6 +61,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employees.stream().map(employee -> mapToEmployeeDto(employee)).collect(Collectors.toList());
     }
 
+    @Override
+    public Employee findByEmail(String emailAddress) {
+        return employeeRepository.findByEmailAddress(emailAddress);
+    }
+
     private Employee mapToEmployee(EmployeeDto employee) {
         Employee employeeDto = Employee.builder()
                 .id(employee.getId())
@@ -68,7 +74,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .emailAddress(employee.getEmailAddress())
                 .department(employee.getDepartment())
                 .telephoneNumber(employee.getTelephoneNumber())
-                .password(passwordEncoder.encode(employee.getPassword()))
+                .password(employee.getPassword())
                 .role(Collections.singleton(employee.getRole()))
                 .build();
         return employeeDto;
@@ -82,7 +88,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .emailAddress(employee.getEmailAddress())
                 .department(employee.getDepartment())
                 .telephoneNumber(employee.getTelephoneNumber())
-                .password(passwordEncoder.encode(employee.getPassword()))
+                .password(employee.getPassword())
+                .role((Role) Collections.singleton(employee.getRole()))
                 .build();
         return employeeDto;
     }

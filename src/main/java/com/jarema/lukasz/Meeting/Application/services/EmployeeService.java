@@ -12,4 +12,5 @@ public interface EmployeeService {
     void updateEmployee(EmployeeDto employee);
     void delete(Long employeeId);
     List<EmployeeDto> searchEmployeesByNameOrSurname(String query);
+    Employee findByEmail(String emailAddress);
 }

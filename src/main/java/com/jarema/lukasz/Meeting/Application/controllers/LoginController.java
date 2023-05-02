@@ -16,13 +16,10 @@ public class LoginController {
         return "employees-login";
     }
 
-    /*
-    @PostMapping("/loginAsAnEmployee")
-    public String loginAsAnEmployee(@ModelAttribute("employee")Employee employee) {
-        return "/employees-list";
+    @GetMapping("/administrator/home")
+    public String viewAdminHomePage() {
+        return "administrator-home";
     }
-
-     */
 
     @GetMapping("/loginAsAReceptionist")
     public String loginAsAReceptionistPage() {

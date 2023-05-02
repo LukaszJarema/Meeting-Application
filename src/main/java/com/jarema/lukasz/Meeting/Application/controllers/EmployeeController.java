@@ -49,14 +49,18 @@ public class EmployeeController {
     }
 
     @PostMapping("employees/new")
-    public String saveEmployee(@Valid @ModelAttribute("employee") Employee employee, BindingResult result,
-            Model model) {
-        if (result.hasErrors()) {
-            model.addAttribute("employee", employee);
+    public String saveEmployee(@Valid @ModelAttribute("employee") EmployeeDto employeeDto, BindingResult result,
+                              Model model) {
+        Employee exsistingEmployeeEmailAddress = employeeService.findByEmail(employeeDto.getEmailAddress());
+        if(exsistingEmployeeEmailAddress != null && exsistingEmployeeEmailAddress.getEmailAddress() != null && !exsistingEmployeeEmailAddress.getEmailAddress().isEmpty()) {
+            result.rejectValue("emailAddress", "error.emailAddress", "There is already a Visitor with this email address or username");
+        }
+        if(result.hasErrors()) {
+            model.addAttribute("employee", employeeDto);
             return "employees-create";
         }
-        employeeRepository.save(employee);
-        return "redirect:/employees";
+        employeeService.saveEmployee(employeeDto);
+        return "redirect:/";
     }
 
     @GetMapping("/employees/{employeeId}/edit")

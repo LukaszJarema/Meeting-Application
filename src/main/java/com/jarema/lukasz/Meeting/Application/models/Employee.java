@@ -5,10 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -22,6 +19,8 @@ import java.util.Set;
 @Entity
 @DynamicInsert
 @DynamicUpdate
+@Getter
+@Setter
 @Table(name = "employee")
 public class Employee {
     @Id
@@ -42,7 +41,8 @@ public class Employee {
     private String telephoneNumber;
     @NotEmpty(message = "Choose one role for an employee")
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "employee_role", joinColumns = {@JoinColumn(name = "employee_id", referencedColumnName = "id")},
+    @JoinTable(name = "employee_role",
+            joinColumns = {@JoinColumn(name = "employee_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     private Set<Role> role = new HashSet<>();
     @OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE)

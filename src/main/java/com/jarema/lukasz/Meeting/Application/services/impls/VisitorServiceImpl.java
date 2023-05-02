@@ -43,7 +43,7 @@ public class VisitorServiceImpl implements VisitorService {
                 .name(visitor.getName())
                 .surname(visitor.getSurname())
                 .emailAddress(visitor.getEmailAddress())
-                .password(passwordEncoder.encode(visitor.getPassword()))
+                .password(visitor.getPassword())
                 .telephoneNumber(visitor.getTelephoneNumber())
                 .build();
         return visitorDto;
