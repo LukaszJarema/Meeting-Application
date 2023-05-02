@@ -51,9 +51,9 @@ public class EmployeeController {
     @PostMapping("employees/new")
     public String saveEmployee(@Valid @ModelAttribute("employee") EmployeeDto employeeDto, BindingResult result,
                               Model model) {
-        Employee existingEmployeeEmailAddress = employeeService.findByEmail(employeeDto.getEmailAddress());
-        if(existingEmployeeEmailAddress != null && existingEmployeeEmailAddress.getEmailAddress() != null && !existingEmployeeEmailAddress.getEmailAddress().isEmpty()) {
-            result.rejectValue("emailAddress", "error.emailAddress", "There is already an Employee with this email address or username");
+        Employee exsistingEmployeeEmailAddress = employeeService.findByEmail(employeeDto.getEmailAddress());
+        if(exsistingEmployeeEmailAddress != null && exsistingEmployeeEmailAddress.getEmailAddress() != null && !exsistingEmployeeEmailAddress.getEmailAddress().isEmpty()) {
+            result.rejectValue("emailAddress", "error.emailAddress", "There is already a Visitor with this email address or username");
         }
         if(result.hasErrors()) {
             model.addAttribute("employee", employeeDto);
