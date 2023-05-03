@@ -4,11 +4,14 @@ import com.jarema.lukasz.Meeting.Application.models.Meeting;
 import com.jarema.lukasz.Meeting.Application.models.Role;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 
-@Data
+//@Data
 @Builder
+@Getter
+@Setter
 public class EmployeeDto {
     private Long id;
     @NotEmpty(message = "Name could not be empty")

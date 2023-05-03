@@ -12,7 +12,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+//@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
