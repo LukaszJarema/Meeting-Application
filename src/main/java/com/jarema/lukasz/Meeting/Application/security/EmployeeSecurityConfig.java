@@ -5,30 +5,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@Order(1)
-public class AdministratorSecurityConfig {
+@Order(2)
+public class EmployeeSecurityConfig {
 
     private CustomAdministratorDetailsService customAdministratorDetailsService;
 
     @Autowired
-    public AdministratorSecurityConfig(CustomAdministratorDetailsService customAdministratorDetailsService) {
+    public EmployeeSecurityConfig(CustomAdministratorDetailsService customAdministratorDetailsService) {
         this.customAdministratorDetailsService = customAdministratorDetailsService;
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public SecurityFilterChain filterChain1(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain2(HttpSecurity http) throws Exception {
         http.httpBasic()
                 .and()
                 .authorizeHttpRequests().requestMatchers("/", "/login**", "/register").permitAll();
@@ -36,13 +28,13 @@ public class AdministratorSecurityConfig {
         http.httpBasic()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/admin/**").hasAuthority("ADMINISTRATOR")
+                .requestMatchers("/employee/**").hasAuthority("EMPLOYEE")
                 .and()
                 .formLogin()
-                .loginPage("/loginAsAnAdmin")
+                .loginPage("/loginAsAnEmployee")
                 .usernameParameter("emailAddress")
-                .loginProcessingUrl("/loginAsAnAdmin")
-                .defaultSuccessUrl("/admin/home")
+                .loginProcessingUrl("/loginAsAnEmployee")
+                .defaultSuccessUrl("/employees/list")
                 .permitAll()
                 .and()
                 .logout()
@@ -52,7 +44,4 @@ public class AdministratorSecurityConfig {
         return http.build();
     }
 
-    public void configure(AuthenticationManagerBuilder builder) throws Exception {
-        builder.userDetailsService(customAdministratorDetailsService).passwordEncoder(passwordEncoder());
-    }
 }
