@@ -6,5 +6,11 @@
 </head>
 <body>
     <h1>Admin home</h1>
+    <p>
+        Welcome
+    </p>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Logout">
+    </form>
 </body>
 </html>

@@ -31,13 +31,23 @@ public class AdministratorSecurityConfig {
     public SecurityFilterChain filterChain1(HttpSecurity http) throws Exception {
         http.httpBasic()
                 .and()
-                .authorizeHttpRequests().requestMatchers("/", "/login**", "/register", "/employees/**").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMINISTRATOR")
+                .authorizeHttpRequests().requestMatchers("/", "/login**", "/register", "/employees/**").permitAll();
+
+        http.httpBasic()
                 .and()
-                .formLogin().permitAll()
+                .authorizeHttpRequests()
+                .requestMatchers("/admin/**").hasAuthority("ADMINISTRATOR")
+                .and()
+                .formLogin()
+                .loginPage("/loginAsAnAdmin")
+                .usernameParameter("emailAddress")
+                .loginProcessingUrl("/loginAsAnAdmin")
+                .defaultSuccessUrl("/admin/home")
+                .permitAll()
                 .and()
                 .logout()
-                .permitAll();
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/");
 
         return http.build();
     }
