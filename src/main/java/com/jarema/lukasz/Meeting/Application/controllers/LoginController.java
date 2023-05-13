@@ -9,27 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class LoginController {
 
-    @GetMapping("/loginAsAnAdmin")
-    public String loginAsAnAdministratorPage() {
-        return "administrators-login";
-    }
-
-    @GetMapping("/loginAsAnEmployee")
-    public String loginAsAnEmployeePage() {
+    @GetMapping("/employeeLogin")
+    public String employeeLoginPage() {
         return "employees-login";
     }
 
-    @GetMapping("/administrator/home")
-    public String viewAdminHomePage() {
-        return "administrator-home";
-    }
-
-    @GetMapping("/loginAsAReceptionist")
-    public String loginAsAReceptionistPage() {
-        return "receptionists-login";
-    }
-
-    @GetMapping("/loginAsAVisitor")
+    @GetMapping("/visitorLogin")
     public String loginAsAVisitorPage() {
         return "visitors-login";
     }

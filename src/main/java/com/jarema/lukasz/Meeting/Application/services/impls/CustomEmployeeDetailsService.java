@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service;
 import java.util.stream.Collectors;
 
 @Service
-public class CustomAdministratorDetailsService implements UserDetailsService {
+public class CustomEmployeeDetailsService implements UserDetailsService {
 
     private EmployeeRepository employeeRepository;
 
     @Autowired
-    public CustomAdministratorDetailsService(EmployeeRepository employeeRepository) {
+    public CustomEmployeeDetailsService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
 

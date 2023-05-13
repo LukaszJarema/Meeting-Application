@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class CustomAdministratorDetails implements UserDetails {
+public class CustomEmployeeDetails implements UserDetails {
 
     private Employee employee;
 
-    public CustomAdministratorDetails(Employee employee) {
+    public CustomEmployeeDetails(Employee employee) {
         this.employee = employee;
     }
 
