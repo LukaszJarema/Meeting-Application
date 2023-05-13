@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +16,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
+@EnableWebSecurity
 @Order(1)
 public class EmployeeSecurityConfig {
 
@@ -35,7 +37,7 @@ public class EmployeeSecurityConfig {
         http.httpBasic()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/login**", "/register").permitAll()
+                .requestMatchers("/employeeLogin", "/visitorLogin", "/register").permitAll()
                 .requestMatchers("/admins/**").hasAuthority("ADMINISTRATOR")
                 .requestMatchers("/employees/**").hasAuthority("EMPLOYEE")
                 .requestMatchers("/receptionists/**").hasAuthority("RECEPTIONIST")

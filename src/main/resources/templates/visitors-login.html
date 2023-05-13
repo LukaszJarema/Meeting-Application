@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Visitor Login - Meeting Application of Company</title>
+  <style>
+    .error-message {
+      font-size: 20px;
+      color: red;
+    }
+  </style>
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
         integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
@@ -11,11 +17,12 @@
 <body>
 <div align = "center">
   <h2>Visitor Login - Meeting Application of Company</h2>
+  <p th:if="${session.errorMessage}" class="error-message" th:text="${session.errorMessage}"></p>
   <div th:if="${param.error}">
     <h4 style="color: red">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</h4>
   </div>
   <br>
-  <form th:action="@{/visitorLogin}" method="post" role="form">
+  <form th:action="@{/visitorLogin}" method="post">
     <table>
       <tr>
         <td>Email address: </td>
@@ -23,7 +30,7 @@
                 id="emailAddress"
                 type="email"
                 class="form-control"
-                placeholder="Email address"
+                placeholder="Email Address"
                 name="emailAddress"
                 required></td>
       </tr>
