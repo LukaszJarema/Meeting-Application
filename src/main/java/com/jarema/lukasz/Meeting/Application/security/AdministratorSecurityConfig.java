@@ -31,23 +31,25 @@ public class AdministratorSecurityConfig {
     public SecurityFilterChain filterChain1(HttpSecurity http) throws Exception {
         http.httpBasic()
                 .and()
-                .authorizeHttpRequests().requestMatchers("/", "/login**", "/register").permitAll();
-
-        http.httpBasic()
-                .and()
                 .authorizeHttpRequests()
+                .requestMatchers("/login**", "/register").permitAll()
                 .requestMatchers("/admin/**").hasAuthority("ADMINISTRATOR")
+                .requestMatchers("/employees/**").hasAuthority("EMPLOYEE")
+                .requestMatchers("/receptionists/**").hasAuthority("RECEPTIONIST")
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/loginAsAnAdmin")
                 .usernameParameter("emailAddress")
-                .loginProcessingUrl("/loginAsAnAdmin")
-                .defaultSuccessUrl("/admin/home")
+                .defaultSuccessUrl("/welcome")
                 .permitAll()
                 .and()
                 .logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/");
+                .logoutSuccessUrl("/")
+                .permitAll()
+                .and()
+                .exceptionHandling().accessDeniedPage("/access-denied");
 
         return http.build();
     }
