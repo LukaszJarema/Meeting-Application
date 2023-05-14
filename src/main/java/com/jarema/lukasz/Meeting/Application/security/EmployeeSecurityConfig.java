@@ -1,6 +1,7 @@
 package com.jarema.lukasz.Meeting.Application.security;
 
 import com.jarema.lukasz.Meeting.Application.services.impls.CustomEmployeeDetailsService;
+import com.jarema.lukasz.Meeting.Application.services.impls.CustomVisitorDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,14 +18,16 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 
 @Configuration
 @EnableWebSecurity
-@Order(1)
 public class EmployeeSecurityConfig {
 
     private CustomEmployeeDetailsService customEmployeeDetailsService;
+    private CustomVisitorDetailsService customVisitorDetailsService;
 
     @Autowired
-    public EmployeeSecurityConfig(CustomEmployeeDetailsService customEmployeeDetailsService) {
+    public EmployeeSecurityConfig(CustomEmployeeDetailsService customEmployeeDetailsService,
+                                  CustomVisitorDetailsService customVisitorDetailsService) {
         this.customEmployeeDetailsService = customEmployeeDetailsService;
+        this.customVisitorDetailsService = customVisitorDetailsService;
     }
 
     @Bean
@@ -33,11 +36,12 @@ public class EmployeeSecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain1(HttpSecurity http) throws Exception {
+    @Order(1)
+    public SecurityFilterChain employeeSecurityFiletChain(HttpSecurity http) throws Exception {
         http.httpBasic()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/employeeLogin", "/visitorLogin", "/register").permitAll()
+                .requestMatchers("/employeeLogin").permitAll()
                 .requestMatchers("/admins/**").hasAuthority("ADMINISTRATOR")
                 .requestMatchers("/employees/**").hasAuthority("EMPLOYEE")
                 .requestMatchers("/receptionists/**").hasAuthority("RECEPTIONIST")
@@ -58,17 +62,49 @@ public class EmployeeSecurityConfig {
                 .exceptionHandling().accessDeniedPage("/access-denied")
                 .and()
                 .formLogin()
-                .successHandler(successHandler())
-                .failureHandler(failureHandler());
+                .successHandler(employeeSuccessHandler())
+                .failureHandler(employeeFailureHandler());
+
+        return http.build();
+    }
+
+    @Bean
+    @Order(2)
+    public SecurityFilterChain visitorSecurityFilterChain(HttpSecurity http) throws Exception {
+        http.httpBasic()
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers( "/visitorLogin", "/register").permitAll()
+                .requestMatchers("/visitors/**").hasAuthority("VISITOR")
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/visitorLogin")
+                .usernameParameter("emailAddress")
+                .defaultSuccessUrl("/")
+                .failureUrl("/visitorLogin?error")
+                .permitAll()
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .permitAll()
+                .and()
+                .exceptionHandling().accessDeniedPage("/access-denied")
+                .and()
+                .formLogin()
+                .successHandler(visitorSuccessHandler())
+                .failureHandler(visitorFailureHandler());
 
         return http.build();
     }
 
     public void configure(AuthenticationManagerBuilder builder) throws Exception {
         builder.userDetailsService(customEmployeeDetailsService).passwordEncoder(passwordEncoder());
+        builder.userDetailsService(customVisitorDetailsService).passwordEncoder(passwordEncoder());
     }
 
-    private AuthenticationSuccessHandler successHandler() {
+    private AuthenticationSuccessHandler employeeSuccessHandler() {
         return ((request, response, authentication) -> {
             for (GrantedAuthority auth : authentication.getAuthorities()) {
                 if (auth.getAuthority().equals("ADMINISTRATOR")) {
@@ -85,11 +121,30 @@ public class EmployeeSecurityConfig {
         });
     }
 
-    private AuthenticationFailureHandler failureHandler() {
+    private AuthenticationSuccessHandler visitorSuccessHandler() {
+        return ((request, response, authentication) -> {
+            for (GrantedAuthority auth : authentication.getAuthorities()) {
+                if (auth.getAuthority().equals("VISITOR")) {
+                    response.sendRedirect("/visitors/welcome");
+                    return;
+                }
+            }
+        });
+    }
+
+    private AuthenticationFailureHandler employeeFailureHandler() {
         return ((request, response, exception) -> {
             String errorMessage = "Błędny login lub hasło";
             request.getSession().setAttribute("errorMessage", errorMessage);
             response.sendRedirect("/employeeLogin?error");
+        });
+    }
+
+    private AuthenticationFailureHandler visitorFailureHandler() {
+        return ((request, response, exception) -> {
+            String errorMessage = "Błędny login lub hasło";
+            request.getSession().setAttribute("errorMessage", errorMessage);
+            response.sendRedirect("/visitorLogin?error");
         });
     }
 }
