@@ -9,14 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class LoginController {
 
-    @GetMapping("/employeeLogin")
+    @GetMapping("/login")
     public String employeeLoginPage() {
-        return "employees-login";
-    }
-
-    @GetMapping("/visitorLogin")
-    public String loginAsAVisitorPage() {
-        return "visitors-login";
+        return "login";
     }
 
     @GetMapping("/welcome")

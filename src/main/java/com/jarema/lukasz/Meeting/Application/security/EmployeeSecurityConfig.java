@@ -1,6 +1,7 @@
 package com.jarema.lukasz.Meeting.Application.security;
 
 import com.jarema.lukasz.Meeting.Application.services.impls.CustomEmployeeDetailsService;
+import com.jarema.lukasz.Meeting.Application.services.impls.CustomVisitorDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,9 +23,13 @@ public class EmployeeSecurityConfig {
 
     private CustomEmployeeDetailsService customEmployeeDetailsService;
 
+    private CustomVisitorDetailsService customVisitorDetailsService;
+
     @Autowired
-    public EmployeeSecurityConfig(CustomEmployeeDetailsService customEmployeeDetailsService) {
+    public EmployeeSecurityConfig(CustomEmployeeDetailsService customEmployeeDetailsService,
+                                  CustomVisitorDetailsService customVisitorDetailsService) {
         this.customEmployeeDetailsService = customEmployeeDetailsService;
+        this.customVisitorDetailsService = customVisitorDetailsService;
     }
 
     @Bean
@@ -41,24 +46,35 @@ public class EmployeeSecurityConfig {
     }
 
     @Bean
+    public DaoAuthenticationProvider authenticationProvider2() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(customVisitorDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
+    @Bean
     @Order(1)
     public SecurityFilterChain employeeSecurityFiletChain(HttpSecurity http) throws Exception {
+
         http.authenticationProvider(authenticationProvider1());
+        http.authenticationProvider(authenticationProvider2());
 
         http.httpBasic()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/employeeLogin").permitAll()
+                .requestMatchers("/login", "/register").permitAll()
                 .requestMatchers("/admins/**").hasAuthority("ADMINISTRATOR")
                 .requestMatchers("/employees/**").hasAuthority("EMPLOYEE")
                 .requestMatchers("/receptionists/**").hasAuthority("RECEPTIONIST")
+                .requestMatchers("/visitors/**").hasAuthority("VISITOR")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/employeeLogin")
+                .loginPage("/login")
                 .usernameParameter("emailAddress")
                 .defaultSuccessUrl("/")
-                .failureUrl("/employeeLogin?error")
+                .failureUrl("/login?error")
                 .permitAll()
                 .and()
                 .logout()
@@ -91,6 +107,9 @@ public class EmployeeSecurityConfig {
                 } else if (auth.getAuthority().equals("RECEPTIONIST")) {
                     response.sendRedirect("/receptionists/welcome");
                     return;
+                } else if (auth.getAuthority().equals("VISITOR")) {
+                    response.sendRedirect("/visitors/home");
+                    return;
                 }
             }
         });
@@ -100,7 +119,7 @@ public class EmployeeSecurityConfig {
         return ((request, response, exception) -> {
             String errorMessage = "Błędny login lub hasło";
             request.getSession().setAttribute("errorMessage", errorMessage);
-            response.sendRedirect("/employeeLogin?error");
+            response.sendRedirect("/login?error");
         });
     }
 }
