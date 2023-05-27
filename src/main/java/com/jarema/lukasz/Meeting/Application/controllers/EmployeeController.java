@@ -60,7 +60,7 @@ public class EmployeeController {
             return "employees-create";
         }
         employeeService.saveEmployee(employeeDto);
-        return "redirect:/";
+        return "redirect:/logout";
     }
 
     @GetMapping("/employees/{employeeId}/edit")

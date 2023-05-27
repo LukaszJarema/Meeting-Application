@@ -1,7 +1,11 @@
 package com.jarema.lukasz.Meeting.Application.controllers;
 
+import com.jarema.lukasz.Meeting.Application.dtos.EmployeeDto;
 import com.jarema.lukasz.Meeting.Application.dtos.VisitorDto;
+import com.jarema.lukasz.Meeting.Application.models.Meeting;
 import com.jarema.lukasz.Meeting.Application.models.Visitor;
+import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
+import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
 import com.jarema.lukasz.Meeting.Application.services.VisitorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +16,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 @Controller
 public class VisitorController {
+    @Autowired
     public VisitorService visitorService;
+    @Autowired
+    public EmployeeRepository employeeRepository;
+    @Autowired
+    public EmployeeService employeeService;
 
     @Autowired
-    public VisitorController(VisitorService visitorService) {
+    public VisitorController(VisitorService visitorService, EmployeeRepository employeeRepository, EmployeeService
+                             employeeService) {
         this.visitorService = visitorService;
+        this.employeeRepository = employeeRepository;
+        this.employeeService = employeeService;
     }
 
     @GetMapping("/register")
@@ -47,4 +61,22 @@ public class VisitorController {
     public String viewVisitorHomePage() {
         return "visitors-home";
     }
+
+    @GetMapping("/visitors/createAMeeting")
+    public String createMeetingForm(Model model) {
+        model.addAttribute("meeting", new Meeting());
+        List<EmployeeDto> employees = employeeService.findAllEmployees();
+        model.addAttribute("employees", employees);
+        return "visitors-createAMeeting";
+    }
+
+    /*
+    @PostMapping("/visitors/createAMeeting")
+    public String saveMeeting(@Valid @ModelAttribute("meeting") MeetingDto meetingDto, BindingResult result, Model model) {
+        List<String> emailAddresses = new ArrayList<>();
+        emailAddressess.add
+
+    }
+
+     */
 }

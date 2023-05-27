@@ -2,7 +2,6 @@ package com.jarema.lukasz.Meeting.Application.services.impls;
 
 import com.jarema.lukasz.Meeting.Application.dtos.EmployeeDto;
 import com.jarema.lukasz.Meeting.Application.models.Employee;
-import com.jarema.lukasz.Meeting.Application.models.Role;
 import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.RoleRepository;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
@@ -91,7 +90,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .department(employee.getDepartment())
                 .telephoneNumber(employee.getTelephoneNumber())
                 .password(passwordEncoder.encode(employee.getPassword()))
-                .role((Role) Collections.singleton(employee.getRole()))
+                //.role((Role) Collections.singleton(employee.getRole()))
                 .build();
         return employeeDto;
     }

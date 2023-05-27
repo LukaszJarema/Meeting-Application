@@ -9,7 +9,9 @@ import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 //@Data
@@ -45,6 +47,9 @@ public class Employee {
             joinColumns = {@JoinColumn(name = "employee_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     private Set<Role> role = new HashSet<>();
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE)
-    private Set<Meeting> meetings = new HashSet<>();
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "employee_meeting",
+            joinColumns = {@JoinColumn(name = "employee_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "meeting_id", referencedColumnName = "id")})
+    private List<Meeting> meeting = new ArrayList<>();
 }

@@ -19,15 +19,15 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 
 @Configuration
 @EnableWebSecurity
-public class EmployeeSecurityConfig {
+public class SecurityConfig {
 
     private CustomEmployeeDetailsService customEmployeeDetailsService;
 
     private CustomVisitorDetailsService customVisitorDetailsService;
 
     @Autowired
-    public EmployeeSecurityConfig(CustomEmployeeDetailsService customEmployeeDetailsService,
-                                  CustomVisitorDetailsService customVisitorDetailsService) {
+    public SecurityConfig(CustomEmployeeDetailsService customEmployeeDetailsService,
+                          CustomVisitorDetailsService customVisitorDetailsService) {
         this.customEmployeeDetailsService = customEmployeeDetailsService;
         this.customVisitorDetailsService = customVisitorDetailsService;
     }
