@@ -6,11 +6,14 @@ import com.jarema.lukasz.Meeting.Application.models.Employee;
 import com.jarema.lukasz.Meeting.Application.models.Meeting;
 import com.jarema.lukasz.Meeting.Application.models.Visitor;
 import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
+import com.jarema.lukasz.Meeting.Application.repositories.VisitorRepository;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
 import com.jarema.lukasz.Meeting.Application.services.MeetingService;
 import com.jarema.lukasz.Meeting.Application.services.VisitorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,14 +33,17 @@ public class VisitorController {
     public EmployeeService employeeService;
     @Autowired
     public MeetingService meetingService;
+    @Autowired
+    public VisitorRepository visitorRepository;
 
     @Autowired
     public VisitorController(VisitorService visitorService, EmployeeRepository employeeRepository, EmployeeService
-                             employeeService, MeetingService meetingService) {
+                             employeeService, MeetingService meetingService, VisitorRepository visitorRepository) {
         this.visitorService = visitorService;
         this.employeeRepository = employeeRepository;
         this.employeeService = employeeService;
         this.meetingService = meetingService;
+        this.visitorRepository = visitorRepository;
     }
 
     @GetMapping("/register")
@@ -76,9 +82,18 @@ public class VisitorController {
     }
 
     @PostMapping("/visitors/new-meeting")
-    public String saveMeeting(Long visitorId, Long[] employeeId, MeetingDto meetingDto) {
+    public String saveMeeting(@ModelAttribute("meeting") MeetingDto meetingDto) {
+        String nameOfVisitor;
 
-        meetingService.createMeeting(visitorId, employeeId, meetingDto);
-        return "redirect:/visitors/welcome";
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            nameOfVisitor = ((UserDetails)principal).getUsername();
+        } else {
+            nameOfVisitor = principal.toString();
+        }
+
+        Long visitorId = visitorRepository.findByEmailAddress(nameOfVisitor).getId();
+        meetingService.createMeeting(visitorId, meetingDto);
+        return "redirect:/visitors/home";
     }
 }

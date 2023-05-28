@@ -32,11 +32,12 @@ public class MeetingServiceImpl implements MeetingService {
                 .startOfMeeting(meetingDto.getStartOfMeeting())
                 .endOfMeeting(meetingDto.getEndOfMeeting())
                 .status(Status.valueOf(String.valueOf(Status.REVIEW)))
+                //.employees(meetingDto.getEmployees())
                 .build();
     }
 
     @Override
-    public void createMeeting(Long visitorId, Long[] employeeId, MeetingDto meetingDto) {
+    public void createMeeting(Long visitorId, MeetingDto meetingDto) {
         Visitor visitor = visitorRepository.findById(visitorId).get();
         Meeting meeting = mapToMeeting(meetingDto);
         meeting.setVisitor(visitor);
