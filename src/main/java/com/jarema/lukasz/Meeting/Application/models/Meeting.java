@@ -2,8 +2,6 @@ package com.jarema.lukasz.Meeting.Application.models;
 
 import com.jarema.lukasz.Meeting.Application.enums.Status;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,9 +24,9 @@ public class Meeting {
     private Long id;
     @NotEmpty(message = "Name could not be empty")
     private String contentOfMeeting;
-    @FutureOrPresent(message = "The start of meeting date can not be from the past")
+    //@FutureOrPresent(message = "The start of meeting date can not be from the past")
     private LocalDateTime startOfMeeting;
-    @Future(message = "The end of meeting date can not be earlier that start of meeting")
+    //@Future(message = "The end of meeting date can not be earlier that start of meeting")
     private LocalDateTime endOfMeeting;
     @Enumerated(EnumType.STRING)
     private Status status;

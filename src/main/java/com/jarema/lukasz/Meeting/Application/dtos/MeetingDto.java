@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -20,6 +21,6 @@ public class MeetingDto {
     private LocalDateTime startOfMeeting;
     private LocalDateTime endOfMeeting;
     private Status status;
-    private Employee employee;
+    private List<Employee> employees;
     private Visitor visitor;
 }

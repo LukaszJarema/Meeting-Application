@@ -7,9 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -31,5 +29,5 @@ public class Visitor {
     inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     private List<Role> role = new ArrayList<>();
     @OneToMany(mappedBy = "visitor", cascade = CascadeType.REMOVE)
-    private Set<Meeting> meetings = new HashSet<>();
+    private List<Meeting> meetings = new ArrayList<>();
 }

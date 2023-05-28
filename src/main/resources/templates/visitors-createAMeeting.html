@@ -12,7 +12,7 @@
 <div class="container">
     <h3>Create a meeting</h3>
     <hr/>
-    <form action="#" th:action="@{/visitors/createAMeeting}" th:object="${meeting}" method="post">
+    <form action="#" th:action="@{/visitors/new-meeting}" th:object="${meeting}" method="post">
         <p>Content: <input type="text" id="content" name="content" th:field="*{contentOfMeeting}" placeholder="Content"></p>
         <p th:if="${#fields.hasErrors('contentOfMeeting')}" class="text-danger" th:errors="*{contentOfMeeting}"></p>
         <p>Start of meeting: <input type="datetime-local" id="start" name="start" th:field="*{startOfMeeting}" placeholder="Start of meeting"></p>
@@ -21,8 +21,8 @@
         <p></pd><span th:if="${#fields.hasErrors('endOfMeeting')}" th:errors="*{endOfMeeting}" class="text-danger">End of meeting can not be before start of meeting</span></p>
         <label>Employees: </label>
         <p>To select more than one employee please click ctrl</p>
-        <select class="form-control" th:field="${employees}" multiple>
-            <option th:each="employee : ${employees}" th:value="${employee.id}" th:text="${employee.name + ' ' + employee.surname}"></option>
+        <select class="form-control" th:field="${employeeList}" multiple>
+            <option th:each="employee : ${employeeList}" th:value="${employee.id}" th:text="${employee.name + ' ' + employee.surname}"></option>
         </select>
         <br>
         <p><input type="submit" value="Submit"/></p>

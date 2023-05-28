@@ -1,11 +1,13 @@
 package com.jarema.lukasz.Meeting.Application.controllers;
 
-import com.jarema.lukasz.Meeting.Application.dtos.EmployeeDto;
+import com.jarema.lukasz.Meeting.Application.dtos.MeetingDto;
 import com.jarema.lukasz.Meeting.Application.dtos.VisitorDto;
+import com.jarema.lukasz.Meeting.Application.models.Employee;
 import com.jarema.lukasz.Meeting.Application.models.Meeting;
 import com.jarema.lukasz.Meeting.Application.models.Visitor;
 import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
+import com.jarema.lukasz.Meeting.Application.services.MeetingService;
 import com.jarema.lukasz.Meeting.Application.services.VisitorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +28,16 @@ public class VisitorController {
     public EmployeeRepository employeeRepository;
     @Autowired
     public EmployeeService employeeService;
+    @Autowired
+    public MeetingService meetingService;
 
     @Autowired
     public VisitorController(VisitorService visitorService, EmployeeRepository employeeRepository, EmployeeService
-                             employeeService) {
+                             employeeService, MeetingService meetingService) {
         this.visitorService = visitorService;
         this.employeeRepository = employeeRepository;
         this.employeeService = employeeService;
+        this.meetingService = meetingService;
     }
 
     @GetMapping("/register")
@@ -62,21 +67,18 @@ public class VisitorController {
         return "visitors-home";
     }
 
-    @GetMapping("/visitors/createAMeeting")
+    @GetMapping("/visitors/new-meeting")
     public String createMeetingForm(Model model) {
+        List<Employee> employeeList = employeeRepository.findAll();
+        model.addAttribute("employeeList", employeeList);
         model.addAttribute("meeting", new Meeting());
-        List<EmployeeDto> employees = employeeService.findAllEmployees();
-        model.addAttribute("employees", employees);
         return "visitors-createAMeeting";
     }
 
-    /*
-    @PostMapping("/visitors/createAMeeting")
-    public String saveMeeting(@Valid @ModelAttribute("meeting") MeetingDto meetingDto, BindingResult result, Model model) {
-        List<String> emailAddresses = new ArrayList<>();
-        emailAddressess.add
+    @PostMapping("/visitors/new-meeting")
+    public String saveMeeting(Long visitorId, Long[] employeeId, MeetingDto meetingDto) {
 
+        meetingService.createMeeting(visitorId, employeeId, meetingDto);
+        return "redirect:/visitors/welcome";
     }
-
-     */
 }

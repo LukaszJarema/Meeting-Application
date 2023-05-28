@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
 public class VisitorDto {
@@ -22,4 +24,5 @@ public class VisitorDto {
     private String password;
     @Pattern(regexp = "^[0-9]{9}$", message = "Telephone number should be contains 9 digits")
     private String telephoneNumber;
+    private List<MeetingDto> meetings;
 }
