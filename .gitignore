@@ -1,3 +1,5 @@
 # ignore all files in directories:
 .idea/
 out/
+src/main/resources/application.yaml
+HELP.md

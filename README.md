@@ -15,6 +15,8 @@ Spring JPA
 
 Spring Security
 
+Spring Java Mail Sender
+
 PostgreSQL
 
 Lombok
