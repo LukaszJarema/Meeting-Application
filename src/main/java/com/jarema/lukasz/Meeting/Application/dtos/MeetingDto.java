@@ -6,12 +6,14 @@ import com.jarema.lukasz.Meeting.Application.models.Visitor;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Builder
 public class MeetingDto {
     private Long id;
@@ -23,4 +25,20 @@ public class MeetingDto {
     private Status status;
     private List<Employee> employees;
     private Visitor visitor;
+
+    public void setEmployeeList(List<Employee> employees) {
+        this.employees = employees;
+    }
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
+    }
+
+    public List<Employee> getEmployeeList() {
+        return employees;
+    }
 }
