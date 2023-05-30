@@ -43,5 +43,6 @@ public class MeetingServiceImpl implements MeetingService {
         meeting.setVisitor(visitor);
         meeting.setEmployees(meetingDto.getEmployeeList());
         meetingRepository.save(meeting);
+
     }
 }
