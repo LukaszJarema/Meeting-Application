@@ -18,5 +18,5 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Transactional
     @Query("UPDATE Employee e SET e.password=:password WHERE e.id=:id")
     void updateEmployeePassword(String password, Long id);
-    List<Employee> findByIdIn(List<Long> ids);
+    List<Employee> findByIdIn(List<Employee> ids);
 }

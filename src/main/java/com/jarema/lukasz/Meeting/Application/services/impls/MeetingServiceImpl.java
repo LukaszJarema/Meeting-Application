@@ -41,7 +41,7 @@ public class MeetingServiceImpl implements MeetingService {
         Visitor visitor = visitorRepository.findById(visitorId).orElse(null);
         Meeting meeting = mapToMeeting(meetingDto);
         meeting.setVisitor(visitor);
-        meeting.setEmployees(meetingDto.getEmployeeList());
+        meeting.setEmployees(meetingDto.getEmployees());
         meetingRepository.save(meeting);
 
     }

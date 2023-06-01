@@ -23,5 +23,4 @@ public class MeetingDto {
     private Status status;
     private List<Employee> employees;
     private Visitor visitor;
-
 }

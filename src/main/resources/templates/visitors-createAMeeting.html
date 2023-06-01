@@ -21,7 +21,7 @@
         <p></pd><span th:if="${#fields.hasErrors('endOfMeeting')}" th:errors="*{endOfMeeting}" class="text-danger">End of meeting can not be before start of meeting</span></p>
         <label>Employees: </label>
         <p>To select more than one employee please click ctrl</p>
-        <select class="form-control" th:field="${employeeList}" multiple name="employeeList">
+        <select id="employee" class="form-control" th:field="${employeeList}" multiple name="employeeList">
             <option th:each="employee : ${employeeList}" th:value="${employee.id}" th:text="${employee.name + ' ' + employee.surname}"></option>
         </select>
         <br>
