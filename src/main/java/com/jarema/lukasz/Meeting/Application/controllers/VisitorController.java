@@ -83,9 +83,13 @@ public class VisitorController {
     }
 
     @PostMapping("/visitors/new-meeting")
-    public String saveMeeting(@ModelAttribute("meeting") MeetingDto meetingDto, @RequestParam("employeeIds") List<Long> employeeIds) {
+    public String saveMeeting(@Valid @ModelAttribute("meeting") MeetingDto meetingDto,
+                              @RequestParam("employeeIds") List<Long> employeeIds, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("meeting", meetingDto);
+            return "visitors-createAMeeting";
+        }
         String nameOfVisitor;
-
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
             nameOfVisitor = ((UserDetails)principal).getUsername();

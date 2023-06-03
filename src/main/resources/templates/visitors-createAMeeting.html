@@ -18,10 +18,11 @@
         <p>Start of meeting: <input type="datetime-local" id="start" name="start" th:field="*{startOfMeeting}" placeholder="Start of meeting"></p>
         <p th:if="${#fields.hasErrors('startOfMeeting')}" class="text-danger" th:errors="*{startOfMeeting}"></p>
         <p>End of meeting: <input type="datetime-local" id="end" name="email" th:field="*{endOfMeeting}" placeholder="End of meeting"></p>
-        <p></pd><span th:if="${#fields.hasErrors('endOfMeeting')}" th:errors="*{endOfMeeting}" class="text-danger">End of meeting can not be before start of meeting</span></p>
+        <p th:if="${#fields.hasErrors('endOfMeeting')}" class="text-danger" th:errors="*{endOfMeeting}"></p>
         <label>Employees: </label>
         <p>To select more than one employee please click ctrl</p>
         <select id="employee" class="form-control" name="employeeIds" multiple>
+            <p th:if="${#fields.hasErrors('employees')}" class="text-danger" th:errors="*{employeeIds}"></p>
             <option th:each="employee : ${employeeList}"
                     th:value="${employee.id}"
                     th:selected="${meeting.employees != null and meeting.employees.contains(employee)}"
