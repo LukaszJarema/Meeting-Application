@@ -91,7 +91,6 @@ public class VisitorController {
         } else {
             nameOfVisitor = principal.toString();
         }
-
         Long visitorId = visitorRepository.findByEmailAddress(nameOfVisitor).getId();
         meetingDto.setVisitor(visitorRepository.findById(visitorId).orElse(null));
         meetingService.createMeeting(visitorId, meetingDto);

@@ -2,6 +2,7 @@ package com.jarema.lukasz.Meeting.Application.services.impls;
 
 import com.jarema.lukasz.Meeting.Application.dtos.MeetingDto;
 import com.jarema.lukasz.Meeting.Application.enums.Status;
+import com.jarema.lukasz.Meeting.Application.models.Employee;
 import com.jarema.lukasz.Meeting.Application.models.Meeting;
 import com.jarema.lukasz.Meeting.Application.models.Visitor;
 import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
@@ -10,6 +11,8 @@ import com.jarema.lukasz.Meeting.Application.repositories.VisitorRepository;
 import com.jarema.lukasz.Meeting.Application.services.MeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class MeetingServiceImpl implements MeetingService {
@@ -32,7 +35,7 @@ public class MeetingServiceImpl implements MeetingService {
                 .startOfMeeting(meetingDto.getStartOfMeeting())
                 .endOfMeeting(meetingDto.getEndOfMeeting())
                 .status(Status.valueOf(String.valueOf(Status.REJECTED)))
-                .employees(meetingDto.getEmployees())
+                //.employees(meetingDto.getEmployees())
                 .build();
     }
 
@@ -41,8 +44,8 @@ public class MeetingServiceImpl implements MeetingService {
         Visitor visitor = visitorRepository.findById(visitorId).orElse(null);
         Meeting meeting = mapToMeeting(meetingDto);
         meeting.setVisitor(visitor);
-        meeting.setEmployees(meetingDto.getEmployees());
+        List<Employee> selectedEmployees = employeeRepository.findAllById(meetingDto.getEmployeeIds());
+        meeting.setEmployees(selectedEmployees);
         meetingRepository.save(meeting);
-
     }
 }

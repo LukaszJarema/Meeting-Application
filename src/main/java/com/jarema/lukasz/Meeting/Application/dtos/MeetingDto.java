@@ -1,18 +1,21 @@
 package com.jarema.lukasz.Meeting.Application.dtos;
 
 import com.jarema.lukasz.Meeting.Application.enums.Status;
-import com.jarema.lukasz.Meeting.Application.models.Employee;
 import com.jarema.lukasz.Meeting.Application.models.Visitor;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @Builder
+@Getter
+@Setter
 public class MeetingDto {
     private Long id;
     @NotEmpty(message = "Content could not be empty")
@@ -21,6 +24,6 @@ public class MeetingDto {
     private LocalDateTime startOfMeeting;
     private LocalDateTime endOfMeeting;
     private Status status;
-    private List<Employee> employees;
+    private List<Long> employeeIds;
     private Visitor visitor;
 }
