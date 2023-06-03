@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -82,7 +83,7 @@ public class VisitorController {
     }
 
     @PostMapping("/visitors/new-meeting")
-    public String saveMeeting(@ModelAttribute("meeting") MeetingDto meetingDto) {
+    public String saveMeeting(@ModelAttribute("meeting") MeetingDto meetingDto, @RequestParam("employeeIds") List<Long> employeeIds) {
         String nameOfVisitor;
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -92,6 +93,7 @@ public class VisitorController {
             nameOfVisitor = principal.toString();
         }
         Long visitorId = visitorRepository.findByEmailAddress(nameOfVisitor).getId();
+        meetingDto.setEmployeeIds(employeeIds);
         meetingDto.setVisitor(visitorRepository.findById(visitorId).orElse(null));
         meetingService.createMeeting(visitorId, meetingDto);
         return "redirect:/visitors/home";
