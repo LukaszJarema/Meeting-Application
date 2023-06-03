@@ -1,10 +1,7 @@
 package com.jarema.lukasz.Meeting.Application.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
+@ToString
 @Table(name = "visitor")
 public class Visitor {
     @Id

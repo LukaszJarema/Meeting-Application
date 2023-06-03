@@ -8,10 +8,12 @@ import com.jarema.lukasz.Meeting.Application.models.Visitor;
 import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.MeetingRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.VisitorRepository;
+import com.jarema.lukasz.Meeting.Application.services.EmailService;
 import com.jarema.lukasz.Meeting.Application.services.MeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,13 +21,15 @@ public class MeetingServiceImpl implements MeetingService {
     private MeetingRepository meetingRepository;
     private EmployeeRepository employeeRepository;
     private VisitorRepository visitorRepository;
+    private EmailService emailService;
 
     @Autowired
     public MeetingServiceImpl(MeetingRepository meetingRepository, EmployeeRepository employeeRepository,
-                              VisitorRepository visitorRepository) {
+                              VisitorRepository visitorRepository, EmailService emailService) {
         this.meetingRepository = meetingRepository;
         this.employeeRepository = employeeRepository;
         this.visitorRepository = visitorRepository;
+        this.emailService = emailService;
     }
 
     private Meeting mapToMeeting(MeetingDto meetingDto) {
@@ -35,7 +39,6 @@ public class MeetingServiceImpl implements MeetingService {
                 .startOfMeeting(meetingDto.getStartOfMeeting())
                 .endOfMeeting(meetingDto.getEndOfMeeting())
                 .status(Status.valueOf(String.valueOf(Status.REJECTED)))
-                //.employees(meetingDto.getEmployees())
                 .build();
     }
 
@@ -48,7 +51,13 @@ public class MeetingServiceImpl implements MeetingService {
         meeting.setEmployees(selectedEmployees);
         for (Employee employee : selectedEmployees) {
             employee.getMeeting().add(meeting);
+            String emailAddress = employee.getEmailAddress();
+            String visitorNameAndSurname = visitor.getName() + " " + visitor.getSurname();
+            String content = meeting.getContentOfMeeting();
+            LocalDateTime dateTime = meeting.getStartOfMeeting();
+            emailService.sendInformationAboutMeetingToEmployee(emailAddress, visitorNameAndSurname, content, dateTime);
         }
-        meetingRepository.save(meeting);
+        String visitorEmailAddress = visitor.getEmailAddress();
+        emailService.sendConfirmationOfMeetingToVisitor(visitorEmailAddress);
     }
 }

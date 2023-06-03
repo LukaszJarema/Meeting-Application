@@ -143,4 +143,11 @@ public class VisitorController {
         visitorRepository.updateVisitorPassword(encodePassword, visitorId);
         return "redirect:/visitors/home";
     }
+
+    @GetMapping("/visitors/myMeetings")
+    public String visitorMyMeetingsPage() {
+        Long visitorId = visitorService.getVisitorIdByLoggedInInformation();
+        Optional<Visitor> visitor = visitorRepository.findById(visitorId);
+        return "visitors-myMeetings";
+    }
 }

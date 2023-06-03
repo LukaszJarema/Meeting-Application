@@ -20,7 +20,7 @@ public class AdministratorController {
 
     @GetMapping("/admin/send")
     public String sendMail() {
-        emailService.sendMail(new String[]{""}, "Test", "Test");
+        emailService.sendMail("", "Test", "Test");
         return "redirect:/";
     }
 }
