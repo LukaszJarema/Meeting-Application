@@ -12,8 +12,7 @@ import com.jarema.lukasz.Meeting.Application.services.MeetingService;
 import com.jarema.lukasz.Meeting.Application.services.VisitorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class VisitorController {
@@ -36,15 +36,19 @@ public class VisitorController {
     public MeetingService meetingService;
     @Autowired
     public VisitorRepository visitorRepository;
+    @Autowired
+    public PasswordEncoder passwordEncoder;
 
     @Autowired
     public VisitorController(VisitorService visitorService, EmployeeRepository employeeRepository, EmployeeService
-                             employeeService, MeetingService meetingService, VisitorRepository visitorRepository) {
+                             employeeService, MeetingService meetingService, VisitorRepository visitorRepository,
+                             PasswordEncoder passwordEncoder) {
         this.visitorService = visitorService;
         this.employeeRepository = employeeRepository;
         this.employeeService = employeeService;
         this.meetingService = meetingService;
         this.visitorRepository = visitorRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/register")
@@ -89,17 +93,54 @@ public class VisitorController {
             model.addAttribute("meeting", meetingDto);
             return "visitors-createAMeeting";
         }
-        String nameOfVisitor;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            nameOfVisitor = ((UserDetails)principal).getUsername();
-        } else {
-            nameOfVisitor = principal.toString();
-        }
-        Long visitorId = visitorRepository.findByEmailAddress(nameOfVisitor).getId();
+        Long visitorId = visitorService.getVisitorIdByLoggedInInformation();
         meetingDto.setEmployeeIds(employeeIds);
         meetingDto.setVisitor(visitorRepository.findById(visitorId).orElse(null));
         meetingService.createMeeting(visitorId, meetingDto);
+        return "redirect:/visitors/home";
+    }
+
+    @GetMapping("/visitors/edit")
+    public String visitorEditPage(Model model) {
+        Long visitorId = visitorService.getVisitorIdByLoggedInInformation();
+        Optional<Visitor> visitor = visitorRepository.findById(visitorId);
+        model.addAttribute("visitor", visitor);
+        return "visitors-edit";
+    }
+
+    @PostMapping("/visitors/edit")
+    public String updateVisitor(@Valid @ModelAttribute("visitor") VisitorDto visitor, BindingResult result,
+                                Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("visitor", visitor);
+            return "visitors-edit";
+        }
+        Long visitorId = visitorService.getVisitorIdByLoggedInInformation();
+        visitor.setId(visitorId);
+        visitorService.updateVisitor(visitor);
+        return "redirect:/visitors/home";
+    }
+
+    @GetMapping("/visitors/changePassword")
+    public String visitorChangePasswordPage(Model model) {
+        Long visitorId = visitorService.getVisitorIdByLoggedInInformation();
+        Optional<Visitor> visitor = visitorRepository.findById(visitorId);
+        model.addAttribute("visitor", visitor);
+        return "visitors-changePassword";
+    }
+
+    @PostMapping("/visitors/changePassword")
+    public String updateVisitorPassword(@Valid @RequestParam(value = "password") String password,
+                                        @ModelAttribute("visitor") VisitorDto visitor, BindingResult result,
+                                        Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute(("visitor"), visitor);
+            return "visitors-changePassword";
+        }
+        Long visitorId = visitorService.getVisitorIdByLoggedInInformation();
+        visitor.setId(visitorId);
+        String encodePassword = passwordEncoder.encode(password);
+        visitorRepository.updateVisitorPassword(encodePassword, visitorId);
         return "redirect:/visitors/home";
     }
 }

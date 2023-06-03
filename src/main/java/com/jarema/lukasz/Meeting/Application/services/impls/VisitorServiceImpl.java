@@ -7,6 +7,8 @@ import com.jarema.lukasz.Meeting.Application.repositories.RoleRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.VisitorRepository;
 import com.jarema.lukasz.Meeting.Application.services.VisitorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -49,5 +51,23 @@ public class VisitorServiceImpl implements VisitorService {
                 .telephoneNumber(visitor.getTelephoneNumber())
                 .build();
         return visitorDto;
+    }
+
+    public Long getVisitorIdByLoggedInInformation() {
+        String nameOfVisitor;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            nameOfVisitor = ((UserDetails)principal).getUsername();
+        } else {
+            nameOfVisitor = principal.toString();
+        }
+        Long id = visitorRepository.findByEmailAddress(nameOfVisitor).getId();
+        return id;
+    }
+
+    @Override
+    public void updateVisitor(VisitorDto visitorDto) {
+       Visitor visitor = mapToVisitor(visitorDto);
+       visitorRepository.save(visitor);
     }
 }

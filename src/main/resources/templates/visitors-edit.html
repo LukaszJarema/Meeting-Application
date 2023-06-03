@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit your profile</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+        crossorigin="anonymous" />
+</head>
+<body>
+<div class="container">
+  <h3>Edit your profile</h3>
+  <hr/>
+  <form action="#" th:action="@{/visitors/edit}" th:object="${visitor}" method="post">
+    <input type="hidden" th:field="*{id}">
+    <p>Name: <input type="text" id="name" name="name" th:field="*{name}" placeholder="Name"></p>
+    <p th:if="${#fields.hasErrors('name')}" class="text-danger" th:errors="*{name}"></p>
+    <p>Surname: <input type="text" id="surnname" name="surnaname" th:field="*{surname}" placeholder="Surname"></p>
+    <p th:if="${#fields.hasErrors('surname')}" class="text-danger" th:errors="*{surname}"></p>
+    <p>Email: <input type="text" id="emailAddress" name="email" th:field="*{emailAddress}" placeholder="Email"></p>
+    <p th:if="${#fields.hasErrors('emailAddress')}" class="text-danger" th:errors="*{emailAddress}"></p>
+    <input type="hidden" id="password" name="password" th:field="*{password}" placeholder="Password">
+    <p>Telephone number: <input type="text" id="telephoneNumber" name="telephoneNumber" th:field="*{telephoneNumber}" placeholder="Telephone number"></p>
+    <p th:if="${#fields.hasErrors('telephoneNumber')}" class="text-danger" th:errors="*{telephoneNumber}"></p>
+    <p><input type="submit" value="Submit"/></p>
+  </form>
+</div>
+</body>
+</html>
