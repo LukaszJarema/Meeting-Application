@@ -70,6 +70,7 @@ public class VisitorServiceImpl implements VisitorService {
        Visitor visitor = mapToVisitor(visitorDto);
        Role role = roleRepository.findByName("VISITOR");
        visitor.setRole(Arrays.asList(role));
+       visitor.setPassword(visitorRepository.findById(visitor.getId()).get().getPassword());
        visitorRepository.save(visitor);
     }
 }
