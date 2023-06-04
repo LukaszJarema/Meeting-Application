@@ -8,6 +8,7 @@ import com.jarema.lukasz.Meeting.Application.models.Visitor;
 import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.MeetingRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.VisitorRepository;
+import com.jarema.lukasz.Meeting.Application.services.EmailService;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
 import com.jarema.lukasz.Meeting.Application.services.MeetingService;
 import com.jarema.lukasz.Meeting.Application.services.VisitorService;
@@ -16,12 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -46,11 +45,14 @@ public class VisitorController {
     public PasswordEncoder passwordEncoder;
     @Autowired
     public MeetingRepository meetingRepository;
+    @Autowired
+    public EmailService emailService;
 
     @Autowired
     public VisitorController(VisitorService visitorService, EmployeeRepository employeeRepository, EmployeeService
                              employeeService, MeetingService meetingService, VisitorRepository visitorRepository,
-                             PasswordEncoder passwordEncoder, MeetingRepository meetingRepository) {
+                             PasswordEncoder passwordEncoder, MeetingRepository meetingRepository,
+                             EmailService emailService) {
         this.visitorService = visitorService;
         this.employeeRepository = employeeRepository;
         this.employeeService = employeeService;
@@ -58,6 +60,7 @@ public class VisitorController {
         this.visitorRepository = visitorRepository;
         this.passwordEncoder = passwordEncoder;
         this.meetingRepository = meetingRepository;
+        this.emailService = emailService;
     }
 
     @GetMapping("/register")
@@ -154,19 +157,12 @@ public class VisitorController {
     }
 
     @GetMapping("/visitors/myMeetings")
-    public String visitorMyMeetingsPage(Model model, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate queryDate, Principal principal) {
+    public String visitorMyMeetingsPage(Model model, Principal principal) {
         String visitorEmailAddress = principal.getName();
         Visitor visitor = visitorRepository.findByEmailAddress(visitorEmailAddress);
         model.addAttribute("visitor", visitor);
         List<Meeting> meetings;
-        if (queryDate != null) {
-            LocalDateTime startOfDay = queryDate.atStartOfDay();
-            LocalDateTime endOfDay = queryDate.atTime(LocalTime.MAX);
-            meetings = meetingRepository.findByStartOfMeetingBetweenAndVisitor(startOfDay, endOfDay, visitor);
-            model.addAttribute("queryDate", queryDate);
-        } else {
-            meetings = visitor.getMeetings();
-        }
+        meetings = visitor.getMeetings();
         model.addAttribute("meetings", meetings);
         return "visitors-myMeetings";
     }
@@ -183,5 +179,23 @@ public class VisitorController {
         model.addAttribute("meetings", meetings);
         model.addAttribute("queryDate", queryDate);
         return "visitors-myMeetings";
+    }
+
+    @PostMapping("visitors/myMeetings/{id}")
+    @Transactional
+    public String deleteMeeting(@PathVariable Long id, Principal principal) {
+        String visitorEmailAddress = principal.getName();
+        Optional<Meeting> meeting = meetingRepository.findById(id);
+        String visitor = meeting.get().getVisitor().getName() + " " + meeting.get().getVisitor().getSurname();
+        String contentOfMeeting = meeting.get().getContentOfMeeting();
+        LocalDateTime date = meeting.get().getStartOfMeeting();
+        List<Employee> employees = meeting.get().getEmployees();
+        for (Employee employee : employees) {
+            emailService.sendInformationAboutDeletedMeetingToEmployee(employee.getEmailAddress(), visitor,
+                    contentOfMeeting, date);
+        }
+        emailService.sendConfirmationAboutDeletedMeetingToVisitor(visitorEmailAddress);
+        meetingService.delete(id);
+        return "redirect:/visitors/home";
     }
 }

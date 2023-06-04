@@ -28,7 +28,6 @@ public class EmailServiceImpl implements EmailService {
             mimeMessageHelper.setTo(to);
             mimeMessageHelper.setSubject(subject);
             mimeMessageHelper.setText(text);
-
             javaMailSender.send(mimeMessage);
             System.out.println("Email has been sent");
         } catch (Exception e) {
@@ -52,5 +51,20 @@ public class EmailServiceImpl implements EmailService {
                 "will receive an email with information about that.\n\n" +
                 "This email has been sent from Meeting Application of our company.";
         sendMail(emailAddress, "Invitation has been sent to our employee(s)", text);
+    }
+
+    public void sendInformationAboutDeletedMeetingToEmployee(String emailAddress, String visitor, String content,
+                                                             LocalDateTime date) {
+        String text = "Hello!\n\nVisitor " + visitor + " deleted the meeting in the content: " + content + " that " +
+                "should have taken place: " + date + "\n\nThis email has been sent from Meeting Application of your " +
+                "company.";
+        sendMail(emailAddress, "Your meeting has been deleted", text);
+    }
+
+    @Override
+    public void sendConfirmationAboutDeletedMeetingToVisitor(String emailAddress) {
+        String text = "Hello\n\nYour invitation has been deleted and the information has been sent to our employees." +
+                "\n\nThis email has been sent from Meeting Application of your company.";
+        sendMail(emailAddress, "Your meeting has been deleted", text);
     }
 }

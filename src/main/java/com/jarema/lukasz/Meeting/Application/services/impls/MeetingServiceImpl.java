@@ -61,4 +61,9 @@ public class MeetingServiceImpl implements MeetingService {
         emailService.sendConfirmationOfMeetingToVisitor(visitorEmailAddress);
         meetingRepository.save(meeting);
     }
+
+    @Override
+    public void delete(Long meetingId) {
+        meetingRepository.deleteById(meetingId);
+    }
 }

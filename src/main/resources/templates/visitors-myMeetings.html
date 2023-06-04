@@ -31,7 +31,7 @@
             <th>End</th>
             <th>Employees</th>
             <th>Status</th>
-            <th>Details</th>
+            <th>Delete</th>
         </tr>
         </thead>
         <tbody>
@@ -46,6 +46,11 @@
                 </span>
             </td>
             <td th:text="${meeting.status}"/>
+            <td>
+                <form th:action="@{/visitors/myMeetings/{id}(id=${meeting.getId()})}" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>
