@@ -17,10 +17,4 @@ public class AdministratorController {
     public String getAdminHome() {
         return "administrator-home";
     }
-
-    @GetMapping("/admin/send")
-    public String sendMail() {
-        emailService.sendMail("", "Test", "Test");
-        return "redirect:/";
-    }
 }

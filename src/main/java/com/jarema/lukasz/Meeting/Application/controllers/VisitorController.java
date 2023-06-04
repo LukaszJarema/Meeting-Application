@@ -130,7 +130,7 @@ public class VisitorController {
         Long visitorId = visitorService.getVisitorIdByLoggedInInformation();
         visitor.setId(visitorId);
         visitorService.updateVisitor(visitor);
-        return "redirect:/logout";
+        return "redirect:/visitors/home";
     }
 
     @GetMapping("/visitors/changePassword")
