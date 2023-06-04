@@ -68,6 +68,8 @@ public class VisitorServiceImpl implements VisitorService {
     @Override
     public void updateVisitor(VisitorDto visitorDto) {
        Visitor visitor = mapToVisitor(visitorDto);
+       Role role = roleRepository.findByName("VISITOR");
+       visitor.setRole(Arrays.asList(role));
        visitorRepository.save(visitor);
     }
 }
