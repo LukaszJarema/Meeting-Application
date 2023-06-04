@@ -181,7 +181,7 @@ public class VisitorController {
         return "visitors-myMeetings";
     }
 
-    @PostMapping("visitors/myMeetings/{id}")
+    @PostMapping("visitors/myMeetings/{id}/delete")
     @Transactional
     public String deleteMeeting(@PathVariable Long id, Principal principal) {
         String visitorEmailAddress = principal.getName();
@@ -195,6 +195,9 @@ public class VisitorController {
                     contentOfMeeting, date);
         }
         emailService.sendConfirmationAboutDeletedMeetingToVisitor(visitorEmailAddress);
+        for (Employee employee : meeting.get().getEmployees()) {
+            employee.getMeeting().remove(meeting.get());
+        }
         meetingService.delete(id);
         return "redirect:/visitors/home";
     }
