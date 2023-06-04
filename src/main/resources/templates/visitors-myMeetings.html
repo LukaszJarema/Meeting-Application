@@ -13,8 +13,13 @@
     <h3>My meetings</h3>
     <hr/>
     <div>
-        <form th:action="@{/visitors/myMeetigns}">
-            <input name="query" type="date" placeholder="Search meeting by start date" aria-label="Search">
+        <form th:action="@{/visitors/myMeetings/search}" method="post">
+            <input name="queryDate" type="date" placeholder="Search meeting by start date" aria-label="Search" th:value="${queryDate != null ? queryDate : ''}">
+            <button type="submit">Search</button>
+        </form>
+        <br>
+        <form th:action="@{/visitors/myMeetings}" method="get">
+            <button type="submit">All my meetings</button>
         </form>
     </div>
     <br>

@@ -13,6 +13,7 @@ import com.jarema.lukasz.Meeting.Application.services.MeetingService;
 import com.jarema.lukasz.Meeting.Application.services.VisitorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -150,11 +154,34 @@ public class VisitorController {
     }
 
     @GetMapping("/visitors/myMeetings")
-    public String visitorMyMeetingsPage(Model model, Principal principal) {
+    public String visitorMyMeetingsPage(Model model, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate queryDate, Principal principal) {
         String visitorEmailAddress = principal.getName();
         Visitor visitor = visitorRepository.findByEmailAddress(visitorEmailAddress);
         model.addAttribute("visitor", visitor);
-        model.addAttribute("meetings", visitor.getMeetings());
+        List<Meeting> meetings;
+        if (queryDate != null) {
+            LocalDateTime startOfDay = queryDate.atStartOfDay();
+            LocalDateTime endOfDay = queryDate.atTime(LocalTime.MAX);
+            meetings = meetingRepository.findByStartOfMeetingBetweenAndVisitor(startOfDay, endOfDay, visitor);
+            model.addAttribute("queryDate", queryDate);
+        } else {
+            meetings = visitor.getMeetings();
+        }
+        model.addAttribute("meetings", meetings);
+        return "visitors-myMeetings";
+    }
+
+    @PostMapping("/visitors/myMeetings/search")
+    public String searchVisitorMeetings(Model model, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                        LocalDate queryDate, Principal principal) {
+        String visitorEmailAddress = principal.getName();
+        Visitor visitor = visitorRepository.findByEmailAddress(visitorEmailAddress);
+        model.addAttribute("visitor", visitor);
+        LocalDateTime startOfDay = queryDate.atStartOfDay();
+        LocalDateTime endOfDay = queryDate.atTime(LocalTime.MAX);
+        List<Meeting> meetings = meetingRepository.findByStartOfMeetingBetweenAndVisitor(startOfDay, endOfDay, visitor);
+        model.addAttribute("meetings", meetings);
+        model.addAttribute("queryDate", queryDate);
         return "visitors-myMeetings";
     }
 }
