@@ -6,6 +6,7 @@ import com.jarema.lukasz.Meeting.Application.models.Employee;
 import com.jarema.lukasz.Meeting.Application.models.Meeting;
 import com.jarema.lukasz.Meeting.Application.models.Visitor;
 import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
+import com.jarema.lukasz.Meeting.Application.repositories.MeetingRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.VisitorRepository;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
 import com.jarema.lukasz.Meeting.Application.services.MeetingService;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,17 +40,20 @@ public class VisitorController {
     public VisitorRepository visitorRepository;
     @Autowired
     public PasswordEncoder passwordEncoder;
+    @Autowired
+    public MeetingRepository meetingRepository;
 
     @Autowired
     public VisitorController(VisitorService visitorService, EmployeeRepository employeeRepository, EmployeeService
                              employeeService, MeetingService meetingService, VisitorRepository visitorRepository,
-                             PasswordEncoder passwordEncoder) {
+                             PasswordEncoder passwordEncoder, MeetingRepository meetingRepository) {
         this.visitorService = visitorService;
         this.employeeRepository = employeeRepository;
         this.employeeService = employeeService;
         this.meetingService = meetingService;
         this.visitorRepository = visitorRepository;
         this.passwordEncoder = passwordEncoder;
+        this.meetingRepository = meetingRepository;
     }
 
     @GetMapping("/register")
@@ -145,9 +150,11 @@ public class VisitorController {
     }
 
     @GetMapping("/visitors/myMeetings")
-    public String visitorMyMeetingsPage() {
-        Long visitorId = visitorService.getVisitorIdByLoggedInInformation();
-        Optional<Visitor> visitor = visitorRepository.findById(visitorId);
+    public String visitorMyMeetingsPage(Model model, Principal principal) {
+        String visitorEmailAddress = principal.getName();
+        Visitor visitor = visitorRepository.findByEmailAddress(visitorEmailAddress);
+        model.addAttribute("visitor", visitor);
+        model.addAttribute("meetings", visitor.getMeetings());
         return "visitors-myMeetings";
     }
 }

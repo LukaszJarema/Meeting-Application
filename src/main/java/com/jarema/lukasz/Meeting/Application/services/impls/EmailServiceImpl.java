@@ -42,7 +42,7 @@ public class EmailServiceImpl implements EmailService {
                 "\n\nThe meeting is currently rejected but if you or anyone else invited wants it to take place you " +
                 "must log into the Meeting Application portal and accept it.\n" +
                 "Please note that if a member of staff has already accepted it in the system, you can join the " +
-                "meeting without accepting it.\n" +
+                "meeting without accepting it.\n\n" +
                 "This email has been sent from Meeting Application of your company.";
         sendMail(emailAddress, "New invitation for a meeting", text);
     }

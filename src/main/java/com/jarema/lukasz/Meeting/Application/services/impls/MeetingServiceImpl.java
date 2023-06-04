@@ -59,5 +59,6 @@ public class MeetingServiceImpl implements MeetingService {
         }
         String visitorEmailAddress = visitor.getEmailAddress();
         emailService.sendConfirmationOfMeetingToVisitor(visitorEmailAddress);
+        meetingRepository.save(meeting);
     }
 }
