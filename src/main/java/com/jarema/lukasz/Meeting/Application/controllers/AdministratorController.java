@@ -13,7 +13,7 @@ public class AdministratorController {
         this.emailService = emailService;
     }
 
-    @GetMapping("admin/home")
+    @GetMapping("admins/home")
     public String getAdminHome() {
         return "administrator-home";
     }

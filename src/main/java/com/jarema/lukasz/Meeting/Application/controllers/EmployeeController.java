@@ -8,6 +8,7 @@ import com.jarema.lukasz.Meeting.Application.repositories.RoleRepository;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,13 +29,18 @@ public class EmployeeController {
     public EmployeeRepository employeeRepository;
 
     @Autowired
-    public EmployeeController(EmployeeService employeeService, RoleRepository roleRepository, EmployeeRepository employeeRepository) {
+    public PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public EmployeeController(EmployeeService employeeService, RoleRepository roleRepository,
+                              EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder) {
         this.employeeService = employeeService;
         this.roleRepository = roleRepository;
         this.employeeRepository = employeeRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping("/employees/welcome")
+    @GetMapping("/employees/home")
     public String viewVisitorHomePage() {
         return "employees-home";
     }
@@ -53,7 +59,28 @@ public class EmployeeController {
         return "redirect:/employees/welcome";
     }
 
+    @GetMapping("/employees/changePassword")
+    public String employeeChangePasswordForm(Model model) {
+        Long employeeId = employeeService.getVisitorIdByLoggedInInformation();
+        Optional<Employee> employee = employeeRepository.findById(employeeId);
+        model.addAttribute("employee", employee);
+        return "employees-changePassword";
+    }
 
+    @PostMapping("/employees/changePassword")
+    public String employeesSavePassword(@Valid @RequestParam(value = "password") String password,
+                                        @ModelAttribute("employee") EmployeeDto employee, BindingResult result,
+                                        Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("employee", employee);
+            return "employees-changePassword";
+        }
+        Long employeeId = employeeService.getVisitorIdByLoggedInInformation();
+        employee.setId(employeeId);
+        String encodePassword = passwordEncoder.encode(password);
+        employeeRepository.updateEmployeePassword(encodePassword, employeeId);
+        return "redirect:/employees/home";
+    }
 
 
     @GetMapping("/employees/list")
@@ -106,6 +133,7 @@ public class EmployeeController {
         return "redirect:/employees";
     }
 
+    /*
     @GetMapping("/employees/{employeeId}/changePassword")
     public String editEmployeePassword(@PathVariable ("employeeId") Long employeeId, Model model) {
         EmployeeDto employee = employeeService.findEmployeeById(employeeId);
@@ -130,6 +158,8 @@ public class EmployeeController {
         employeeRepository.updateEmployeePassword(password, employeeId);
         return "redirect:/employees";
     }
+
+     */
 
     @GetMapping("/employees/{employeeId}/delete")
     public String deleteEmployee(@PathVariable("employeeId") Long employeeId) {

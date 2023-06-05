@@ -99,13 +99,13 @@ public class SecurityConfig {
         return ((request, response, authentication) -> {
             for (GrantedAuthority auth : authentication.getAuthorities()) {
                 if (auth.getAuthority().equals("ADMINISTRATOR")) {
-                    response.sendRedirect("/admins/welcome");
+                    response.sendRedirect("/admins/home");
                     return;
                 } else if (auth.getAuthority().equals("EMPLOYEE")) {
-                    response.sendRedirect("/employees/welcome");
+                    response.sendRedirect("/employees/home");
                     return;
                 } else if (auth.getAuthority().equals("RECEPTIONIST")) {
-                    response.sendRedirect("/receptionists/welcome");
+                    response.sendRedirect("/receptionists/home");
                     return;
                 } else if (auth.getAuthority().equals("VISITOR")) {
                     response.sendRedirect("/visitors/home");
