@@ -2,18 +2,25 @@ package com.jarema.lukasz.Meeting.Application.controllers;
 
 import com.jarema.lukasz.Meeting.Application.dtos.EmployeeDto;
 import com.jarema.lukasz.Meeting.Application.models.Employee;
+import com.jarema.lukasz.Meeting.Application.models.Meeting;
 import com.jarema.lukasz.Meeting.Application.models.Role;
 import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
+import com.jarema.lukasz.Meeting.Application.repositories.MeetingRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.RoleRepository;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,16 +39,21 @@ public class EmployeeController {
     public PasswordEncoder passwordEncoder;
 
     @Autowired
+    public MeetingRepository meetingRepository;
+
+    @Autowired
     public EmployeeController(EmployeeService employeeService, RoleRepository roleRepository,
-                              EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder) {
+                              EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder,
+                              MeetingRepository meetingRepository) {
         this.employeeService = employeeService;
         this.roleRepository = roleRepository;
         this.employeeRepository = employeeRepository;
         this.passwordEncoder = passwordEncoder;
+        this.meetingRepository = meetingRepository;
     }
 
     @GetMapping("/employees/home")
-    public String viewVisitorHomePage() {
+    public String viewEmployeeHomePage() {
         return "employees-home";
     }
 
@@ -68,7 +80,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees/changePassword")
-    public String employeesSavePassword(@Valid @RequestParam(value = "password") String password,
+    public String employeeSavePassword(@Valid @RequestParam(value = "password") String password,
                                         @ModelAttribute("employee") EmployeeDto employee, BindingResult result,
                                         Model model) {
         if (result.hasErrors()) {
@@ -82,6 +94,30 @@ public class EmployeeController {
         return "redirect:/employees/home";
     }
 
+    @GetMapping("/employees/myMeetings")
+    public String employeeMyMeetingsPage(Model model, Principal principal) {
+        String employeeEmailAddress = principal.getName();
+        Employee employee = employeeRepository.findByEmailAddress(employeeEmailAddress);
+        model.addAttribute("employee", employee);
+        List<Meeting> meetings;
+        meetings = employee.getMeeting();
+        model.addAttribute("meeting", meetings);
+        return "employees-myMeetings";
+    }
+
+    @PostMapping("/employees/myMeetings/search")
+    public String searchEmployeeMeetingsByDate(Model model, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                               LocalDate queryDate, Principal principal) {
+        String employeeEmailAddress = principal.getName();
+        Employee employee = employeeRepository.findByEmailAddress(employeeEmailAddress);
+        model.addAttribute("employee", employee);
+        LocalDateTime startOfDay = queryDate.atStartOfDay();
+        LocalDateTime endOfDay = queryDate.atTime(LocalTime.MAX);
+        List<Meeting> meetings = meetingRepository.findByStartOfMeetingBetweenAndEmployees(startOfDay, endOfDay, employee);
+        model.addAttribute("meetings", meetings);
+        model.addAttribute("queryDate", queryDate);
+        return "employees-myMeetings";
+    }
 
     @GetMapping("/employees/list")
     public String employeesList(Model model) {

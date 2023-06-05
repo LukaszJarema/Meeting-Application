@@ -1,5 +1,6 @@
 package com.jarema.lukasz.Meeting.Application.repositories;
 
+import com.jarema.lukasz.Meeting.Application.models.Employee;
 import com.jarema.lukasz.Meeting.Application.models.Meeting;
 import com.jarema.lukasz.Meeting.Application.models.Visitor;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,4 +10,5 @@ import java.util.List;
 
 public interface MeetingRepository extends JpaRepository<Meeting, Long> {
     List<Meeting> findByStartOfMeetingBetweenAndVisitor(LocalDateTime startDateTime, LocalDateTime endDateTime, Visitor visitor);
+    List<Meeting> findByStartOfMeetingBetweenAndEmployees(LocalDateTime startOfDay, LocalDateTime endOfDay, Employee employee);
 }

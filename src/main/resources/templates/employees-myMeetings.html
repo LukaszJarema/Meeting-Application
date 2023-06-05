@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My meetings</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+          crossorigin="anonymous" />
+</head>
+<body>
+<div class="container">
+    <h3>My meetings</h3>
+    <hr/>
+    <div>
+        <form th:action="@{/employees/myMeetings/search}" method="post">
+            <input name="queryDate" type="date" placeholder="Search meeting by start date" aria-label="Search" th:value="${queryDate != null ? queryDate : ''}">
+            <button type="submit">Search</button>
+        </form>
+        <br>
+        <form th:action="@{/employees/myMeetings}" method="get">
+            <button type="submit">All my meetings</button>
+        </form>
+    </div>
+    <br>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Content</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Visitor</th>
+            <th>Status</th>
+            <th>Change status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="meeting: ${meeting}">
+            <td th:text="${meeting.contentOfMeeting}"/>
+            <td th:text="${meeting.startOfMeeting}"/>
+            <td th:text="${meeting.endOfMeeting}"/>
+            <td>
+                <span th:each="visitor, iterStat: ${meeting.visitor}">
+                    <span th:text="${visitor.name} + ' ' + ${visitor.surname}"></span>
+                    <span th:if="${!iterStat.last}">,</span>
+                </span>
+            </td>
+            <td th:text="${meeting.status}"/>
+            <td>
+                <a th:href="@{/employees/myMeetings/{id}/changeStatus(id=${meeting.getId()})}" class="w3-button">Change meeting status</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
