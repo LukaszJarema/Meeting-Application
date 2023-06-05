@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class EmployeeController {
@@ -38,10 +39,25 @@ public class EmployeeController {
         return "employees-home";
     }
 
+    @GetMapping("/employees/accountDetails")
+    public String viewEmployeeDetails(Model model) {
+        Long employeeId = employeeService.getVisitorIdByLoggedInInformation();
+        Optional<Employee> employeeOptional = employeeRepository.findById(employeeId);
+        Employee employee = employeeOptional.orElseThrow(() -> new IllegalArgumentException("Employee not found"));
+        model.addAttribute("employee", employee);
+        return "employees-accountDetails";
+    }
+
+    @PostMapping("/employees/accountDetails")
+    public String viewEmployeeDetailsForm() {
+        return "redirect:/employees/welcome";
+    }
+
+
 
 
     @GetMapping("/employees/list")
-    public String employessList(Model model) {
+    public String employeesList(Model model) {
         List<EmployeeDto> employees = employeeService.findAllEmployees();
         model.addAttribute("employees", employees);
         return "employees-list";

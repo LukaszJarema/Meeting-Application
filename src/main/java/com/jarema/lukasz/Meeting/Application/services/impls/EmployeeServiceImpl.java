@@ -6,6 +6,8 @@ import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.RoleRepository;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -65,6 +67,19 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee findByEmail(String emailAddress) {
         return employeeRepository.findByEmailAddress(emailAddress);
+    }
+
+    @Override
+    public Long getVisitorIdByLoggedInInformation() {
+        String nameOfEmployee;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            nameOfEmployee = ((UserDetails)principal).getUsername();
+        } else {
+            nameOfEmployee = principal.toString();
+        }
+        Long id = employeeRepository.findByEmailAddress(nameOfEmployee).getId();
+        return id;
     }
 
     private Employee mapToEmployee(EmployeeDto employee) {
