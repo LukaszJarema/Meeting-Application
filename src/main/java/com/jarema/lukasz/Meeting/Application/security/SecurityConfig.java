@@ -66,7 +66,7 @@ public class SecurityConfig {
                 .requestMatchers("/login", "/register").permitAll()
                 .requestMatchers("/admins/**").hasAuthority("ADMINISTRATOR")
                 .requestMatchers("/employees/**").hasAuthority("EMPLOYEE")
-                .requestMatchers("/receptionists/**").hasAuthority("RECEPTIONIST")
+                .requestMatchers("/receptionists/**").hasAuthority("RECEPTION")
                 .requestMatchers("/visitors/**").hasAuthority("VISITOR")
                 .anyRequest().authenticated()
                 .and()
@@ -104,7 +104,7 @@ public class SecurityConfig {
                 } else if (auth.getAuthority().equals("EMPLOYEE")) {
                     response.sendRedirect("/employees/home");
                     return;
-                } else if (auth.getAuthority().equals("RECEPTIONIST")) {
+                } else if (auth.getAuthority().equals("RECEPTION")) {
                     response.sendRedirect("/receptionists/home");
                     return;
                 } else if (auth.getAuthority().equals("VISITOR")) {
