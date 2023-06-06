@@ -8,6 +8,6 @@ public interface EmailService {
     void sendConfirmationOfMeetingToVisitor(String emailAddress);
     void sendInformationAboutDeletedMeetingToEmployee(String emailAddress, String visitor, String content,
                                                       LocalDateTime date);
-
     void sendConfirmationAboutDeletedMeetingToVisitor(String emailAddress);
+    void sendConfirmationAboutChangedStatusOfMeeting(String emailAddress, String employee, String content, String status);
 }

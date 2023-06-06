@@ -13,5 +13,5 @@ public interface EmployeeService {
     void delete(Long employeeId);
     List<EmployeeDto> searchEmployeesByNameOrSurname(String query);
     Employee findByEmail(String emailAddress);
-    Long getVisitorIdByLoggedInInformation();
+    Long getEmployeeIdByLoggedInInformation();
 }

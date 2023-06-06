@@ -67,4 +67,13 @@ public class EmailServiceImpl implements EmailService {
                 "\n\nThis email has been sent from Meeting Application of your company.";
         sendMail(emailAddress, "Your meeting has been deleted", text);
     }
+
+    @Override
+    public void sendConfirmationAboutChangedStatusOfMeeting(String emailAddress, String employee,
+                                                            String content, String status) {
+        String text = "Hello\n\nEmployee " + employee + " changed the status of meeting: " + content + " to: " + status
+                + " .\n\nThis email has been sent from Meeting Application of our company.";
+        sendMail(emailAddress, "Your meeting changed the status", text);
+    }
+
 }

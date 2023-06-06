@@ -70,7 +70,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Long getVisitorIdByLoggedInInformation() {
+    public Long getEmployeeIdByLoggedInInformation() {
         String nameOfEmployee;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {

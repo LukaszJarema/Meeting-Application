@@ -1,18 +1,21 @@
 package com.jarema.lukasz.Meeting.Application.controllers;
 
 import com.jarema.lukasz.Meeting.Application.dtos.EmployeeDto;
+import com.jarema.lukasz.Meeting.Application.enums.Status;
 import com.jarema.lukasz.Meeting.Application.models.Employee;
 import com.jarema.lukasz.Meeting.Application.models.Meeting;
 import com.jarema.lukasz.Meeting.Application.models.Role;
 import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.MeetingRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.RoleRepository;
+import com.jarema.lukasz.Meeting.Application.services.EmailService;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -42,14 +45,18 @@ public class EmployeeController {
     public MeetingRepository meetingRepository;
 
     @Autowired
+    public EmailService emailService;
+
+    @Autowired
     public EmployeeController(EmployeeService employeeService, RoleRepository roleRepository,
                               EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder,
-                              MeetingRepository meetingRepository) {
+                              MeetingRepository meetingRepository, EmailService emailService) {
         this.employeeService = employeeService;
         this.roleRepository = roleRepository;
         this.employeeRepository = employeeRepository;
         this.passwordEncoder = passwordEncoder;
         this.meetingRepository = meetingRepository;
+        this.emailService = emailService;
     }
 
     @GetMapping("/employees/home")
@@ -59,7 +66,7 @@ public class EmployeeController {
 
     @GetMapping("/employees/accountDetails")
     public String viewEmployeeDetails(Model model) {
-        Long employeeId = employeeService.getVisitorIdByLoggedInInformation();
+        Long employeeId = employeeService.getEmployeeIdByLoggedInInformation();
         Optional<Employee> employeeOptional = employeeRepository.findById(employeeId);
         Employee employee = employeeOptional.orElseThrow(() -> new IllegalArgumentException("Employee not found"));
         model.addAttribute("employee", employee);
@@ -73,7 +80,7 @@ public class EmployeeController {
 
     @GetMapping("/employees/changePassword")
     public String employeeChangePasswordForm(Model model) {
-        Long employeeId = employeeService.getVisitorIdByLoggedInInformation();
+        Long employeeId = employeeService.getEmployeeIdByLoggedInInformation();
         Optional<Employee> employee = employeeRepository.findById(employeeId);
         model.addAttribute("employee", employee);
         return "employees-changePassword";
@@ -87,7 +94,7 @@ public class EmployeeController {
             model.addAttribute("employee", employee);
             return "employees-changePassword";
         }
-        Long employeeId = employeeService.getVisitorIdByLoggedInInformation();
+        Long employeeId = employeeService.getEmployeeIdByLoggedInInformation();
         employee.setId(employeeId);
         String encodePassword = passwordEncoder.encode(password);
         employeeRepository.updateEmployeePassword(encodePassword, employeeId);
@@ -118,6 +125,36 @@ public class EmployeeController {
         model.addAttribute("queryDate", queryDate);
         return "employees-myMeetings";
     }
+
+    @GetMapping("/employees/myMeetings/{id}/changeStatus")
+    @Transactional
+    public String changeMeetingStatus(@PathVariable Long id) {
+        Optional<Meeting> meeting = meetingRepository.findById(id);
+        String content = meeting.get().getContentOfMeeting();
+        Long employeeId = employeeService.getEmployeeIdByLoggedInInformation();
+        Optional<Employee> employee = employeeRepository.findById(employeeId);
+        String employeeNameAndSurname = employee.get().getName() + " " + employee.get().getSurname();
+        String status = "";
+        Status stat;
+        List<Employee> employees = meeting.get().getEmployees();
+        if (meeting.get().getStatus() == Status.REJECTED) {
+            stat = Status.APPROVED;
+            status = "APPROVED";
+        }
+        else {
+            stat = Status.REJECTED;
+            status = "REJECTED";
+        }
+        for (Employee employee1 : employees) {
+            emailService.sendConfirmationAboutChangedStatusOfMeeting(employee1.getEmailAddress(), employeeNameAndSurname,
+                    content, status);
+        }
+        emailService.sendConfirmationAboutChangedStatusOfMeeting(meeting.get().getVisitor().getEmailAddress(),
+                employeeNameAndSurname, content, status);
+        meetingRepository.updateMeetingStatus(stat, id);
+        return "redirect:/employees/home";
+    }
+
 
     @GetMapping("/employees/list")
     public String employeesList(Model model) {
