@@ -101,7 +101,7 @@ public class EmployeeController {
         model.addAttribute("employee", employee);
         List<Meeting> meetings;
         meetings = employee.getMeeting();
-        model.addAttribute("meeting", meetings);
+        model.addAttribute("meetings", meetings);
         return "employees-myMeetings";
     }
 
