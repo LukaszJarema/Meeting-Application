@@ -31,22 +31,15 @@ import java.util.Optional;
 
 @Controller
 public class VisitorController {
-    @Autowired
-    public VisitorService visitorService;
-    @Autowired
-    public EmployeeRepository employeeRepository;
-    @Autowired
-    public EmployeeService employeeService;
-    @Autowired
-    public MeetingService meetingService;
-    @Autowired
-    public VisitorRepository visitorRepository;
-    @Autowired
-    public PasswordEncoder passwordEncoder;
-    @Autowired
-    public MeetingRepository meetingRepository;
-    @Autowired
-    public EmailService emailService;
+
+    private VisitorService visitorService;
+    private EmployeeRepository employeeRepository;
+    private EmployeeService employeeService;
+    private MeetingService meetingService;
+    private VisitorRepository visitorRepository;
+    private PasswordEncoder passwordEncoder;
+    private MeetingRepository meetingRepository;
+    private EmailService emailService;
 
     @Autowired
     public VisitorController(VisitorService visitorService, EmployeeRepository employeeRepository, EmployeeService

@@ -29,23 +29,13 @@ import java.util.Optional;
 
 @Controller
 public class EmployeeController {
-    @Autowired
-    public EmployeeService employeeService;
 
-    @Autowired
-    public RoleRepository roleRepository;
-
-    @Autowired
-    public EmployeeRepository employeeRepository;
-
-    @Autowired
-    public PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public MeetingRepository meetingRepository;
-
-    @Autowired
-    public EmailService emailService;
+    private EmployeeService employeeService;
+    private RoleRepository roleRepository;
+    private EmployeeRepository employeeRepository;
+    private PasswordEncoder passwordEncoder;
+    private MeetingRepository meetingRepository;
+    private EmailService emailService;
 
     @Autowired
     public EmployeeController(EmployeeService employeeService, RoleRepository roleRepository,

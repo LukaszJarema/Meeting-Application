@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class LoginController {
 
+    @GetMapping("/")
+    public String mainPage(){
+        return "main-page";
+    }
+
     @GetMapping("/login")
     public String employeeLoginPage() {
         return "login";

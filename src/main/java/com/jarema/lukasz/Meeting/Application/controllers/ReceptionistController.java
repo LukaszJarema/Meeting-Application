@@ -9,7 +9,6 @@ import com.jarema.lukasz.Meeting.Application.repositories.MeetingRepository;
 import com.jarema.lukasz.Meeting.Application.services.EmailService;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -28,16 +27,11 @@ import java.util.Optional;
 @Controller
 public class ReceptionistController {
 
-    @Autowired
-    public EmployeeService employeeService;
-    @Autowired
-    public EmployeeRepository employeeRepository;
-    @Autowired
-    public PasswordEncoder passwordEncoder;
-    @Autowired
-    public MeetingRepository meetingRepository;
-    @Autowired
-    public EmailService emailService;
+    private EmployeeService employeeService;
+    private EmployeeRepository employeeRepository;
+    private PasswordEncoder passwordEncoder;
+    private MeetingRepository meetingRepository;
+    private EmailService emailService;
 
     public ReceptionistController(EmployeeService employeeService, EmployeeRepository employeeRepository,
                                   PasswordEncoder passwordEncoder, MeetingRepository meetingRepository) {
