@@ -4,8 +4,10 @@ import com.jarema.lukasz.Meeting.Application.dtos.EmployeeDto;
 import com.jarema.lukasz.Meeting.Application.enums.Status;
 import com.jarema.lukasz.Meeting.Application.models.Employee;
 import com.jarema.lukasz.Meeting.Application.models.Meeting;
+import com.jarema.lukasz.Meeting.Application.models.Role;
 import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.MeetingRepository;
+import com.jarema.lukasz.Meeting.Application.repositories.RoleRepository;
 import com.jarema.lukasz.Meeting.Application.services.EmailService;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
 import jakarta.transaction.Transactional;
@@ -35,16 +37,18 @@ public class AdministratorController {
     private EmployeeService employeeService;
     private PasswordEncoder passwordEncoder;
     private MeetingRepository meetingRepository;
+    private RoleRepository roleRepository;
 
     @Autowired
     public AdministratorController(EmailService emailService, EmployeeRepository employeeRepository,
                                    EmployeeService employeeService, PasswordEncoder passwordEncoder,
-                                   MeetingRepository meetingRepository) {
+                                   MeetingRepository meetingRepository, RoleRepository roleRepository) {
         this.emailService = emailService;
         this.employeeRepository = employeeRepository;
         this.employeeService = employeeService;
         this.passwordEncoder = passwordEncoder;
         this.meetingRepository = meetingRepository;
+        this.roleRepository = roleRepository;
     }
 
     @GetMapping("/admins/home")
@@ -167,5 +171,28 @@ public class AdministratorController {
         model.addAttribute("meetings", meetings);
         model.addAttribute("queryDate", queryDate);
         return "administrators-allMeetings";
+    }
+
+    @GetMapping("/admins/employees/new")
+    public String createEmployeeForm(Model model) {
+        List<Role> roleList = roleRepository.findAll();
+        model.addAttribute("roleList", roleList);
+        model.addAttribute("employee", new Employee());
+        return "administrators-createEmployee";
+    }
+
+    @PostMapping("/admins/employees/new")
+    public String saveEmployee(@Valid @ModelAttribute("employee") EmployeeDto employeeDto, BindingResult result,
+                               Model model) {
+        Employee exsistingEmployeeEmailAddress = employeeService.findByEmail(employeeDto.getEmailAddress());
+        if(exsistingEmployeeEmailAddress != null && exsistingEmployeeEmailAddress.getEmailAddress() != null && !exsistingEmployeeEmailAddress.getEmailAddress().isEmpty()) {
+            result.rejectValue("emailAddress", "error.emailAddress", "There is already a Visitor with this email address or username");
+        }
+        if(result.hasErrors()) {
+            model.addAttribute("employee", employeeDto);
+            return "administrators-createEmployee";
+        }
+        employeeService.saveEmployee(employeeDto);
+        return "redirect:/admins/home";
     }
 }

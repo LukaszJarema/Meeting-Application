@@ -154,35 +154,11 @@ public class EmployeeController {
         return "redirect:/employees/home";
     }
 
-
     @GetMapping("/employees/list")
     public String employeesList(Model model) {
         List<EmployeeDto> employees = employeeService.findAllEmployees();
         model.addAttribute("employees", employees);
         return "employees-list";
-    }
-
-    @GetMapping("employees/new")
-    public String createEmployeeForm(Model model) {
-        List<Role> roleList = roleRepository.findAll();
-        model.addAttribute("roleList", roleList);
-        model.addAttribute("employee", new Employee());
-        return "employees-create";
-    }
-
-    @PostMapping("employees/new")
-    public String saveEmployee(@Valid @ModelAttribute("employee") EmployeeDto employeeDto, BindingResult result,
-                              Model model) {
-        Employee exsistingEmployeeEmailAddress = employeeService.findByEmail(employeeDto.getEmailAddress());
-        if(exsistingEmployeeEmailAddress != null && exsistingEmployeeEmailAddress.getEmailAddress() != null && !exsistingEmployeeEmailAddress.getEmailAddress().isEmpty()) {
-            result.rejectValue("emailAddress", "error.emailAddress", "There is already a Visitor with this email address or username");
-        }
-        if(result.hasErrors()) {
-            model.addAttribute("employee", employeeDto);
-            return "employees-create";
-        }
-        employeeService.saveEmployee(employeeDto);
-        return "redirect:/logout";
     }
 
     @GetMapping("/employees/{employeeId}/edit")

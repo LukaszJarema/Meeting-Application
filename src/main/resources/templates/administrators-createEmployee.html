@@ -12,7 +12,7 @@
 <div class="container">
   <h3>Create an employee</h3>
   <hr/>
-  <form action="#" th:action="@{/employees/new}" th:object="${employee}" method="post">
+  <form action="#" th:action="@{/admins/employees/new}" th:object="${employee}" method="post">
     <p>Name: <input type="text" id="name" name="name" th:field="*{name}" placeholder="Name"></p>
     <p th:if="${#fields.hasErrors('name')}" class="text-danger" th:errors="*{name}"></p>
     <p>Surname: <input type="text" id="surnname" name="surnaname" th:field="*{surname}" placeholder="Surname"></p>
