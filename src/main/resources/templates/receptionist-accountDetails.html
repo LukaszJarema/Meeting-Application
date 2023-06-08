@@ -12,7 +12,7 @@
 <div class="container">
   <h3>Your account details</h3>
   <hr/>
-  <form action="#" th:action="@{/employees/accountDetails}" th:object="${employee}" method="post">
+  <form action="#" th:action="@{/receptionists/accountDetails}" th:object="${employee}" method="post">
     <input type="hidden" th:field="*{id}">
     <p>Name: <input type="text" id="name" name="name" th:field="*{name}" placeholder="Name" readonly></p>
     <p>Surname: <input type="text" id="surnname" name="surnaname" th:field="*{surname}" placeholder="Surname" readonly></p>
@@ -26,7 +26,7 @@
       </li>
     </ul>
     <p style="color:#FF0000">If your details are incorrect please contact administrator</p>
-    <p><button onclick="window.location.href='/employees/home';">
+    <p><button onclick="window.location.href='/receptionists/home';">
       Return to home page
     </button>
     </p>

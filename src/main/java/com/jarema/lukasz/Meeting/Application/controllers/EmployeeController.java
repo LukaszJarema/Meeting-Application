@@ -75,7 +75,7 @@ public class EmployeeController {
 
     @PostMapping("/employees/accountDetails")
     public String viewEmployeeDetailsForm() {
-        return "redirect:/employees/welcome";
+        return "redirect:/employees/home";
     }
 
     @GetMapping("/employees/changePassword")
