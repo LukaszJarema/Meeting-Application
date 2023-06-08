@@ -160,4 +160,20 @@ public class ReceptionistController {
         model.addAttribute("queryDate", queryDate);
         return "receptionists-allMeetings";
     }
+
+    @GetMapping("/receptionists/allMeetings/pdf")
+    public String generatePdfWithMeetings(Model model, @RequestParam(required = false)
+                                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate queryDate) {
+        List<Meeting> meetings;
+        if (queryDate != null) {
+            LocalDateTime startOfDay = queryDate.atStartOfDay();
+            LocalDateTime endOfDay = queryDate.atTime(LocalTime.MAX);
+            meetings = meetingRepository.findByStartOfMeetingBetween(startOfDay, endOfDay);
+        } else {
+            meetings = meetingRepository.findAll();
+        }
+        model.addAttribute("meetings", meetings);
+        model.addAttribute("queryDate", queryDate);
+        return "receptionists-allMeetings";
+    }
 }

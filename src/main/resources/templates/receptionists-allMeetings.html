@@ -19,8 +19,15 @@
         </form>
         <br>
         <form th:action="@{/receptionists/allMeetings}" method="get">
-            <button type="submit">All my meetings</button>
+            <button type="submit">All meetings</button>
         </form>
+        <br>
+        <button onclick="printToPDF()">Print</button>
+        <script>
+            function printToPDF() {
+                window.print();
+            }
+        </script>
     </div>
     <br>
     <table class="table table-bordered table-striped">
