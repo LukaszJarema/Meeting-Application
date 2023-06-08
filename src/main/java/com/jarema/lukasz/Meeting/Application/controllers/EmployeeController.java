@@ -154,25 +154,7 @@ public class EmployeeController {
         return "redirect:/employees/home";
     }
 
-    @GetMapping("/employees/{employeeId}/edit")
-    public String editEmployeeForm(@PathVariable("employeeId") Long employeeId, Model model) {
-        EmployeeDto employee = employeeService.findEmployeeById(employeeId);
-        model.addAttribute("employee", employee);
-        List<Role> roleList = roleRepository.findAll();
-        model.addAttribute("roleList", roleList);
-        return "employees-edit";
-    }
 
-    @PostMapping("/employees/{employeeId}/edit")
-    public String updateEmployee(@PathVariable("employeeId") Long employeeId, @Valid @ModelAttribute("employee")
-    EmployeeDto employee, BindingResult result) {
-        if (result.hasErrors()) {
-            return "employees-edit";
-        }
-        employee.setId(employeeId);
-        employeeService.updateEmployee(employee);
-        return "redirect:/employees";
-    }
 
     /*
     @GetMapping("/employees/{employeeId}/changePassword")

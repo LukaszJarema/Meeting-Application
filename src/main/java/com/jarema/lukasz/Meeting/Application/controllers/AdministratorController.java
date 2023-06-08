@@ -209,4 +209,24 @@ public class AdministratorController {
         model.addAttribute("employees", employees);
         return "administrators-allEmployees";
     }
+
+    @GetMapping("/admins/employees/{employeeId}/edit")
+    public String editEmployeeForm(@PathVariable("employeeId") Long employeeId, Model model) {
+        EmployeeDto employee = employeeService.findEmployeeById(employeeId);
+        model.addAttribute("employee", employee);
+        List<Role> roleList = roleRepository.findAll();
+        model.addAttribute("roleList", roleList);
+        return "administrators-employeesEdit";
+    }
+
+    @PostMapping("/admins/employees/{employeeId}/edit")
+    public String updateEmployee(@PathVariable("employeeId") Long employeeId, @Valid @ModelAttribute("employee")
+                                 EmployeeDto employee, BindingResult result) {
+        if (result.hasErrors()) {
+            return "administrators-employeesEdit";
+        }
+        employee.setId(employeeId);
+        employeeService.updateEmployee(employee);
+        return "redirect:/admins/home";
+    }
 }
