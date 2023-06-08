@@ -24,6 +24,6 @@ public class VisitorDto {
     private String password;
     @Pattern(regexp = "^[0-9]{9}$", message = "Telephone number should be contains 9 digits")
     private String telephoneNumber;
-    private boolean accountNonLocked;
+    private String accountNonLocked;
     private List<MeetingDto> meetings;
 }

@@ -14,9 +14,9 @@ public interface VisitorRepository extends JpaRepository<Visitor, Long> {
     @Query("UPDATE Visitor v SET v.password=:password WHERE v.id=:id")
     void updateVisitorPassword(String password, Long id);
     @Modifying
-    @Query("UPDATE Visitor v SET v.accountNonLocked = true WHERE v.id = :visitorId")
+    @Query("UPDATE Visitor v SET v.accountNonLocked = 'true' WHERE v.id = :visitorId")
     void activateVisitor(@Param("visitorId") Long visitorId);
     @Modifying
-    @Query("UPDATE Visitor v SET v.accountNonLocked = false WHERE v.id = :visitorId")
+    @Query("UPDATE Visitor v SET v.accountNonLocked = 'false' WHERE v.id = :visitorId")
     void deactivateVisitor(@Param("visitorId") Long visitorId);
 }

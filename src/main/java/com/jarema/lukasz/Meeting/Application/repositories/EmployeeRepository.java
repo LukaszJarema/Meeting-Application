@@ -22,9 +22,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query("SELECT e FROM Employee e ORDER BY e.surname ASC")
     List<Employee> findAllEmployeesSortedBySurnameAscending();
     @Modifying
-    @Query("UPDATE Employee e SET e.accountNonLocked = true WHERE e.id = :employeeId")
+    @Query("UPDATE Employee e SET e.accountNonLocked = 'true' WHERE e.id = :employeeId")
     void activateEmployee(@Param("employeeId") Long employeeId);
     @Modifying
-    @Query("UPDATE Employee e SET e.accountNonLocked = false WHERE e.id = :employeeId")
+    @Query("UPDATE Employee e SET e.accountNonLocked = 'false' WHERE e.id = :employeeId")
     void deactivateEmployee(@Param("employeeId") Long employeeId);
 }

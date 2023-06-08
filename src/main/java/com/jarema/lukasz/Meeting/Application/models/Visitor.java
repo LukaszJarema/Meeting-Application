@@ -26,7 +26,7 @@ public class Visitor {
     @JoinTable(name = "visitor_role", joinColumns = {@JoinColumn(name = "visitor_id", referencedColumnName = "id")},
     inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     private List<Role> role = new ArrayList<>();
-    private boolean accountNonLocked;
+    private String accountNonLocked;
     @OneToMany(mappedBy = "visitor", cascade = CascadeType.REMOVE)
     private List<Meeting> meetings = new ArrayList<>();
 }

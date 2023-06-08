@@ -28,6 +28,6 @@ public class EmployeeDto {
     private String telephoneNumber;
     @NotNull(message = "Choose one role for an employee")
     private Role role;
-    private boolean accountNonLocked;
+    private String accountNonLocked;
     private Meeting meeting;
 }

@@ -4,6 +4,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class LoginController {
@@ -13,19 +14,24 @@ public class LoginController {
         return "main-page";
     }
 
+    @PostMapping("/")
+    public String mainPagePost() {
+        return "main-page";
+    }
+
     @GetMapping("/login")
     public String employeeLoginPage() {
         return "login";
     }
 
-    @GetMapping("/welcome")
-    public String welcomePage() {
-        return "welcome";
-    }
-
     @GetMapping("/access-denied")
     public String accessDeniedPage() {
         return "access-denied";
+    }
+
+    @GetMapping("/accountDisabled")
+    public String accountDisabledPage() {
+        return "account-disabled";
     }
 
     @GetMapping("/logout")

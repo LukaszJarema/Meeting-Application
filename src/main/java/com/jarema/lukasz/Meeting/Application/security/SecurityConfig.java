@@ -112,7 +112,7 @@ public class SecurityConfig {
                 String emailAddress = authObject.getName();
                 if (auth.getAuthority().equals("ADMINISTRATOR")) {
                     Employee employee = employeeRepository.findByEmailAddress(emailAddress);
-                    if (employee != null && employee.isAccountNonLocked()) {
+                    if (employee != null && employee.getAccountNonLocked().equals("true")) {
                         response.sendRedirect("/admins/home");
                     } else {
                         response.sendRedirect("/accountDisabled");
@@ -120,7 +120,7 @@ public class SecurityConfig {
                     return;
                 } else if (auth.getAuthority().equals("EMPLOYEE")) {
                     Employee employee = employeeRepository.findByEmailAddress(emailAddress);
-                    if (employee != null && employee.isAccountNonLocked()) {
+                    if (employee != null && employee.getAccountNonLocked().equals("true")) {
                         response.sendRedirect("/employees/home");
                     } else {
                         response.sendRedirect("/accountDisabled");
@@ -128,7 +128,7 @@ public class SecurityConfig {
                     return;
                 } else if (auth.getAuthority().equals("RECEPTION")) {
                     Employee employee = employeeRepository.findByEmailAddress(emailAddress);
-                    if (employee != null && employee.isAccountNonLocked()) {
+                    if (employee != null && employee.getAccountNonLocked().equals("true")) {
                         response.sendRedirect("/receptionists/home");
                     } else {
                         response.sendRedirect("/accountDisabled");
@@ -136,7 +136,7 @@ public class SecurityConfig {
                     return;
                 } else if (auth.getAuthority().equals("VISITOR")) {
                     Visitor visitor = visitorRepository.findByEmailAddress(emailAddress);
-                    if (visitor != null && visitor.isAccountNonLocked()) {
+                    if (visitor != null && visitor.getAccountNonLocked().equals("true")) {
                         response.sendRedirect("/visitors/home");
                     } else {
                         response.sendRedirect("/accountDisabled");

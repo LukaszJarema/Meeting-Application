@@ -38,7 +38,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee saveEmployee(EmployeeDto employeeDto) {
         Employee employee = mapToEmployee(employeeDto);
-        employee.setAccountNonLocked(true);
         return employeeRepository.save(employee);
     }
 
@@ -51,7 +50,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void updateEmployee(EmployeeDto employeeDto) {
         Employee employee = mapToEmployee(employeeDto);
-        employee.setAccountNonLocked(true);
         employeeRepository.save(employee);
     }
 
@@ -94,6 +92,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .telephoneNumber(employee.getTelephoneNumber())
                 .password(passwordEncoder.encode(employee.getPassword()))
                 .role(Collections.singleton(employee.getRole()))
+                .accountNonLocked("true")
                 .build();
         return employeeDto;
     }
@@ -107,7 +106,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .department(employee.getDepartment())
                 .telephoneNumber(employee.getTelephoneNumber())
                 .password(passwordEncoder.encode(employee.getPassword()))
-                .accountNonLocked(employee.isAccountNonLocked())
+                .accountNonLocked("true")
                 //.role((Role) Collections.singleton(employee.getRole()))
                 .build();
         return employeeDto;
