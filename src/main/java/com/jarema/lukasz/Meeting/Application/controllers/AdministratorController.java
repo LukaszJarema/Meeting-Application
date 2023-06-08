@@ -1,12 +1,14 @@
 package com.jarema.lukasz.Meeting.Application.controllers;
 
 import com.jarema.lukasz.Meeting.Application.dtos.EmployeeDto;
+import com.jarema.lukasz.Meeting.Application.enums.Status;
 import com.jarema.lukasz.Meeting.Application.models.Employee;
 import com.jarema.lukasz.Meeting.Application.models.Meeting;
 import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.MeetingRepository;
 import com.jarema.lukasz.Meeting.Application.services.EmailService;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -15,10 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -120,5 +119,53 @@ public class AdministratorController {
         model.addAttribute("meetings", meetings);
         model.addAttribute("queryDate", queryDate);
         return "administrators-myMeetings";
+    }
+
+    @GetMapping("/admins/myMeetings/{id}/changeStatus")
+    @Transactional
+    public String changeMeetingStatus(@PathVariable Long id) {
+        Optional<Meeting> meeting = meetingRepository.findById(id);
+        String content = meeting.get().getContentOfMeeting();
+        Long employeeId = employeeService.getEmployeeIdByLoggedInInformation();
+        Optional<Employee> employee = employeeRepository.findById(employeeId);
+        String employeeNameAndSurname = employee.get().getName() + " " + employee.get().getSurname();
+        String status = "";
+        Status stat;
+        List<Employee> employees = meeting.get().getEmployees();
+        if (meeting.get().getStatus() == Status.REJECTED) {
+            stat = Status.APPROVED;
+            status = "APPROVED";
+        }
+        else {
+            stat = Status.REJECTED;
+            status = "REJECTED";
+        }
+        for (Employee employee1 : employees) {
+            emailService.sendConfirmationAboutChangedStatusOfMeeting(employee1.getEmailAddress(), employeeNameAndSurname,
+                    content, status);
+        }
+        emailService.sendConfirmationAboutChangedStatusOfMeeting(meeting.get().getVisitor().getEmailAddress(),
+                employeeNameAndSurname, content, status);
+        meetingRepository.updateMeetingStatus(stat, id);
+        return "redirect:/admins/home";
+    }
+
+    @GetMapping("/admins/allMeetings")
+    public String administratorAllMeetings(Model model) {
+        List<Meeting> meetings = meetingRepository.findAllMeetingsSortedByStartDateDescending();
+        model.addAttribute("meetings", meetings);
+        return "administrators-allMeetings";
+    }
+
+    @PostMapping("/admins/allMeetings/search")
+    public String searchMeetingsByDate(Model model, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    LocalDate queryDate) {
+        LocalDateTime startOfDay = queryDate.atStartOfDay();
+        LocalDateTime endOfDay = queryDate.atTime(LocalTime.MAX);
+        Sort sort = Sort.by(Sort.Direction.DESC, "startOfMeeting");
+        List<Meeting> meetings = meetingRepository.findByStartOfMeetingBetween(startOfDay, endOfDay, sort);
+        model.addAttribute("meetings", meetings);
+        model.addAttribute("queryDate", queryDate);
+        return "administrators-allMeetings";
     }
 }
