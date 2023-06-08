@@ -208,10 +208,4 @@ public class EmployeeController {
         return "redirect:/employees";
     }
 
-    @GetMapping("/employees/search")
-    public String searchEmployeesByNameOrSurname(@RequestParam(value = "query") String query, Model model) {
-        List<EmployeeDto> employees = employeeService.searchEmployeesByNameOrSurname(query);
-        model.addAttribute("employees", employees);
-        return "administrators-allEmployees";
-    }
 }

@@ -17,6 +17,10 @@
                     <input name="query" type="search" placeholder="Search employees by name or surname" aria-label="Search">
                     <button type="submit">Search</button>
                 </form>
+                <br>
+                <form th:action="@{/admins/employees}" method="get">
+                    <button type="submit">All employees</button>
+                </form>
             </div>
             <br>
             <table class="table table-bordered table-striped">
@@ -26,6 +30,7 @@
                     <th>Surname</th>
                     <th>Email</th>
                     <th>Department</th>
+                    <th>Is account unlocked?</th>
                     <th>Options</th>
                 </tr>
                 </thead>
@@ -35,7 +40,7 @@
                         <td th:text="${employee.surname}"/>
                         <td th:text="${employee.emailAddress}"/>
                         <td th:text="${employee.department}"/>
-                        <td th:text="${employee.accountNonLocked ? 'Active' : 'Inactive'}"/>
+                        <td th:text="${employee.accountNonLocked}"/>
                         <td>
                             <form th:action="@{/admins/employees/{id}/edit(id=${employee.getId()})}" method="post">
                                 <button type="submit">Edit</button>
@@ -46,7 +51,7 @@
                             </form>
                             <br>
                             <form th:action="@{/admins/employees/{id}/changeStatus(id=${employee.getId()})}" method="post">
-                                <button type="submit">Change Status</button>
+                                <button type="submit">Change Account Status</button>
                             </form>
                         </td>
                     </tr>

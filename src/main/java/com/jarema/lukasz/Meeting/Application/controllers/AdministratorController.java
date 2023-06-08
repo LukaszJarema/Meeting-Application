@@ -202,4 +202,11 @@ public class AdministratorController {
         model.addAttribute("employees", employees);
         return "administrators-allEmployees";
     }
+
+    @GetMapping("/admins/employees/search")
+    public String searchEmployeesByNameOrSurname(@RequestParam(value = "query") String query, Model model) {
+        List<EmployeeDto> employees = employeeService.searchEmployeesByNameOrSurname(query);
+        model.addAttribute("employees", employees);
+        return "administrators-allEmployees";
+    }
 }
