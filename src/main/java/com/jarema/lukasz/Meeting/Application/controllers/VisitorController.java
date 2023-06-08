@@ -144,6 +144,10 @@ public class VisitorController {
         }
         Long visitorId = visitorService.getVisitorIdByLoggedInInformation();
         visitor.setId(visitorId);
+        if (password.length() < 6) {
+            model.addAttribute("visitor", visitor);
+            return "visitors-changePassword";
+        }
         String encodePassword = passwordEncoder.encode(password);
         visitorRepository.updateVisitorPassword(encodePassword, visitorId);
         return "redirect:/visitors/home";

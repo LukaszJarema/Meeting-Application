@@ -86,6 +86,10 @@ public class EmployeeController {
         }
         Long employeeId = employeeService.getEmployeeIdByLoggedInInformation();
         employee.setId(employeeId);
+        if (password.length() < 6) {
+            model.addAttribute("employee", employee);
+            return "employees-changePassword";
+        }
         String encodePassword = passwordEncoder.encode(password);
         employeeRepository.updateEmployeePassword(encodePassword, employeeId);
         return "redirect:/employees/home";

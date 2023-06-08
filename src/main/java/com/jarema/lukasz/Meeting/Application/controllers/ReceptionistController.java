@@ -78,6 +78,10 @@ public class ReceptionistController {
         }
         Long employeeId = employeeService.getEmployeeIdByLoggedInInformation();
         employee.setId(employeeId);
+        if (password.length() < 6) {
+            model.addAttribute("employee", employee);
+            return "receptionists-changePassword";
+        }
         String encodePassword = passwordEncoder.encode(password);
         employeeRepository.updateEmployeePassword(encodePassword, employeeId);
         return "redirect:/receptionists/home";
