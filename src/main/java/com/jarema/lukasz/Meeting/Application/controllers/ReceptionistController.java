@@ -9,6 +9,7 @@ import com.jarema.lukasz.Meeting.Application.repositories.MeetingRepository;
 import com.jarema.lukasz.Meeting.Application.services.EmailService;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,6 +96,7 @@ public class ReceptionistController {
         model.addAttribute("employee", employee);
         List<Meeting> meetings;
         meetings = employee.getMeeting();
+        meetings.sort(Comparator.comparing(Meeting::getStartOfMeeting).reversed());
         model.addAttribute("meetings", meetings);
         return "receptionists-myMeetings";
     }
@@ -106,7 +109,9 @@ public class ReceptionistController {
         model.addAttribute("employee", employee);
         LocalDateTime startOfDay = queryDate.atStartOfDay();
         LocalDateTime endOfDay = queryDate.atTime(LocalTime.MAX);
-        List<Meeting> meetings = meetingRepository.findByStartOfMeetingBetweenAndEmployees(startOfDay, endOfDay, employee);
+        Sort sort = Sort.by(Sort.Direction.DESC, "startOfMeeting");
+        List<Meeting> meetings = meetingRepository.findByStartOfMeetingBetweenAndEmployees(startOfDay, endOfDay,
+                employee, sort);
         model.addAttribute("meetings", meetings);
         model.addAttribute("queryDate", queryDate);
         return "receptionists-myMeetings";
@@ -153,7 +158,8 @@ public class ReceptionistController {
                                        LocalDate queryDate) {
         LocalDateTime startOfDay = queryDate.atStartOfDay();
         LocalDateTime endOfDay = queryDate.atTime(LocalTime.MAX);
-        List<Meeting> meetings = meetingRepository.findByStartOfMeetingBetween(startOfDay, endOfDay);
+        Sort sort = Sort.by(Sort.Direction.DESC, "startOfMeeting");
+        List<Meeting> meetings = meetingRepository.findByStartOfMeetingBetween(startOfDay, endOfDay, sort);
         model.addAttribute("meetings", meetings);
         model.addAttribute("queryDate", queryDate);
         return "receptionists-allMeetings";
@@ -166,9 +172,11 @@ public class ReceptionistController {
         if (queryDate != null) {
             LocalDateTime startOfDay = queryDate.atStartOfDay();
             LocalDateTime endOfDay = queryDate.atTime(LocalTime.MAX);
-            meetings = meetingRepository.findByStartOfMeetingBetween(startOfDay, endOfDay);
+            Sort sort = Sort.by(Sort.Direction.DESC, "startOfMeeting");
+            meetings = meetingRepository.findByStartOfMeetingBetween(startOfDay, endOfDay, sort);
         } else {
-            meetings = meetingRepository.findAll();
+            Sort sort = Sort.by(Sort.Direction.DESC, "startOfMeeting");
+            meetings = meetingRepository.findAll(sort);
         }
         model.addAttribute("meetings", meetings);
         model.addAttribute("queryDate", queryDate);

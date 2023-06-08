@@ -14,6 +14,7 @@ import com.jarema.lukasz.Meeting.Application.services.MeetingService;
 import com.jarema.lukasz.Meeting.Application.services.VisitorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,7 @@ import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -160,6 +162,7 @@ public class VisitorController {
         model.addAttribute("visitor", visitor);
         List<Meeting> meetings;
         meetings = visitor.getMeetings();
+        meetings.sort(Comparator.comparing(Meeting::getStartOfMeeting).reversed());
         model.addAttribute("meetings", meetings);
         return "visitors-myMeetings";
     }
@@ -172,7 +175,9 @@ public class VisitorController {
         model.addAttribute("visitor", visitor);
         LocalDateTime startOfDay = queryDate.atStartOfDay();
         LocalDateTime endOfDay = queryDate.atTime(LocalTime.MAX);
-        List<Meeting> meetings = meetingRepository.findByStartOfMeetingBetweenAndVisitor(startOfDay, endOfDay, visitor);
+        Sort sort = Sort.by(Sort.Direction.DESC, "startOfMeeting");
+        List<Meeting> meetings = meetingRepository.findByStartOfMeetingBetweenAndVisitor(startOfDay, endOfDay,
+                visitor, sort);
         model.addAttribute("meetings", meetings);
         model.addAttribute("queryDate", queryDate);
         return "visitors-myMeetings";
