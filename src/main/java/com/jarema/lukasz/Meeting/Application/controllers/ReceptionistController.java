@@ -145,7 +145,7 @@ public class ReceptionistController {
 
     @GetMapping("/receptionists/allMeetings")
     public String receptionistAllMeetings(Model model) {
-        List<Meeting> meetings = meetingRepository.findAll();
+        List<Meeting> meetings = meetingRepository.findAllMeetingsSortedByStartDateDescending();
         model.addAttribute("meetings", meetings);
         return "receptionists-allMeetings";
     }
