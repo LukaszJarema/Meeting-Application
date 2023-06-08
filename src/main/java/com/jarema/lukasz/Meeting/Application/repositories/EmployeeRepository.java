@@ -4,6 +4,7 @@ import com.jarema.lukasz.Meeting.Application.models.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -20,4 +21,10 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     void updateEmployeePassword(String password, Long id);
     @Query("SELECT e FROM Employee e ORDER BY e.surname ASC")
     List<Employee> findAllEmployeesSortedBySurnameAscending();
+    @Modifying
+    @Query("UPDATE Employee e SET e.accountNonLocked = true WHERE e.id = :employeeId")
+    void activateEmployee(@Param("employeeId") Long employeeId);
+    @Modifying
+    @Query("UPDATE Employee e SET e.accountNonLocked = false WHERE e.id = :employeeId")
+    void deactivateEmployee(@Param("employeeId") Long employeeId);
 }

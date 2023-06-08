@@ -35,6 +35,7 @@
                         <td th:text="${employee.surname}"/>
                         <td th:text="${employee.emailAddress}"/>
                         <td th:text="${employee.department}"/>
+                        <td th:text="${employee.accountNonLocked ? 'Active' : 'Inactive'}"/>
                         <td>
                             <form th:action="@{/admins/employees/{id}/edit(id=${employee.getId()})}" method="post">
                                 <button type="submit">Edit</button>

@@ -33,6 +33,7 @@ public class VisitorServiceImpl implements VisitorService {
         Visitor visitor = mapToVisitor(visitorDto);
         Role role = roleRepository.findByName("VISITOR");
         visitor.setRole(Arrays.asList(role));
+        visitor.setAccountNonLocked(true);
         return visitorRepository.save(visitor);
     }
 

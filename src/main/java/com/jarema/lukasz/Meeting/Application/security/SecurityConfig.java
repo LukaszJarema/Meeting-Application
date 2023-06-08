@@ -1,5 +1,9 @@
 package com.jarema.lukasz.Meeting.Application.security;
 
+import com.jarema.lukasz.Meeting.Application.models.Employee;
+import com.jarema.lukasz.Meeting.Application.models.Visitor;
+import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
+import com.jarema.lukasz.Meeting.Application.repositories.VisitorRepository;
 import com.jarema.lukasz.Meeting.Application.services.impls.CustomEmployeeDetailsService;
 import com.jarema.lukasz.Meeting.Application.services.impls.CustomVisitorDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +14,9 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -22,14 +28,18 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 public class SecurityConfig {
 
     private CustomEmployeeDetailsService customEmployeeDetailsService;
-
     private CustomVisitorDetailsService customVisitorDetailsService;
+    private EmployeeRepository employeeRepository;
+    private VisitorRepository visitorRepository;
 
     @Autowired
     public SecurityConfig(CustomEmployeeDetailsService customEmployeeDetailsService,
-                          CustomVisitorDetailsService customVisitorDetailsService) {
+                          CustomVisitorDetailsService customVisitorDetailsService,
+                          EmployeeRepository employeeRepository, VisitorRepository visitorRepository) {
         this.customEmployeeDetailsService = customEmployeeDetailsService;
         this.customVisitorDetailsService = customVisitorDetailsService;
+        this.employeeRepository = employeeRepository;
+        this.visitorRepository = visitorRepository;
     }
 
     @Bean
@@ -96,23 +106,46 @@ public class SecurityConfig {
     }
 
     private AuthenticationSuccessHandler employeeSuccessHandler() {
-        return ((request, response, authentication) -> {
+        return (request, response, authentication) -> {
             for (GrantedAuthority auth : authentication.getAuthorities()) {
+                Authentication authObject = SecurityContextHolder.getContext().getAuthentication();
+                String emailAddress = authObject.getName();
                 if (auth.getAuthority().equals("ADMINISTRATOR")) {
-                    response.sendRedirect("/admins/home");
+                    Employee employee = employeeRepository.findByEmailAddress(emailAddress);
+                    if (employee != null && employee.isAccountNonLocked()) {
+                        response.sendRedirect("/admins/home");
+                    } else {
+                        response.sendRedirect("/accountDisabled");
+                    }
                     return;
                 } else if (auth.getAuthority().equals("EMPLOYEE")) {
-                    response.sendRedirect("/employees/home");
+                    Employee employee = employeeRepository.findByEmailAddress(emailAddress);
+                    if (employee != null && employee.isAccountNonLocked()) {
+                        response.sendRedirect("/employees/home");
+                    } else {
+                        response.sendRedirect("/accountDisabled");
+                    }
                     return;
                 } else if (auth.getAuthority().equals("RECEPTION")) {
-                    response.sendRedirect("/receptionists/home");
+                    Employee employee = employeeRepository.findByEmailAddress(emailAddress);
+                    if (employee != null && employee.isAccountNonLocked()) {
+                        response.sendRedirect("/receptionists/home");
+                    } else {
+                        response.sendRedirect("/accountDisabled");
+                    }
                     return;
                 } else if (auth.getAuthority().equals("VISITOR")) {
-                    response.sendRedirect("/visitors/home");
+                    Visitor visitor = visitorRepository.findByEmailAddress(emailAddress);
+                    if (visitor != null && visitor.isAccountNonLocked()) {
+                        response.sendRedirect("/visitors/home");
+                    } else {
+                        response.sendRedirect("/accountDisabled");
+                    }
+
                     return;
                 }
             }
-        });
+        };
     }
 
     private AuthenticationFailureHandler employeeFailureHandler() {
