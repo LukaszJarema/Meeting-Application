@@ -154,13 +154,6 @@ public class EmployeeController {
         return "redirect:/employees/home";
     }
 
-    @GetMapping("/employees/list")
-    public String employeesList(Model model) {
-        List<EmployeeDto> employees = employeeService.findAllEmployees();
-        model.addAttribute("employees", employees);
-        return "employees-list";
-    }
-
     @GetMapping("/employees/{employeeId}/edit")
     public String editEmployeeForm(@PathVariable("employeeId") Long employeeId, Model model) {
         EmployeeDto employee = employeeService.findEmployeeById(employeeId);
@@ -219,6 +212,6 @@ public class EmployeeController {
     public String searchEmployeesByNameOrSurname(@RequestParam(value = "query") String query, Model model) {
         List<EmployeeDto> employees = employeeService.searchEmployeesByNameOrSurname(query);
         model.addAttribute("employees", employees);
-        return "employees-list";
+        return "administrators-allEmployees";
     }
 }

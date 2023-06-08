@@ -18,4 +18,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Transactional
     @Query("UPDATE Employee e SET e.password=:password WHERE e.id=:id")
     void updateEmployeePassword(String password, Long id);
+    @Query("SELECT e FROM Employee e ORDER BY e.surname ASC")
+    List<Employee> findAllEmployeesSortedBySurnameAscending();
 }

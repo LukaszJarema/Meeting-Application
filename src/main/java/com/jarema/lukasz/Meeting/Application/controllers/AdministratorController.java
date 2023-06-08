@@ -195,4 +195,11 @@ public class AdministratorController {
         employeeService.saveEmployee(employeeDto);
         return "redirect:/admins/home";
     }
+
+    @GetMapping("/admins/employees")
+    public String employeesList(Model model) {
+        List<Employee> employees = employeeRepository.findAllEmployeesSortedBySurnameAscending();
+        model.addAttribute("employees", employees);
+        return "administrators-allEmployees";
+    }
 }

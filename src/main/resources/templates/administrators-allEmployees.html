@@ -10,14 +10,10 @@
 </head>
 <body>
         <div class="container">
-            <br>
-            <a th:href="@{/employees/list}" class="btn btn-large btn-success">Employees list</a>
-            <a th:href="@{employees/new}" class="btn btn-large btn-success">Add an employee</a>
-            <br>
             <h3>Employees List</h3>
             <hr/>
             <div>
-                <form th:action="@{/employees/search}">
+                <form th:action="@{/admins/employees/search}">
                     <input name="query" type="search" placeholder="Search employees by name or surname" aria-label="Search">
                     <button type="submit">Search</button>
                 </form>
@@ -40,9 +36,17 @@
                         <td th:text="${employee.emailAddress}"/>
                         <td th:text="${employee.department}"/>
                         <td>
-                            <a th:href="@{employees/{employeeId}/edit(employeeId=${employee.id})}" class="btn btn-large btn-success">Edit</a>
-                            <a th:href="@{employees/{employeeId}/changePassword(employeeId=${employee.id})}" class="btn btn-large btn-success">Change password</a>
-                            <a th:href="@{employees/{employeeId}/delete(employeeId=${employee.id})}" class="btn btn-large btn-success">Delete</a>
+                            <form th:action="@{/admins/employees/{id}/edit(id=${employee.getId()})}" method="post">
+                                <button type="submit">Edit</button>
+                            </form>
+                            <br>
+                            <form th:action="@{/admins/employees/{id}/changePassword(id=${employee.getId()})}" method="post">
+                                <button type="submit">Change Password</button>
+                            </form>
+                            <br>
+                            <form th:action="@{/admins/employees/{id}/changeStatus(id=${employee.getId()})}" method="post">
+                                <button type="submit">Change Status</button>
+                            </form>
                         </td>
                     </tr>
                 </tbody>
