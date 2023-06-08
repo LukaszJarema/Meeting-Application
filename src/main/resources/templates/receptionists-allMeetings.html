@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My meetings</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+          crossorigin="anonymous" />
+</head>
+<body>
+<div class="container">
+    <h3>All meetings</h3>
+    <hr/>
+    <div>
+        <form th:action="@{/receptionists/allMeetings/search}" method="post">
+            <input name="queryDate" type="date" placeholder="Search meeting by start date" aria-label="Search" th:value="${queryDate != null ? queryDate : ''}">
+            <button type="submit">Search</button>
+        </form>
+        <br>
+        <form th:action="@{/receptionists/allMeetings}" method="get">
+            <button type="submit">All my meetings</button>
+        </form>
+    </div>
+    <br>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Content</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Visitor</th>
+            <th>Requested employees</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="meeting: ${meetings}">
+            <td th:text="${meeting.contentOfMeeting}"/>
+            <td th:text="${meeting.startOfMeeting}"/>
+            <td th:text="${meeting.endOfMeeting}"/>
+            <td>
+                <span th:each="visitor, iterStat: ${meeting.visitor}">
+                    <span th:text="${visitor.name} + ' ' + ${visitor.surname}"></span>
+                    <span th:if="${!iterStat.last}">,</span>
+                </span>
+            </td>
+            <td>
+                <span th:each="employee, iterStat: ${meeting.employees}">
+                    <span th:text="${employee.name} + ' ' + ${employee.surname}"></span>
+                    <span th:if="${!iterStat.last}">,</span>
+                </span>
+            </td>
+            <td th:text="${meeting.status}"/>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

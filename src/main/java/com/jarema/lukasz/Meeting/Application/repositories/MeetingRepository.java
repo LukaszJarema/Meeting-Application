@@ -15,7 +15,7 @@ import java.util.List;
 public interface MeetingRepository extends JpaRepository<Meeting, Long> {
     List<Meeting> findByStartOfMeetingBetweenAndVisitor(LocalDateTime startDateTime, LocalDateTime endDateTime, Visitor visitor);
     List<Meeting> findByStartOfMeetingBetweenAndEmployees(LocalDateTime startOfDay, LocalDateTime endOfDay, Employee employee);
-
+    List<Meeting> findByStartOfMeetingBetween(LocalDateTime startOfDay, LocalDateTime endOfDay);
     @Modifying
     @Transactional
     @Query("UPDATE Meeting m SET m.status=:status WHERE m.id=:id")
