@@ -229,4 +229,25 @@ public class AdministratorController {
         employeeService.updateEmployee(employee);
         return "redirect:/admins/home";
     }
+
+    @GetMapping("/admins/employees/{employeeId}/changePassword")
+    public String changeEmployeePasswordForm(@PathVariable("employeeId") Long employeeId, Model model) {
+        EmployeeDto employee = employeeService.findEmployeeById(employeeId);
+        model.addAttribute("employee", employee);
+        return "administrators-employeeChangePassword";
+    }
+
+    @PostMapping("/admins/employees/{employeeId}/changePassword")
+    public String updateEmployeePassword(@PathVariable("employeeId") Long employeeId, @Valid
+                                        @RequestParam(value = "password") String password, @ModelAttribute("employee")
+                                         EmployeeDto employee, BindingResult result, Model model) {
+        if (result.hasErrors() || password.length() < 6) {
+            model.addAttribute("employee", employee);
+            return "administrators-employeeChangePassword";
+        }
+        employee.setId(employeeId);
+        String encodePassword = passwordEncoder.encode(password);
+        employeeRepository.updateEmployeePassword(encodePassword, employeeId);
+        return "redirect:/admins/home";
+    }
 }
