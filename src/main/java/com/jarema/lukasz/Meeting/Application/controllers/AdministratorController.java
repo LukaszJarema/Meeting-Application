@@ -343,4 +343,16 @@ public class AdministratorController {
         visitorRepository.updateVisitorPassword(encodePassword, visitorId);
         return "redirect:/admins/home";
     }
+
+    @PostMapping("/admins/visitors/{visitorId}/changeStatus")
+    @Transactional
+    public String updateVisitorAccountStatus(@PathVariable("visitorId") Long visitorId) {
+        Optional<Visitor> visitor = visitorRepository.findById(visitorId);
+        if (visitor.get().getAccountNonLocked().equals("true")) {
+            visitor.get().setAccountNonLocked("false");
+        } else {
+            visitor.get().setAccountNonLocked("true");
+        }
+        return "redirect:/admins/home";
+    }
 }
