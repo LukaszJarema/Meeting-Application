@@ -12,33 +12,30 @@
 <div class="container">
     <h3>Edit an employee</h3>
     <hr/>
-    <form action="@{/admins/employees/{id}/edit(id=${employee.id})}" th:object="${employee}" method="post">
+    <form action="#" th:action="@{/admins/employees/{employeeId}/edit(employeeId=${employee.id})}" th:object="${employee}" method="post">
         <input type="hidden" th:field="*{id}">
         <p>Name: <input type="text" id="name" name="name" th:field="*{name}" placeholder="Name"></p>
         <p th:if="${#fields.hasErrors('name')}" class="text-danger" th:errors="*{name}"></p>
-        <p>Surname: <input type="text" id="surname" name="surname" th:field="*{surname}" placeholder="Surname"></p>
+        <p>Surname: <input type="text" id="surnname" name="surnaname" th:field="*{surname}" placeholder="Surname"></p>
         <p th:if="${#fields.hasErrors('surname')}" class="text-danger" th:errors="*{surname}"></p>
-        <p>Email: <input type="text" id="email" name="email" th:field="*{emailAddress}" placeholder="Email"></p>
+        <p>Email: <input type="text" id="emailAddress" name="email" th:field="*{emailAddress}" placeholder="Email"></p>
         <p th:if="${#fields.hasErrors('emailAddress')}" class="text-danger" th:errors="*{emailAddress}"></p>
         <p>Department: <input type="text" id="department" name="department" th:field="*{department}" placeholder="Department"></p>
         <p th:if="${#fields.hasErrors('department')}" class="text-danger" th:errors="*{department}"></p>
+        <input type="hidden" id="password" name="password" th:field="*{password}" placeholder="Password">
         <p>Telephone number: <input type="text" id="telephoneNumber" name="telephoneNumber" th:field="*{telephoneNumber}" placeholder="Telephone number"></p>
         <p th:if="${#fields.hasErrors('telephoneNumber')}" class="text-danger" th:errors="*{telephoneNumber}"></p>
         <div class="form-group row">
-            <label class="col-form-label col-sm-4">Assigned role:</label>
-            <div class="col-sm-8 text-left">
-                <span th:text="${employee.role}"></span>
+                <p><label class="col-form-label col-sm-4">Role: </label>
+                <div class="col-sm-8 text-left">
+                    <th:block th:each="role, iterStat : ${roleList}">
+                        <div th:if="${!iterStat.last}">
+                            <input type="radio" th:field="*{role}" th:value="${role.id}" th:text="${role.name}">
+                        </div>
+                    </th:block>
+                </div>
             </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-form-label col-sm-4">Roles:</label>
-            <div class="col-sm-8 text-left">
-                <label th:each="role : ${roleList}">
-                    <input type="radio" th:field="*{role}" th:value="${role.id}" th:text="${role.name}">
-                </label>
-            </div>
-        </div>
-        <p><input type="submit" value="Submit"/></p>
+            <p><input type="submit" value="Submit"/></p>
     </form>
 </div>
 </body>

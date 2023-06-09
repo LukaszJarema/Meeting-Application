@@ -42,15 +42,15 @@
                         <td th:text="${employee.department}"/>
                         <td th:text="${employee.accountNonLocked}"/>
                         <td>
-                            <form th:action="@{/admins/employees/{id}/edit(id=${employee.getId()})}" method="post">
+                            <form th:action="@{/admins/employees/{id}/edit(id=${employee.getId()})}" method="get">
                                 <button type="submit">Edit</button>
                             </form>
                             <br>
-                            <form th:action="@{/admins/employees/{id}/changePassword(id=${employee.getId()})}" method="post">
+                            <form th:action="@{/admins/employees/{id}/changePassword(id=${employee.getId()})}" method="get">
                                 <button type="submit">Change Password</button>
                             </form>
                             <br>
-                            <form th:action="@{/admins/employees/{id}/changeStatus(id=${employee.getId()})}" method="post">
+                            <form th:action="@{/admins/employees/{id}/changeStatus(id=${employee.getId()})}" method="get">
                                 <button type="submit">Change Account Status</button>
                             </form>
                         </td>
