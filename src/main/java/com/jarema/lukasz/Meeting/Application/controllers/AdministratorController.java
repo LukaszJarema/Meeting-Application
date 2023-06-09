@@ -1,15 +1,19 @@
 package com.jarema.lukasz.Meeting.Application.controllers;
 
 import com.jarema.lukasz.Meeting.Application.dtos.EmployeeDto;
+import com.jarema.lukasz.Meeting.Application.dtos.VisitorDto;
 import com.jarema.lukasz.Meeting.Application.enums.Status;
 import com.jarema.lukasz.Meeting.Application.models.Employee;
 import com.jarema.lukasz.Meeting.Application.models.Meeting;
 import com.jarema.lukasz.Meeting.Application.models.Role;
+import com.jarema.lukasz.Meeting.Application.models.Visitor;
 import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.MeetingRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.RoleRepository;
+import com.jarema.lukasz.Meeting.Application.repositories.VisitorRepository;
 import com.jarema.lukasz.Meeting.Application.services.EmailService;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
+import com.jarema.lukasz.Meeting.Application.services.VisitorService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,17 +42,22 @@ public class AdministratorController {
     private PasswordEncoder passwordEncoder;
     private MeetingRepository meetingRepository;
     private RoleRepository roleRepository;
+    private VisitorRepository visitorRepository;
+    private VisitorService visitorService;
 
     @Autowired
     public AdministratorController(EmailService emailService, EmployeeRepository employeeRepository,
                                    EmployeeService employeeService, PasswordEncoder passwordEncoder,
-                                   MeetingRepository meetingRepository, RoleRepository roleRepository) {
+                                   MeetingRepository meetingRepository, RoleRepository roleRepository,
+                                   VisitorRepository visitorRepository, VisitorService visitorService) {
         this.emailService = emailService;
         this.employeeRepository = employeeRepository;
         this.employeeService = employeeService;
         this.passwordEncoder = passwordEncoder;
         this.meetingRepository = meetingRepository;
         this.roleRepository = roleRepository;
+        this.visitorRepository = visitorRepository;
+        this.visitorService = visitorService;
     }
 
     @GetMapping("/admins/home")
@@ -79,9 +88,9 @@ public class AdministratorController {
     }
 
     @PostMapping("/admins/changePassword")
-    public String receptionistSavePassword(@Valid @RequestParam(value = "password") String password,
-                                           @ModelAttribute("employee") EmployeeDto employee, BindingResult result,
-                                           Model model) {
+    public String administratorSavePassword(@Valid @RequestParam(value = "password") String password,
+                                            @ModelAttribute("employee") EmployeeDto employee, BindingResult result,
+                                            Model model) {
         if (result.hasErrors()) {
             model.addAttribute("employee", employee);
             return "administrators-changePassword";
@@ -98,7 +107,7 @@ public class AdministratorController {
     }
 
     @GetMapping("admins/myMeetings")
-    public String receptionistMyMeetingsPage(Model model, Principal principal) {
+    public String administratorMyMeetingsPage(Model model, Principal principal) {
         String employeeEmailAddress = principal.getName();
         Employee employee = employeeRepository.findByEmailAddress(employeeEmailAddress);
         model.addAttribute("employee", employee);
@@ -110,7 +119,7 @@ public class AdministratorController {
     }
 
     @PostMapping("/admins/myMeetings/search")
-    public String searchReceptionistMeetingsByDate(Model model, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    public String searchAdministratorMeetingsByDate(Model model, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     LocalDate queryDate, Principal principal) {
         String employeeEmailAddress = principal.getName();
         Employee employee = employeeRepository.findByEmailAddress(employeeEmailAddress);
@@ -261,5 +270,19 @@ public class AdministratorController {
             employee.get().setAccountNonLocked("true");
         }
         return "redirect:/admins/home";
+    }
+
+    @GetMapping("/admins/visitors")
+    public String visitorsList(Model model) {
+        List<Visitor> visitors = visitorRepository.findAllVisitorsSortedBySurnameAscending();
+        model.addAttribute("visitors", visitors);
+        return "administrators-allVisitors";
+    }
+
+    @GetMapping("/admins/visitors/search")
+    public String searchVisitorsByNameOrSurname(@RequestParam(value = "query") String query, Model model) {
+        List<VisitorDto> visitors = visitorService.searchVisitorsByNameOrSurname(query);
+        model.addAttribute("visitors", visitors);
+        return "administrators-allVisitors";
     }
 }

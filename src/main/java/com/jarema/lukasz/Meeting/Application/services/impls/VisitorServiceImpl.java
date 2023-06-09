@@ -13,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class VisitorServiceImpl implements VisitorService {
@@ -73,5 +75,24 @@ public class VisitorServiceImpl implements VisitorService {
        visitor.setRole(Arrays.asList(role));
        visitor.setPassword(visitorRepository.findById(visitor.getId()).get().getPassword());
        visitorRepository.save(visitor);
+    }
+
+    @Override
+    public List<VisitorDto> searchVisitorsByNameOrSurname(String query) {
+        List<Visitor> visitors = visitorRepository.searchVisitorsByNameOrSurname(query.toLowerCase());
+        return visitors.stream().map(visitor -> mapToVisitorDto(visitor)).collect(Collectors.toList());
+    }
+
+    private VisitorDto mapToVisitorDto(Visitor visitor) {
+        VisitorDto visitorDto = VisitorDto.builder()
+                .id(visitor.getId())
+                .name(visitor.getName())
+                .surname(visitor.getSurname())
+                .emailAddress(visitor.getEmailAddress())
+                .telephoneNumber(visitor.getTelephoneNumber())
+                .password(visitor.getPassword())
+                .accountNonLocked(visitor.getAccountNonLocked())
+                .build();
+        return visitorDto;
     }
 }

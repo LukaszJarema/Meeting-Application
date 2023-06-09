@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Visitors list</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+        crossorigin="anonymous" />
+</head>
+<body>
+<div class="container">
+  <h3>Visitors List</h3>
+  <hr/>
+  <div>
+    <form th:action="@{/admins/visitors/search}">
+      <input name="query" type="search" placeholder="Search visitors by name or surname" aria-label="Search">
+      <button type="submit">Search</button>
+    </form>
+    <br>
+    <form th:action="@{/admins/visitors}" method="get">
+      <button type="submit">All visitors</button>
+    </form>
+  </div>
+  <br>
+  <table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Surname</th>
+      <th>Email</th>
+      <th>Is account unlocked?</th>
+      <th>Options</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="visitor: ${visitors}">
+      <td th:text="${visitor.name}"/>
+      <td th:text="${visitor.surname}"/>
+      <td th:text="${visitor.emailAddress}"/>
+      <td th:text="${visitor.accountNonLocked}"/>
+      <td>
+        <form th:action="@{/admins/visitors/{id}/edit(id=${visitor.getId()})}" method="get">
+          <button type="submit">Edit</button>
+        </form>
+        <br>
+        <form th:action="@{/admins/visitors/{id}/changePassword(id=${visitor.getId()})}" method="get">
+          <button type="submit">Change Password</button>
+        </form>
+        <br>
+        <form th:action="@{/admins/visitors/{id}/changeStatus(id=${visitor.getId()})}" method="post">
+          <button type="submit">Change Account Status</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
