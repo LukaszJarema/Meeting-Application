@@ -73,7 +73,7 @@ public class SecurityConfig {
         http.httpBasic()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/login", "/register").permitAll()
+                .requestMatchers("/login", "/register", "/support").permitAll()
                 .requestMatchers("/admins/**").hasAuthority("ADMINISTRATOR")
                 .requestMatchers("/employees/**").hasAuthority("EMPLOYEE")
                 .requestMatchers("/receptionists/**").hasAuthority("RECEPTION")

@@ -193,8 +193,8 @@ public class AdministratorController {
     @PostMapping("/admins/employees/new")
     public String saveEmployee(@Valid @ModelAttribute("employee") EmployeeDto employeeDto, BindingResult result,
                                Model model) {
-        Employee exsistingEmployeeEmailAddress = employeeService.findByEmail(employeeDto.getEmailAddress());
-        if(exsistingEmployeeEmailAddress != null && exsistingEmployeeEmailAddress.getEmailAddress() != null && !exsistingEmployeeEmailAddress.getEmailAddress().isEmpty()) {
+        Employee existingEmployeeEmailAddress = employeeService.findByEmail(employeeDto.getEmailAddress());
+        if(existingEmployeeEmailAddress != null && existingEmployeeEmailAddress.getEmailAddress() != null && !existingEmployeeEmailAddress.getEmailAddress().isEmpty()) {
             result.rejectValue("emailAddress", "error.emailAddress", "There is already a Visitor with this email address or username");
         }
         if(result.hasErrors()) {

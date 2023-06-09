@@ -5,6 +5,7 @@ import com.jarema.lukasz.Meeting.Application.models.Employee;
 import com.jarema.lukasz.Meeting.Application.models.Role;
 import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.RoleRepository;
+import com.jarema.lukasz.Meeting.Application.services.EmailService;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,13 +22,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
+    private EmailService emailService;
 
     @Autowired
     public EmployeeServiceImpl(EmployeeRepository employeeRepository, RoleRepository roleRepository,
-                               PasswordEncoder passwordEncoder) {
+                               PasswordEncoder passwordEncoder, EmailService emailService) {
         this.employeeRepository = employeeRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     @Override
@@ -39,6 +42,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee saveEmployee(EmployeeDto employeeDto) {
         Employee employee = mapToEmployee(employeeDto);
+        String password = employee.getPassword();
+        String emailAddress = employee.getEmailAddress();
+        emailService.sendWelcomeMessageForNewEmployee(emailAddress, password);
+        employee.setPassword(passwordEncoder.encode(password));
         return employeeRepository.save(employee);
     }
 
@@ -97,7 +104,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .emailAddress(employee.getEmailAddress())
                 .department(employee.getDepartment())
                 .telephoneNumber(employee.getTelephoneNumber())
-                .password(passwordEncoder.encode(employee.getPassword()))
+                .password(employee.getPassword())
                 .role(Collections.singleton(employee.getRole()))
                 .accountNonLocked("true")
                 .build();

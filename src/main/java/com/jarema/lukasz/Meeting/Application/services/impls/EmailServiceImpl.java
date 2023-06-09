@@ -76,4 +76,11 @@ public class EmailServiceImpl implements EmailService {
         sendMail(emailAddress, "Your meeting changed the status", text);
     }
 
+    @Override
+    public void sendWelcomeMessageForNewEmployee(String emailAddress, String password) {
+        String text = "Hello\n\n.Your account has been created in our Meeting Application. You can log in to the portal" +
+                " with below credentials:\nLogin: " + emailAddress + "\nPassword: " + password + "\n\nThis email" +
+                " has been sent from Meeting Application of our company.";
+        sendMail(emailAddress, "Welcome in Meeting Application", text);
+    }
 }

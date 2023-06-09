@@ -1,8 +1,10 @@
 package com.jarema.lukasz.Meeting.Application.controllers;
 
+import com.jarema.lukasz.Meeting.Application.models.Support;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -38,5 +40,12 @@ public class LoginController {
     public String logoutPage(HttpServletRequest request) throws ServletException {
         request.logout();
         return "redirect:/";
+    }
+
+    @GetMapping("/support")
+    public String supportForm(Model model) {
+        Support support = new Support();
+        model.addAttribute("support", support);
+        return "support";
     }
 }

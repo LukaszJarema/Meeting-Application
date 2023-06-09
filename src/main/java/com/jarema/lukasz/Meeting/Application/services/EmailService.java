@@ -10,4 +10,5 @@ public interface EmailService {
                                                       LocalDateTime date);
     void sendConfirmationAboutDeletedMeetingToVisitor(String emailAddress);
     void sendConfirmationAboutChangedStatusOfMeeting(String emailAddress, String employee, String content, String status);
+    void sendWelcomeMessageForNewEmployee(String emailAddress, String password);
 }
