@@ -83,4 +83,11 @@ public class EmailServiceImpl implements EmailService {
                 " has been sent from Meeting Application of our company.";
         sendMail(emailAddress, "Welcome in Meeting Application", text);
     }
+
+    @Override
+    public void sendConfirmationAboutOpenTicket(String emailAddress) {
+        String text = "Hello.\n\nYour ticket has been created.\n\nEmail has been sent from Meeting Application" +
+                " of company.";
+        sendMail(emailAddress, "Ticket has been created", text);
+    }
 }

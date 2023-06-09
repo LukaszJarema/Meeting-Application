@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 public class SupportDto {
@@ -18,4 +20,6 @@ public class SupportDto {
     private String message;
     private String answer;
     private SupportStatus supportStatus;
+    private LocalDateTime createdAt;
+    private LocalDateTime closedAd;
 }

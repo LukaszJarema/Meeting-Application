@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Support tickets</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+        crossorigin="anonymous" />
+</head>
+<body>
+<div class="container">
+  <h3>Support tickets</h3>
+  <hr/>
+  <br>
+  <table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+      <th>Email address</th>
+      <th>Message</th>
+      <th>Status</th>
+      <th>Open at</th>
+      <th>Options</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="support: ${supports}">
+      <td th:text="${support.emailAddress}"/>
+      <td th:text="${support.message}"/>
+      <td th:text="${support.supportStatus}"/>
+      <td th:text="${support.createdAt}"/>
+      <td>
+        <form th:action="@{/admins/support/{id}/edit(id=${support.getId()})}" method="get">
+          <button type="submit">Answer</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

@@ -11,4 +11,5 @@ public interface EmailService {
     void sendConfirmationAboutDeletedMeetingToVisitor(String emailAddress);
     void sendConfirmationAboutChangedStatusOfMeeting(String emailAddress, String employee, String content, String status);
     void sendWelcomeMessageForNewEmployee(String emailAddress, String password);
+    void sendConfirmationAboutOpenTicket(String emailAddress);
 }

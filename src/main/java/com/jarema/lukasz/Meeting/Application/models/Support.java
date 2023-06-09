@@ -9,6 +9,8 @@ import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -30,4 +32,6 @@ public class Support {
     private String answer;
     @Enumerated(EnumType.STRING)
     private SupportStatus supportStatus;
+    private LocalDateTime createdAt;
+    private LocalDateTime closedAd;
 }

@@ -3,14 +3,8 @@ package com.jarema.lukasz.Meeting.Application.controllers;
 import com.jarema.lukasz.Meeting.Application.dtos.EmployeeDto;
 import com.jarema.lukasz.Meeting.Application.dtos.VisitorDto;
 import com.jarema.lukasz.Meeting.Application.enums.Status;
-import com.jarema.lukasz.Meeting.Application.models.Employee;
-import com.jarema.lukasz.Meeting.Application.models.Meeting;
-import com.jarema.lukasz.Meeting.Application.models.Role;
-import com.jarema.lukasz.Meeting.Application.models.Visitor;
-import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
-import com.jarema.lukasz.Meeting.Application.repositories.MeetingRepository;
-import com.jarema.lukasz.Meeting.Application.repositories.RoleRepository;
-import com.jarema.lukasz.Meeting.Application.repositories.VisitorRepository;
+import com.jarema.lukasz.Meeting.Application.models.*;
+import com.jarema.lukasz.Meeting.Application.repositories.*;
 import com.jarema.lukasz.Meeting.Application.services.EmailService;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
 import com.jarema.lukasz.Meeting.Application.services.VisitorService;
@@ -44,12 +38,14 @@ public class AdministratorController {
     private RoleRepository roleRepository;
     private VisitorRepository visitorRepository;
     private VisitorService visitorService;
+    private SupportRepository supportRepository;
 
     @Autowired
     public AdministratorController(EmailService emailService, EmployeeRepository employeeRepository,
                                    EmployeeService employeeService, PasswordEncoder passwordEncoder,
                                    MeetingRepository meetingRepository, RoleRepository roleRepository,
-                                   VisitorRepository visitorRepository, VisitorService visitorService) {
+                                   VisitorRepository visitorRepository, VisitorService visitorService,
+                                   SupportRepository supportRepository) {
         this.emailService = emailService;
         this.employeeRepository = employeeRepository;
         this.employeeService = employeeService;
@@ -58,6 +54,7 @@ public class AdministratorController {
         this.roleRepository = roleRepository;
         this.visitorRepository = visitorRepository;
         this.visitorService = visitorService;
+        this.supportRepository = supportRepository;
     }
 
     @GetMapping("/admins/home")
@@ -354,5 +351,12 @@ public class AdministratorController {
             visitor.get().setAccountNonLocked("true");
         }
         return "redirect:/admins/home";
+    }
+
+    @GetMapping("/admins/support")
+    public String administratorSupportPage(Model model) {
+        List<Support> supports = supportRepository.findAllSupportTicketSortedByCreatedDateAscending();
+        model.addAttribute("supports", supports);
+        return "administrators-support";
     }
 }
