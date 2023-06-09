@@ -1,15 +1,28 @@
 package com.jarema.lukasz.Meeting.Application.controllers;
 
+import com.jarema.lukasz.Meeting.Application.dtos.SupportDto;
 import com.jarema.lukasz.Meeting.Application.models.Support;
+import com.jarema.lukasz.Meeting.Application.services.SupportService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class LoginController {
+
+    private SupportService supportService;
+
+    @Autowired
+    public LoginController(SupportService supportService) {
+        this.supportService = supportService;
+    }
 
     @GetMapping("/")
     public String mainPage(){
@@ -47,5 +60,15 @@ public class LoginController {
         Support support = new Support();
         model.addAttribute("support", support);
         return "support";
+    }
+
+    @PostMapping("/support")
+    public String supportSave(@Valid @ModelAttribute("support") SupportDto supportDto, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("support", supportDto);
+            return "support";
+        }
+        supportService.saveSupport(supportDto);
+        return "redirect:/";
     }
 }
