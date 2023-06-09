@@ -285,4 +285,22 @@ public class AdministratorController {
         model.addAttribute("visitors", visitors);
         return "administrators-allVisitors";
     }
+
+    @GetMapping("/admins/visitors/{visitorId}/edit")
+    public String visitorEditPage(@PathVariable("visitorId") Long visitorId, Model model) {
+        VisitorDto visitor = visitorService.findVisitorById(visitorId);
+        model.addAttribute("visitor", visitor);
+        return "administrators-visitorEdit";
+    }
+
+    @PostMapping("/admins/visitors/{visitorId}/edit")
+    public String updateVisitor(@PathVariable("visitorId") Long visitorId, @Valid
+                                @ModelAttribute("visitor") VisitorDto visitor, BindingResult result) {
+        if (result.hasErrors()) {
+            return "administrators-visitorEdit";
+        }
+        visitor.setId(visitorId);
+        visitorService.updateVisitor(visitor);
+        return "redirect:/admins/home";
+    }
 }

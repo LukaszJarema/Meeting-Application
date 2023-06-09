@@ -83,6 +83,12 @@ public class VisitorServiceImpl implements VisitorService {
         return visitors.stream().map(visitor -> mapToVisitorDto(visitor)).collect(Collectors.toList());
     }
 
+    @Override
+    public VisitorDto findVisitorById(Long visitorId) {
+        Visitor visitor = visitorRepository.findById(visitorId).get();
+        return mapToVisitorDto(visitor);
+    }
+
     private VisitorDto mapToVisitorDto(Visitor visitor) {
         VisitorDto visitorDto = VisitorDto.builder()
                 .id(visitor.getId())
