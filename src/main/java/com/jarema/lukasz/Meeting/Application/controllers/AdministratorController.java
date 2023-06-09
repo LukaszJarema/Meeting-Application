@@ -1,12 +1,15 @@
 package com.jarema.lukasz.Meeting.Application.controllers;
 
 import com.jarema.lukasz.Meeting.Application.dtos.EmployeeDto;
+import com.jarema.lukasz.Meeting.Application.dtos.SupportDto;
 import com.jarema.lukasz.Meeting.Application.dtos.VisitorDto;
 import com.jarema.lukasz.Meeting.Application.enums.Status;
+import com.jarema.lukasz.Meeting.Application.enums.SupportStatus;
 import com.jarema.lukasz.Meeting.Application.models.*;
 import com.jarema.lukasz.Meeting.Application.repositories.*;
 import com.jarema.lukasz.Meeting.Application.services.EmailService;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
+import com.jarema.lukasz.Meeting.Application.services.SupportService;
 import com.jarema.lukasz.Meeting.Application.services.VisitorService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -39,13 +42,14 @@ public class AdministratorController {
     private VisitorRepository visitorRepository;
     private VisitorService visitorService;
     private SupportRepository supportRepository;
+    private SupportService supportService;
 
     @Autowired
     public AdministratorController(EmailService emailService, EmployeeRepository employeeRepository,
                                    EmployeeService employeeService, PasswordEncoder passwordEncoder,
                                    MeetingRepository meetingRepository, RoleRepository roleRepository,
                                    VisitorRepository visitorRepository, VisitorService visitorService,
-                                   SupportRepository supportRepository) {
+                                   SupportRepository supportRepository, SupportService supportService) {
         this.emailService = emailService;
         this.employeeRepository = employeeRepository;
         this.employeeService = employeeService;
@@ -55,6 +59,7 @@ public class AdministratorController {
         this.visitorRepository = visitorRepository;
         this.visitorService = visitorService;
         this.supportRepository = supportRepository;
+        this.supportService = supportService;
     }
 
     @GetMapping("/admins/home")
@@ -358,5 +363,32 @@ public class AdministratorController {
         List<Support> supports = supportRepository.findAllSupportTicketSortedByCreatedDateAscending();
         model.addAttribute("supports", supports);
         return "administrators-support";
+    }
+
+    @GetMapping("/admins/support/{supportId}/edit")
+    public String viewTicketOnSupport(@PathVariable Long supportId, Model model) {
+        Optional<Support> support = supportRepository.findById(supportId);
+        model.addAttribute("support", support);
+        return "administrators-editSupportTicket";
+    }
+
+    @PostMapping("/admins/support/{supportId}/edit")
+    public String answerForATicketOnSupport(@Valid @PathVariable("supportId") Long supportId,
+                                            @ModelAttribute("support") SupportDto support, BindingResult result,
+                                            Model model) {
+        Optional<Support> existingSupportOptional = supportRepository.findById(supportId);
+        if (result.hasErrors()) {
+            model.addAttribute("support", support);
+            return "administrators-editSupportTicket";
+        }
+        if (existingSupportOptional.isPresent()) {
+            Support existingSupport = existingSupportOptional.get();
+            existingSupport.setAnswer(support.getAnswer());
+            existingSupport.setClosedAd(LocalDateTime.now());
+            existingSupport.setSupportStatus(SupportStatus.CLOSED);
+            supportRepository.save(existingSupport);
+            emailService.closeTicket(existingSupport.getEmailAddress(), existingSupport.getAnswer());
+        }
+        return "redirect:/admins/home";
     }
 }

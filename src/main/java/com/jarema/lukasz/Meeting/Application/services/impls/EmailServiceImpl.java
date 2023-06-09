@@ -90,4 +90,11 @@ public class EmailServiceImpl implements EmailService {
                 " of company.";
         sendMail(emailAddress, "Ticket has been created", text);
     }
+
+    @Override
+    public void closeTicket(String emailAddress, String answer) {
+        String text = "Hello.\n\nYour ticket has been closed with answer:\n" + answer + "\nIf you have any further " +
+                "question please open new ticket.\n\nEmail has been sent from Meeting Application of our company.";
+        sendMail(emailAddress, "Your ticket has been closed", text);
+    }
 }

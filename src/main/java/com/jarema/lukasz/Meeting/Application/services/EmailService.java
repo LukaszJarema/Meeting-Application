@@ -12,4 +12,5 @@ public interface EmailService {
     void sendConfirmationAboutChangedStatusOfMeeting(String emailAddress, String employee, String content, String status);
     void sendWelcomeMessageForNewEmployee(String emailAddress, String password);
     void sendConfirmationAboutOpenTicket(String emailAddress);
+    void closeTicket(String emailAddress, String answer);
 }
