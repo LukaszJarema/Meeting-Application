@@ -322,4 +322,25 @@ public class AdministratorController {
         visitorService.updateVisitor(visitor);
         return "redirect:/admins/home";
     }
+
+    @GetMapping("/admins/visitors/{visitorId}/changePassword")
+    public String changeVisitorPasswordForm(@PathVariable("visitorId") Long visitorId, Model model) {
+        VisitorDto visitor = visitorService.findVisitorById(visitorId);
+        model.addAttribute("visitor", visitor);
+        return "administrators-visitorChangePassword";
+    }
+
+    @PostMapping("/admins/visitors/{visitorId}/changePassword")
+    public String updateVisitorPassword(@PathVariable("visitorId") Long visitorId, @Valid
+                                        @RequestParam(value = "password") String password, @ModelAttribute("visitor")
+                                         VisitorDto visitor, BindingResult result, Model model) {
+        if (result.hasErrors() || password.length() < 6) {
+            model.addAttribute("visitor", visitor);
+            return "administrators-visitorChangePassword";
+        }
+        visitor.setId(visitorId);
+        String encodePassword = passwordEncoder.encode(password);
+        visitorRepository.updateVisitorPassword(encodePassword, visitorId);
+        return "redirect:/admins/home";
+    }
 }
