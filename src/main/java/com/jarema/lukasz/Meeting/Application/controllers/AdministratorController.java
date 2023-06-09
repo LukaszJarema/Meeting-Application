@@ -250,4 +250,16 @@ public class AdministratorController {
         employeeRepository.updateEmployeePassword(encodePassword, employeeId);
         return "redirect:/admins/home";
     }
+
+    @PostMapping("/admins/employees/{employeeId}/changeStatus")
+    @Transactional
+    public String updateEmployeeAccountStatus(@PathVariable("employeeId") Long employeeId) {
+        Optional<Employee> employee = employeeRepository.findById(employeeId);
+        if (employee.get().getAccountNonLocked().equals("true")) {
+            employee.get().setAccountNonLocked("false");
+        } else {
+            employee.get().setAccountNonLocked("true");
+        }
+        return "redirect:/admins/home";
+    }
 }

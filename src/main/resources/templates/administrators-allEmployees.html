@@ -50,7 +50,7 @@
                                 <button type="submit">Change Password</button>
                             </form>
                             <br>
-                            <form th:action="@{/admins/employees/{id}/changeStatus(id=${employee.getId()})}" method="get">
+                            <form th:action="@{/admins/employees/{id}/changeStatus(id=${employee.getId()})}" method="post">
                                 <button type="submit">Change Account Status</button>
                             </form>
                         </td>

@@ -140,16 +140,12 @@ public class VisitorController {
     public String updateVisitorPassword(@Valid @RequestParam(value = "password") String password,
                                         @ModelAttribute("visitor") VisitorDto visitor, BindingResult result,
                                         Model model) {
-        if (result.hasErrors()) {
+        if (result.hasErrors() || password.length() < 6) {
             model.addAttribute(("visitor"), visitor);
             return "visitors-changePassword";
         }
         Long visitorId = visitorService.getVisitorIdByLoggedInInformation();
         visitor.setId(visitorId);
-        if (password.length() < 6) {
-            model.addAttribute("visitor", visitor);
-            return "visitors-changePassword";
-        }
         String encodePassword = passwordEncoder.encode(password);
         visitorRepository.updateVisitorPassword(encodePassword, visitorId);
         return "redirect:/visitors/home";
