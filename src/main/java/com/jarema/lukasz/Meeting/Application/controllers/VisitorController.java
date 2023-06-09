@@ -68,8 +68,8 @@ public class VisitorController {
     @PostMapping("/register")
     public String saveVisitor(@Valid @ModelAttribute("visitor") VisitorDto visitorDto, BindingResult result,
                               Model model) {
-        Visitor exsistingVisitorEmailAddress = visitorService.findByEmail(visitorDto.getEmailAddress());
-        if(exsistingVisitorEmailAddress != null && exsistingVisitorEmailAddress.getEmailAddress() != null && !exsistingVisitorEmailAddress.getEmailAddress().isEmpty()) {
+        Visitor existingVisitorEmailAddress = visitorService.findByEmail(visitorDto.getEmailAddress());
+        if(existingVisitorEmailAddress != null && existingVisitorEmailAddress.getEmailAddress() != null && !existingVisitorEmailAddress.getEmailAddress().isEmpty()) {
             result.rejectValue("emailAddress", "error.emailAddress", "There is already a Visitor with this email address or username");
         }
         if(result.hasErrors()) {
@@ -118,11 +118,18 @@ public class VisitorController {
     @PostMapping("/visitors/edit")
     public String updateVisitor(@Valid @ModelAttribute("visitor") VisitorDto visitor, BindingResult result,
                                 Model model) {
+        Long visitorId = visitorService.getVisitorIdByLoggedInInformation();
+        Visitor existingVisitor = visitorService.findById(visitorId);
+        if (!visitor.getEmailAddress().equals(existingVisitor.getEmailAddress())) {
+            Visitor existingVisitorEmailAddress = visitorService.findByEmail(visitor.getEmailAddress());
+            if (existingVisitorEmailAddress != null) {
+                result.rejectValue("emailAddress", "error.emailAddress", "There is already a Visitor with this email address");
+            }
+        }
         if (result.hasErrors()) {
             model.addAttribute("visitor", visitor);
             return "visitors-edit";
         }
-        Long visitorId = visitorService.getVisitorIdByLoggedInInformation();
         visitor.setId(visitorId);
         visitorService.updateVisitor(visitor);
         return "redirect:/visitors/home";

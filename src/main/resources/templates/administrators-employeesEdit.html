@@ -20,6 +20,9 @@
         <p th:if="${#fields.hasErrors('surname')}" class="text-danger" th:errors="*{surname}"></p>
         <p>Email: <input type="text" id="emailAddress" name="email" th:field="*{emailAddress}" placeholder="Email"></p>
         <p th:if="${#fields.hasErrors('emailAddress')}" class="text-danger" th:errors="*{emailAddress}"></p>
+        <div th:if="${error}" class="error-message">
+            <span th:text="${error}"></span>
+        </div>
         <p>Department: <input type="text" id="department" name="department" th:field="*{department}" placeholder="Department"></p>
         <p th:if="${#fields.hasErrors('department')}" class="text-danger" th:errors="*{department}"></p>
         <input type="hidden" id="password" name="password" th:field="*{password}" placeholder="Password">

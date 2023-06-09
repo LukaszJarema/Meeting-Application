@@ -14,4 +14,5 @@ public interface EmployeeService {
     List<EmployeeDto> searchEmployeesByNameOrSurname(String query);
     Employee findByEmail(String emailAddress);
     Long getEmployeeIdByLoggedInInformation();
+    Employee findById(Long employeeId);
 }

@@ -84,6 +84,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         return id;
     }
 
+    @Override
+    public Employee findById(Long employeeId) {
+        return employeeRepository.findById(employeeId).orElse(null);
+    }
+
     private Employee mapToEmployee(EmployeeDto employee) {
         Employee employeeDto = Employee.builder()
                 .id(employee.getId())

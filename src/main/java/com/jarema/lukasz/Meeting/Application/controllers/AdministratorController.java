@@ -230,8 +230,20 @@ public class AdministratorController {
 
     @PostMapping("/admins/employees/{employeeId}/edit")
     public String updateEmployee(@PathVariable("employeeId") Long employeeId, @Valid @ModelAttribute("employee")
-                                 EmployeeDto employee, BindingResult result) {
+                                 EmployeeDto employee, BindingResult result, Model model) {
+        Employee existingEmployee = employeeService.findById(employeeId);
+        if (!employee.getEmailAddress().equals(existingEmployee.getEmailAddress())) {
+            Employee existingEmployeeEmailAddress = employeeService.findByEmail(employee.getEmailAddress());
+            if (existingEmployeeEmailAddress != null) {
+                result.rejectValue("emailAddress", "error.emailAddress", "There is already an Employee with this email address");
+                model.addAttribute("error", "There is already an Employee with this email address");
+            }
+        }
         if (result.hasErrors()) {
+            employee = employeeService.findEmployeeById(employeeId);
+            model.addAttribute("employee", employee);
+            List<Role> roleList = roleRepository.findAll();
+            model.addAttribute("roleList", roleList);
             return "administrators-employeesEdit";
         }
         employee.setId(employeeId);
@@ -296,6 +308,13 @@ public class AdministratorController {
     @PostMapping("/admins/visitors/{visitorId}/edit")
     public String updateVisitor(@PathVariable("visitorId") Long visitorId, @Valid
                                 @ModelAttribute("visitor") VisitorDto visitor, BindingResult result) {
+        Visitor existingVisitor = visitorService.findById(visitorId);
+        if (!visitor.getEmailAddress().equals(existingVisitor.getEmailAddress())) {
+            Visitor existingVisitorEmailAddress = visitorService.findByEmail(visitor.getEmailAddress());
+            if (existingVisitorEmailAddress != null) {
+                result.rejectValue("emailAddress", "error.emailAddress", "There is already a Visitor with this email address");
+            }
+        }
         if (result.hasErrors()) {
             return "administrators-visitorEdit";
         }

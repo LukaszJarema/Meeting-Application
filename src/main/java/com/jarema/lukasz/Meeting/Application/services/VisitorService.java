@@ -12,4 +12,5 @@ public interface VisitorService {
     void updateVisitor(VisitorDto visitor);
     List<VisitorDto> searchVisitorsByNameOrSurname(String query);
     VisitorDto findVisitorById(Long visitorId);
+    Visitor findById(Long visitorId);
 }
