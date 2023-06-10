@@ -3,3 +3,6 @@
 out/
 src/main/resources/application.yaml
 HELP.md
+mvnw
+mvnw.cmd
+.mvn
