@@ -66,4 +66,14 @@ public class MeetingServiceImpl implements MeetingService {
     public void delete(Long meetingId) {
         meetingRepository.deleteById(meetingId);
     }
+
+    @Override
+    public void updateMeeting(Long visitorId, Meeting meeting) {
+        Visitor visitor = visitorRepository.findById(visitorId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid visitor ID: " + visitorId));
+        if (!meeting.getVisitor().equals(visitor)) {
+            throw new IllegalArgumentException("Meeting does not belong to the visitor");
+        }
+        meetingRepository.save(meeting);
+    }
 }

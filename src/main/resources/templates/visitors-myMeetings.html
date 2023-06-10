@@ -47,6 +47,10 @@
             </td>
             <td th:text="${meeting.status}"/>
             <td>
+                <form th:action="@{/visitors/myMeetings/{id}/edit(id=${meeting.getId()})}" method="get">
+                    <button type="submit">Edit</button>
+                </form>
+                <br>
                 <form th:action="@{/visitors/myMeetings/{id}/delete(id=${meeting.getId()})}" method="post">
                     <button type="submit">Delete</button>
                 </form>

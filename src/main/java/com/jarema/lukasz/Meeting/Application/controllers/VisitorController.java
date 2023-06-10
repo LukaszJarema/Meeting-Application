@@ -186,6 +186,44 @@ public class VisitorController {
         return "visitors-myMeetings";
     }
 
+    @GetMapping("/visitors/myMeetings/{id}/edit")
+    public String editMeetingForm(@PathVariable Long id, Model model) {
+        Optional<Meeting> meeting = meetingRepository.findById(id);
+        List<Employee> employeeList = employeeRepository.findAll();
+        model.addAttribute("employeeList", employeeList);
+        model.addAttribute("meeting", meeting);
+        return "visitors-editMeetings";
+    }
+
+    @PostMapping("/visitors/myMeetings/{id}/edit")
+    @Transactional
+    public String updateMeeting(@PathVariable Long id, @Valid @ModelAttribute("meeting") MeetingDto meetingDto,
+                                BindingResult result, Model model) {
+        Meeting meeting = meetingRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid meeting ID: " + id));
+        if (result.hasErrors()) {
+            List<Employee> employeeList = employeeRepository.findAll();
+            model.addAttribute("employeeList", employeeList);
+            model.addAttribute("meeting", meeting);
+            return "visitors-editMeetings";
+        }
+        List<Employee> employeesToRemove = meeting.getEmployees();
+        for (Employee employee : employeesToRemove) {
+            employee.getMeeting().remove(meeting);
+        }
+        List<Long> employeeIds = meetingDto.getEmployeeIds();
+        List<Employee> employeesToAdd = employeeRepository.findAllById(employeeIds);
+        for (Employee employee : employeesToAdd) {
+            employee.getMeeting().add(meeting);
+        }
+        meeting.setContentOfMeeting(meetingDto.getContentOfMeeting());
+        meeting.setStartOfMeeting(meetingDto.getStartOfMeeting());
+        meeting.setEndOfMeeting(meetingDto.getEndOfMeeting());
+        meeting.setStatus(meetingDto.getStatus());
+        meetingRepository.save(meeting);
+        return "redirect:/visitors/home";
+    }
+
     @PostMapping("visitors/myMeetings/{id}/delete")
     @Transactional
     public String deleteMeeting(@PathVariable Long id, Principal principal) {

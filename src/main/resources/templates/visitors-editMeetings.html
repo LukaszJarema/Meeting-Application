@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit a meeting</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+        crossorigin="anonymous" />
+</head>
+<body>
+<div class="container">
+  <h3>Edit a meeting</h3>
+  <hr/>
+  <form action="#" th:action="@{/visitors/myMeetings/{id}/edit(id=${meeting.get().getId()})}" th:object="${meeting}" method="post">
+    <p>Content: <input type="text" id="content" name="content" th:field="*{contentOfMeeting}" placeholder="Content"></p>
+    <p th:if="${#fields.hasErrors('contentOfMeeting')}" class="text-danger" th:errors="*{contentOfMeeting}"></p>
+    <p>Start of meeting: <input type="datetime-local" id="start" name="start" th:field="*{startOfMeeting}" placeholder="Start of meeting"></p>
+    <p th:if="${#fields.hasErrors('startOfMeeting')}" class="text-danger" th:errors="*{startOfMeeting}"></p>
+    <p>Please remember to choose once again correct date and time of start the meeting</p>
+    <p>End of meeting: <input type="datetime-local" id="end" name="email" th:field="*{endOfMeeting}" placeholder="End of meeting"></p>
+    <p th:if="${#fields.hasErrors('endOfMeeting')}" class="text-danger" th:errors="*{endOfMeeting}"></p>
+    <p>Please remember to choose once again correct date and time of end the meeting</p>
+    <label>Employees: </label>
+    <p>To select more than one employee please click ctrl</p>
+    <select id="employee" class="form-control" name="employeeIds" multiple>
+      <p th:if="${#fields.hasErrors('employees')}" class="text-danger" th:errors="*{employeeIds}"></p>
+      <option th:each="employee : ${employeeList}"
+              th:if="${employee.accountNonLocked}"
+              th:value="${employee.id}"
+              th:selected="${meeting.orElse(null)?.employees != null and meeting.orElse(null)?.employees.contains(employee)}"
+              th:text="${employee.name + ' ' + employee.surname}"></option>
+    </select>
+    <br>
+    <p><input type="submit" value="Submit"/></p>
+    <br>
+    <h6><a th:href="@{/logout}">Logout</a></h6>
+    <br>
+  </form>
+</div>
+</body>
+</html>
