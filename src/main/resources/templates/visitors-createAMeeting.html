@@ -24,6 +24,7 @@
         <select id="employee" class="form-control" name="employeeIds" multiple>
             <p th:if="${#fields.hasErrors('employees')}" class="text-danger" th:errors="*{employeeIds}"></p>
             <option th:each="employee : ${employeeList}"
+                    th:if="${employee.accountNonLocked}"
                     th:value="${employee.id}"
                     th:selected="${meeting.employees != null and meeting.employees.contains(employee)}"
                     th:text="${employee.name + ' ' + employee.surname}"></option>
