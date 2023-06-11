@@ -1,4 +1,4 @@
-image: 3.8.5-openjdk-17
+image: 3.9-eclipse-temurin-17-focal
 
 stages:
   - "build"
