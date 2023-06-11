@@ -10,6 +10,8 @@ build-project:
     - mvn install -DskipTests
     - mkdir app
     - cp /root/.m2/repository/com/jarema/lukasz/Meeting-Application/0.0.1-SNAPSHOT/Meeting-Application-0.0.1-SNAPSHOT.jar app/
+    - ls -l app/
+    - ls -l /root/.m2/repository/com/jarema/lukasz/Meeting-Application/0.0.1-SNAPSHOT/
     - echo "Maven package done"
 
 deploy-to-ftp:
