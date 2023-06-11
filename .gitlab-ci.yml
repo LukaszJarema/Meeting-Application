@@ -7,7 +7,7 @@ build-project:
     stage: build
     script:
         - echo "Maven package start"
-        - mvn package -B
+        - mvn package -e
         - echo "Maven package done"
     artifacts:
       paths:
