@@ -1,16 +1,21 @@
-image: maven:latest
-
 stages:
-  - build and deploy
+  - install
+  - build
+
+install-ftp-client:
+  stage: install
+  image: alpine
+  script:
+    - apk add lftp
+    - lftp --version
 
 build-project:
-    stage: build and deploy
-    image: alpine
+    stage: build
+    image: maven:latest
     script:
-        - apk add lftp
-        - lftp --version
         - echo "Maven package start"
         - mvn install -D skipTests
         - echo "Maven package done"
         - cd /root/.m2/repository/com/jarema/lukasz/Meeting-Application/0.0.1-SNAPSHOT/
         - ls
+        - lftp --version
