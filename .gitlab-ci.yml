@@ -1,5 +1,4 @@
-image:
-  - 3.8.5-openjdk-17
+image: 3.8.5-openjdk-17
 
 stages:
   - "build"
