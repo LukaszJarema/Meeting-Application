@@ -8,6 +8,8 @@ build-project:
   script:
     - echo "Maven package start"
     - mvn install -DskipTests
+    - mkdir app
+    - cp /root/.m2/repository/com/jarema/lukasz/Meeting-Application/0.0.1-SNAPSHOT/Meeting-Application-0.0.1-SNAPSHOT.jar app/
     - echo "Maven package done"
 
 deploy-to-ftp:
@@ -15,4 +17,4 @@ deploy-to-ftp:
   stage: deploy
   script:
     - apk add --no-cache ncftp
-    - echo "put /builds/LukaszJarema/meeting-application/Meeting-Application-0.0.1-SNAPSHOT.jar /" | ncftp -u $FTP_USERNAME -p $FTP_PASSWORD $FTP_HOSTNAME
+    - echo "put app/Meeting-Application-0.0.1-SNAPSHOT.jar /" | ncftp -u $FTP_USERNAME -p $FTP_PASSWORD $FTP_HOSTNAME
