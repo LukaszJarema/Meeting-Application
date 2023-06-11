@@ -97,4 +97,20 @@ public class EmailServiceImpl implements EmailService {
                 "question please open new ticket.\n\nEmail has been sent from Meeting Application of our company.";
         sendMail(emailAddress, "Your ticket has been closed", text);
     }
+
+    @Override
+    public void sendInformationAboutEditedMeeting(String emailAddress, String visitor, String content, LocalDateTime date) {
+        String text = "Hello.\n\nVisitor: " + visitor + " edited your meeting. New details:\n" + content +
+                " Start at: " + date + "\nStatus of meeting is rejected, if you want to participate please change the" +
+                " status or check if someone changed it to accepted.\n\nEmail has been sent from Meeting Application" +
+                " of our company.";
+        sendMail(emailAddress, "Your meeting has been edited", text);
+    }
+
+    @Override
+    public void sendInformationToVisitorAboutEditedMeeting(String emailAddress) {
+        String text = "Hello.\n\nThe meeting has been edited by you. The information has been sent to our employees." +
+                " Please wait for accept it by them.\n\nEmail has been sent from Meeting Application of our company.";
+        sendMail(emailAddress, "Your meeting has been edited", text);
+    }
 }

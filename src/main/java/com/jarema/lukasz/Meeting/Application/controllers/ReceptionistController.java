@@ -36,11 +36,13 @@ public class ReceptionistController {
     private EmailService emailService;
 
     public ReceptionistController(EmployeeService employeeService, EmployeeRepository employeeRepository,
-                                  PasswordEncoder passwordEncoder, MeetingRepository meetingRepository) {
+                                  PasswordEncoder passwordEncoder, MeetingRepository meetingRepository,
+                                  EmailService emailService) {
         this.employeeService = employeeService;
         this.employeeRepository = employeeRepository;
         this.passwordEncoder = passwordEncoder;
         this.meetingRepository = meetingRepository;
+        this.emailService = emailService;
     }
 
     @GetMapping("/receptionists/home")
@@ -125,7 +127,7 @@ public class ReceptionistController {
         Long employeeId = employeeService.getEmployeeIdByLoggedInInformation();
         Optional<Employee> employee = employeeRepository.findById(employeeId);
         String employeeNameAndSurname = employee.get().getName() + " " + employee.get().getSurname();
-        String status = "";
+        String status;
         Status stat;
         List<Employee> employees = meeting.get().getEmployees();
         if (meeting.get().getStatus() == Status.REJECTED) {

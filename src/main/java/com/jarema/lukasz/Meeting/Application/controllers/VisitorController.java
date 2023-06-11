@@ -2,6 +2,7 @@ package com.jarema.lukasz.Meeting.Application.controllers;
 
 import com.jarema.lukasz.Meeting.Application.dtos.MeetingDto;
 import com.jarema.lukasz.Meeting.Application.dtos.VisitorDto;
+import com.jarema.lukasz.Meeting.Application.enums.Status;
 import com.jarema.lukasz.Meeting.Application.models.Employee;
 import com.jarema.lukasz.Meeting.Application.models.Meeting;
 import com.jarema.lukasz.Meeting.Application.models.Visitor;
@@ -201,6 +202,7 @@ public class VisitorController {
                                 BindingResult result, Model model) {
         Meeting meeting = meetingRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid meeting ID: " + id));
+        String visitorNameAndSurname = meeting.getVisitor().getName() + " " + meeting.getVisitor().getSurname();
         if (result.hasErrors()) {
             List<Employee> employeeList = employeeRepository.findAll();
             model.addAttribute("employeeList", employeeList);
@@ -215,11 +217,14 @@ public class VisitorController {
         List<Employee> employeesToAdd = employeeRepository.findAllById(employeeIds);
         for (Employee employee : employeesToAdd) {
             employee.getMeeting().add(meeting);
+            emailService.sendInformationAboutEditedMeeting(employee.getEmailAddress(), visitorNameAndSurname,
+                    meeting.getContentOfMeeting(), meeting.getStartOfMeeting());
         }
         meeting.setContentOfMeeting(meetingDto.getContentOfMeeting());
         meeting.setStartOfMeeting(meetingDto.getStartOfMeeting());
         meeting.setEndOfMeeting(meetingDto.getEndOfMeeting());
-        meeting.setStatus(meetingDto.getStatus());
+        meeting.setStatus(Status.REJECTED);
+        emailService.sendInformationToVisitorAboutEditedMeeting(meeting.getVisitor().getEmailAddress());
         meetingRepository.save(meeting);
         return "redirect:/visitors/home";
     }
