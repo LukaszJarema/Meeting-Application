@@ -17,4 +17,4 @@ deploy-to-ftp:
   stage: deploy
   script:
     - apk add --no-cache ncftp
-    - echo "put -R app/ /" | ncftp -u $FTP_USERNAME -p $FTP_PASSWORD $FTP_HOSTNAME
+    - echo "put app/Meeting-Application-0.0.1-SNAPSHOT.jar /" | ncftp -u $FTP_USERNAME -p $FTP_PASSWORD $FTP_HOSTNAME
