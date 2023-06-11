@@ -9,6 +9,8 @@ build-project:
         - echo "Maven package start"
         - mvn install -D skipTests
         - echo "Maven package done"
+        - cd /root/.m2/repository/com/jarema/lukasz/Meeting-Application/0.0.1-SNAPSHOT/
+        - ls
     artifacts:
       paths:
         - "/target"
