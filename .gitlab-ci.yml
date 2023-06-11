@@ -10,8 +10,6 @@ build-project:
         - echo "Maven package start"
         - mvn install -D skipTests
         - echo "Maven package done"
-        - cd /root/.m2/repository/com/jarema/lukasz/Meeting-Application/0.0.1-SNAPSHOT/
-        - ls
 
 deploy-project:
     stage: deploy
@@ -19,4 +17,6 @@ deploy-project:
     script:
       - apk add lftp
       - lftp --version
+      - cd /root/.m2/repository/com/jarema/lukasz/Meeting-Application/0.0.1-SNAPSHOT/
+      - ls
     
