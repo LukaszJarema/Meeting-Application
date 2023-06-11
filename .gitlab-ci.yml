@@ -16,5 +16,5 @@ deploy-to-ftp:
   image: alpine
   stage: deploy
   script:
-    - apk add --no-cache lftp
-    - lftp -c "open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOSTNAME; mirror -R app/Meeting-Application-0.0.1-SNAPSHOT.jar /"
+    - apk add --no-cache ftp
+    - echo -e "user $FTP_USERNAME $FTP_PASSWORD\nput -R app/ /\nquit" | ftp -n $FTP_HOSTNAME
