@@ -2,10 +2,9 @@ stages:
   - "build"
 
 build-project:
-    image: maven:3-jdk-17
     stage: build
     script:
-        mvn package
+        - mvn package
     artifacts:
       paths:
         - "/target"
