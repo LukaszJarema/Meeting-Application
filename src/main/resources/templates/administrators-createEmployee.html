@@ -26,11 +26,10 @@
     <p>Telephone number: <input type="text" id="telephoneNumber" name="telephoneNumber" th:field="*{telephoneNumber}" placeholder="Telephone number"></p>
     <p th:if="${#fields.hasErrors('telephoneNumber')}" class="text-danger" th:errors="*{telephoneNumber}"></p>
     <div class="form-group row">
-      <p><label class="col-form-label col-sm-4">Roles: </label>
+      <p><label class="col-form-label col-sm-4">Role: </label>
       <div class="col-sm-8 text-left">
-      <p th:if="${#fields.hasErrors('role')}" class="text-danger" th:errors="*{role}"></p>
-        <th:block th:each="role : ${roleList}">
-          <div>
+        <th:block th:each="role, iterStat : ${roleList}">
+          <div th:if="${!iterStat.last}">
             <input type="radio" th:field="*{role}" th:value="${role.id}" th:text="${role.name}">
           </div>
         </th:block>

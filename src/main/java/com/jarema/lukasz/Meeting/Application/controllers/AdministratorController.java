@@ -200,6 +200,8 @@ public class AdministratorController {
             result.rejectValue("emailAddress", "error.emailAddress", "There is already a Visitor with this email address or username");
         }
         if(result.hasErrors()) {
+            List<Role> roleList = roleRepository.findAll();
+            model.addAttribute("roleList", roleList);
             model.addAttribute("employee", employeeDto);
             return "administrators-createEmployee";
         }
