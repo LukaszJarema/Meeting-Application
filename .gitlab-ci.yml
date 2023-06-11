@@ -1,0 +1,10 @@
+stages:
+  - "build"
+
+build-project:
+    stage: build
+    script:
+        mvn package
+    artifacts:
+      paths:
+        - "/target"
