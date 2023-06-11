@@ -16,10 +16,5 @@ deploy-to-ftp:
   image: alpine
   stage: deploy
   script:
-    - apk add --no-cache curlftpfs
-    - echo $FTP_PASSWORD | curlftpfs $FTP_USERNAME@$FTP_HOSTNAME ftp-mount -o password_stdin
-    - cd ftp-mount
-    - cp ../Meeting-Application-0.0.1-SNAPSHOT.jar ./Meeting-Application-0.0.1-SNAPSHOT.jar
-    - cd ..
-    - curl -u $FTP_USERNAME:$FTP_PASSWORD -T app/Meeting-Application-0.0.1-SNAPSHOT.jar ftp://$FTP_HOSTNAME/Meeting-Application-0.0.1-SNAPSHOT.jar
-    - fusermount -u ftp-mount
+    - apk add --no-cache lftp
+    - lftp -c "open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOSTNAME; mirror -R app/Meeting-Application-0.0.1-SNAPSHOT.jar /"
