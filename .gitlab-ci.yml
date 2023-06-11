@@ -1,18 +1,13 @@
+image: maven:latest, alpine
+
 stages:
-  - install
   - build
-
-install-ftp-client:
-  stage: install
-  image: alpine
-  script:
-    - apk add lftp
-    - lftp --version
-
+  
 build-project:
     stage: build
-    image: maven:latest
     script:
+        - apk add lftp
+        - lftp --version
         - echo "Maven package start"
         - mvn install -D skipTests
         - echo "Maven package done"
