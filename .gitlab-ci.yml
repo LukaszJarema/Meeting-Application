@@ -1,12 +1,14 @@
-image: 3.9-eclipse-temurin-17-focal
+image: maven:latest
 
 stages:
-  - "build"
+  - build
 
 build-project:
     stage: build
     script:
+        - echo "Maven package start"
         - mvn package
+        - echo "Maven package done"
     artifacts:
       paths:
         - "/target"
