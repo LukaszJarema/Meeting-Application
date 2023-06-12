@@ -1,0 +1,21 @@
+stages:
+  - build
+  - deploy
+
+build-project:
+  image: maven:latest
+  stage: build
+  script:
+    - echo "Maven package start"
+    - mvn install -DskipTests
+    - mkdir app
+    - cp /root/.m2/repository/com/jarema/lukasz/Meeting-Application/0.0.1-SNAPSHOT/Meeting-Application-0.0.1-SNAPSHOT.jar app/
+    - ls -l app/
+    - echo "Maven package done"
+
+deploy-to-ftp:
+  image: alpine
+  stage: deploy
+  script:
+    - apk add --no-cache ncftp
+    - echo "put /builds/LukaszJarema/meeting-application/app/Meeting-Application-0.0.1-SNAPSHOT.jar /" | ncftp -u $FTP_USERNAME -p $FTP_PASSWORD $FTP_HOSTNAME

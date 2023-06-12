@@ -98,7 +98,9 @@ public class VisitorController {
     public String saveMeeting(@Valid @ModelAttribute("meeting") MeetingDto meetingDto,
                               @RequestParam("employeeIds") List<Long> employeeIds, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("meeting", meetingDto);
+            List<Employee> employeeList = employeeRepository.findAll();
+            model.addAttribute("employeeList", employeeList);
+            model.addAttribute("meeting", new Meeting());
             return "visitors-createAMeeting";
         }
         Long visitorId = visitorService.getVisitorIdByLoggedInInformation();
