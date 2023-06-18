@@ -4,9 +4,11 @@ import com.jarema.lukasz.Meeting.Application.dtos.EmployeeDto;
 import com.jarema.lukasz.Meeting.Application.enums.Status;
 import com.jarema.lukasz.Meeting.Application.models.Employee;
 import com.jarema.lukasz.Meeting.Application.models.Meeting;
+import com.jarema.lukasz.Meeting.Application.models.Visitor;
 import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.MeetingRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.RoleRepository;
+import com.jarema.lukasz.Meeting.Application.repositories.VisitorRepository;
 import com.jarema.lukasz.Meeting.Application.services.EmailService;
 import com.jarema.lukasz.Meeting.Application.services.EmployeeService;
 import jakarta.validation.Valid;
@@ -37,17 +39,20 @@ public class EmployeeController {
     private PasswordEncoder passwordEncoder;
     private MeetingRepository meetingRepository;
     private EmailService emailService;
+    private VisitorRepository visitorRepository;
 
     @Autowired
     public EmployeeController(EmployeeService employeeService, RoleRepository roleRepository,
                               EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder,
-                              MeetingRepository meetingRepository, EmailService emailService) {
+                              MeetingRepository meetingRepository, EmailService emailService,
+                              VisitorRepository visitorRepository) {
         this.employeeService = employeeService;
         this.roleRepository = roleRepository;
         this.employeeRepository = employeeRepository;
         this.passwordEncoder = passwordEncoder;
         this.meetingRepository = meetingRepository;
         this.emailService = emailService;
+        this.visitorRepository = visitorRepository;
     }
 
     @GetMapping("/employees/home")
@@ -106,6 +111,18 @@ public class EmployeeController {
         meetings.sort(Comparator.comparing(Meeting::getStartOfMeeting).reversed());
         model.addAttribute("meetings", meetings);
         return "employees-myMeetings";
+    }
+
+    @GetMapping("/employees/myMeetings/{id}/contact")
+    public String visitorContact(@PathVariable Long id, Model model) {
+        Optional<Visitor> visitor = visitorRepository.findById(id);
+        model.addAttribute("visitor", visitor);
+        return "employees-visitorContact";
+    }
+
+    @PostMapping("/employees/myMeetings/{id}/contact")
+    public String viewEmployeesMeetings() {
+        return "redirect:/employees/myMeetings";
     }
 
     @PostMapping("/employees/myMeetings/search")

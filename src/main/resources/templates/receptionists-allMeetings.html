@@ -49,13 +49,17 @@
             <td>
                 <span th:each="visitor, iterStat: ${meeting.visitor}">
                     <span th:text="${visitor.name} + ' ' + ${visitor.surname}"></span>
-                    <span th:if="${!iterStat.last}">,</span>
+                    <form th:action="@{/receptionists/allMeetings/{id}/contactVisitor(id=${visitor.getId()})}" method="get">
+                        <button type="submit">Contact</button>
+                  </form>
                 </span>
             </td>
             <td>
                 <span th:each="employee, iterStat: ${meeting.employees}">
                     <span th:text="${employee.name} + ' ' + ${employee.surname}"></span>
-                    <span th:if="${!iterStat.last}">,</span>
+                    <form th:action="@{/receptionists/allMeetings/{id}/contactEmployee(id=${employee.getId()})}" method="get">
+                        <button type="submit">Contact</button>
+                  </form>
                 </span>
             </td>
             <td th:text="${meeting.status}"/>

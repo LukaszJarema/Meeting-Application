@@ -12,14 +12,14 @@
 <div class="container">
   <h3>Employee contact</h3>
   <hr/>
-  <form action="#" th:action="@{/visitors/myMeetings/{id}/contact(id=${employee.get().getId()})}" th:object="${employee}" method="post">
+  <form action="#" th:action="@{/receptionists/allMeetings/{id}/contactEmployee(id=${employee.get().getId()})}" th:object="${employee}" method="post">
     <input type="hidden" th:field="*{id}">
     <p>Name: <input type="text" id="name" name="name" th:field="*{name}" placeholder="Name" readonly></p>
     <p>Surname: <input type="text" id="surnname" name="surnaname" th:field="*{surname}" placeholder="Surname" readonly></p>
     <p>Email: <input style="width: 300px" type="text" id="emailAddress" name="email" th:field="*{emailAddress}" placeholder="Email" readonly></p>
     <p>Department: <input type="text" id="department" name="department" th:field="*{department}" placeholder="Department" readonly></p>
     <p>Telephone number: <input type="text" id="telephoneNumber" name="telephoneNumber" th:field="*{telephoneNumber}" placeholder="Telephone number" readonly></p>
-    <p><button onclick="window.location.href='/visitors/myMeetings/';">
+    <p><button onclick="window.location.href='/receptionists/allMeetings/';">
       Return
     </button>
     </p>

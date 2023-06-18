@@ -108,7 +108,7 @@ public class AdministratorController {
         return "redirect:/admins/home";
     }
 
-    @GetMapping("admins/myMeetings")
+    @GetMapping("/admins/myMeetings")
     public String administratorMyMeetingsPage(Model model, Principal principal) {
         String employeeEmailAddress = principal.getName();
         Employee employee = employeeRepository.findByEmailAddress(employeeEmailAddress);
@@ -118,6 +118,18 @@ public class AdministratorController {
         meetings.sort(Comparator.comparing(Meeting::getStartOfMeeting).reversed());
         model.addAttribute("meetings", meetings);
         return "administrators-myMeetings";
+    }
+
+    @GetMapping("/admins/myMeetings/{id}/contact")
+    public String visitorContact(@PathVariable Long id, Model model) {
+        Optional<Visitor> visitor = visitorRepository.findById(id);
+        model.addAttribute("visitor", visitor);
+        return "aministrators-visitorContact";
+    }
+
+    @PostMapping("/admins/myMeetings/{id}/contact")
+    public String viewAdministratorMeetings() {
+        return "redirect:/admins/myMeetings";
     }
 
     @PostMapping("/admins/myMeetings/search")

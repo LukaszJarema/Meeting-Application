@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Employee contact</title>
+  <title>Visitor contact</title>
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
         integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
@@ -10,16 +10,15 @@
 </head>
 <body style="background-color: LightSteelBlue;">
 <div class="container">
-  <h3>Employee contact</h3>
+  <h3>Visitor contact</h3>
   <hr/>
-  <form action="#" th:action="@{/visitors/myMeetings/{id}/contact(id=${employee.get().getId()})}" th:object="${employee}" method="post">
+  <form action="#" th:action="@{/admins/myMeetings/{id}/contact(id=${visitor.get().getId()})}" th:object="${visitor}" method="post">
     <input type="hidden" th:field="*{id}">
     <p>Name: <input type="text" id="name" name="name" th:field="*{name}" placeholder="Name" readonly></p>
     <p>Surname: <input type="text" id="surnname" name="surnaname" th:field="*{surname}" placeholder="Surname" readonly></p>
     <p>Email: <input style="width: 300px" type="text" id="emailAddress" name="email" th:field="*{emailAddress}" placeholder="Email" readonly></p>
-    <p>Department: <input type="text" id="department" name="department" th:field="*{department}" placeholder="Department" readonly></p>
     <p>Telephone number: <input type="text" id="telephoneNumber" name="telephoneNumber" th:field="*{telephoneNumber}" placeholder="Telephone number" readonly></p>
-    <p><button onclick="window.location.href='/visitors/myMeetings/';">
+    <p><button onclick="window.location.href='/admins/myMeetings/';">
       Return
     </button>
     </p>

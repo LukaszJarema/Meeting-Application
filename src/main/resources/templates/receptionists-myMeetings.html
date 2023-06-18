@@ -43,7 +43,9 @@
       <td>
                 <span th:each="visitor, iterStat: ${meeting.visitor}">
                     <span th:text="${visitor.name} + ' ' + ${visitor.surname}"></span>
-                    <span th:if="${!iterStat.last}">,</span>
+                  <form th:action="@{/receptionists/myMeetings/{id}/contact(id=${visitor.getId()})}" method="get">
+                        <button type="submit">Contact</button>
+                  </form>
                 </span>
       </td>
       <td>
