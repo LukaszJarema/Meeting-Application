@@ -4,7 +4,6 @@ import com.jarema.lukasz.Meeting.Application.dtos.EmployeeDto;
 import com.jarema.lukasz.Meeting.Application.enums.Status;
 import com.jarema.lukasz.Meeting.Application.models.Employee;
 import com.jarema.lukasz.Meeting.Application.models.Meeting;
-import com.jarema.lukasz.Meeting.Application.models.Role;
 import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.MeetingRepository;
 import com.jarema.lukasz.Meeting.Application.repositories.RoleRepository;
@@ -125,25 +124,17 @@ public class EmployeeController {
         return "employees-myMeetings";
     }
 
-    @GetMapping("/employees/myMeetings/{id}/changeStatus")
+    @GetMapping("/employees/myMeetings/{id}/accept")
     @Transactional
-    public String changeMeetingStatus(@PathVariable Long id) {
+    public String acceptMeeting(@PathVariable Long id) {
         Optional<Meeting> meeting = meetingRepository.findById(id);
         String content = meeting.get().getContentOfMeeting();
         Long employeeId = employeeService.getEmployeeIdByLoggedInInformation();
         Optional<Employee> employee = employeeRepository.findById(employeeId);
         String employeeNameAndSurname = employee.get().getName() + " " + employee.get().getSurname();
-        String status = "";
-        Status stat;
+        String status = "APPROVED";
+        Status stat = Status.APPROVED;
         List<Employee> employees = meeting.get().getEmployees();
-        if (meeting.get().getStatus() == Status.REJECTED) {
-            stat = Status.APPROVED;
-            status = "APPROVED";
-        }
-        else {
-            stat = Status.REJECTED;
-            status = "REJECTED";
-        }
         for (Employee employee1 : employees) {
             emailService.sendConfirmationAboutChangedStatusOfMeeting(employee1.getEmailAddress(), employeeNameAndSurname,
                     content, status);
@@ -154,35 +145,26 @@ public class EmployeeController {
         return "redirect:/employees/home";
     }
 
-
-
-    /*
-    @GetMapping("/employees/{employeeId}/changePassword")
-    public String editEmployeePassword(@PathVariable ("employeeId") Long employeeId, Model model) {
-        EmployeeDto employee = employeeService.findEmployeeById(employeeId);
-        model.addAttribute("employee", employee);
-        List<Role> roleList = roleRepository.findAll();
-        model.addAttribute("roleList", roleList);
-        return "employees-changePassword";
-    }
-
-    @PostMapping("/employees/{employeeId}/changePassword")
-    public String updateEmployeePassword(@PathVariable("employeeId") Long employeeId, @Valid
-    @RequestParam(value = "password") String password, EmployeeDto employeeDto, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return "employees-changePassword";
+    @GetMapping("/employees/myMeetings/{id}/reject")
+    @Transactional
+    public String rejectMeeting(@PathVariable Long id) {
+        Optional<Meeting> meeting = meetingRepository.findById(id);
+        String content = meeting.get().getContentOfMeeting();
+        Long employeeId = employeeService.getEmployeeIdByLoggedInInformation();
+        Optional<Employee> employee = employeeRepository.findById(employeeId);
+        String employeeNameAndSurname = employee.get().getName() + " " + employee.get().getSurname();
+        String status = "REJECTED";
+        Status stat = Status.REJECTED;
+        List<Employee> employees = meeting.get().getEmployees();
+        for (Employee employee1 : employees) {
+            emailService.sendConfirmationAboutChangedStatusOfMeeting(employee1.getEmailAddress(), employeeNameAndSurname,
+                    content, status);
         }
-        if (password.length() < 6) {
-            employeeDto.setId(employeeId);
-            model.addAttribute("employee", employeeDto);
-            return "employees-changePassword";
-        }
-        employeeDto.setId(employeeId);
-        employeeRepository.updateEmployeePassword(password, employeeId);
-        return "redirect:/employees";
+        emailService.sendConfirmationAboutChangedStatusOfMeeting(meeting.get().getVisitor().getEmailAddress(),
+                employeeNameAndSurname, content, status);
+        meetingRepository.updateMeetingStatus(stat, id);
+        return "redirect:/employees/home";
     }
-
-     */
 
     @GetMapping("/employees/{employeeId}/delete")
     public String deleteEmployee(@PathVariable("employeeId") Long employeeId) {

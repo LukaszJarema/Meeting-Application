@@ -54,7 +54,9 @@
             </td>
             <td th:text="${meeting.status}"/>
             <td>
-                <a th:href="@{/employees/myMeetings/{id}/changeStatus(id=${meeting.getId()})}" class="w3-button">Change meeting status</a>
+                <a th:href="@{/employees/myMeetings/{id}/accept(id=${meeting.getId()})}" class="w3-button">Accept</a>
+                <br>
+                <a th:href="@{/employees/myMeetings/{id}/reject(id=${meeting.getId()})}" class="w3-button">Reject</a>
             </td>
         </tr>
         </tbody>
