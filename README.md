@@ -29,6 +29,8 @@ Git
 
 Maven
 
+GitLab CI / CD
+
 ## Authors
 
 - [@lukaszjarema](https://github.com/LukaszJarema)

@@ -119,25 +119,38 @@ public class ReceptionistController {
         return "receptionists-myMeetings";
     }
 
-    @GetMapping("/receptionists/myMeetings/{id}/changeStatus")
+    @GetMapping("/receptionists/myMeetings/{id}/accept")
     @Transactional
-    public String changeMeetingStatus(@PathVariable Long id) {
+    public String acceptMeeting(@PathVariable Long id) {
         Optional<Meeting> meeting = meetingRepository.findById(id);
         String content = meeting.get().getContentOfMeeting();
         Long employeeId = employeeService.getEmployeeIdByLoggedInInformation();
         Optional<Employee> employee = employeeRepository.findById(employeeId);
         String employeeNameAndSurname = employee.get().getName() + " " + employee.get().getSurname();
-        String status;
-        Status stat;
+        String status = "APPROVED";
+        Status stat = Status.APPROVED;
         List<Employee> employees = meeting.get().getEmployees();
-        if (meeting.get().getStatus() == Status.REJECTED) {
-            stat = Status.APPROVED;
-            status = "APPROVED";
+        for (Employee employee1 : employees) {
+            emailService.sendConfirmationAboutChangedStatusOfMeeting(employee1.getEmailAddress(), employeeNameAndSurname,
+                    content, status);
         }
-        else {
-            stat = Status.REJECTED;
-            status = "REJECTED";
-        }
+        emailService.sendConfirmationAboutChangedStatusOfMeeting(meeting.get().getVisitor().getEmailAddress(),
+                employeeNameAndSurname, content, status);
+        meetingRepository.updateMeetingStatus(stat, id);
+        return "redirect:/receptionists/home";
+    }
+
+    @GetMapping("/receptionists/myMeetings/{id}/reject")
+    @Transactional
+    public String rejectMeeting(@PathVariable Long id) {
+        Optional<Meeting> meeting = meetingRepository.findById(id);
+        String content = meeting.get().getContentOfMeeting();
+        Long employeeId = employeeService.getEmployeeIdByLoggedInInformation();
+        Optional<Employee> employee = employeeRepository.findById(employeeId);
+        String employeeNameAndSurname = employee.get().getName() + " " + employee.get().getSurname();
+        String status = "REJECTED";
+        Status stat = Status.REJECTED;
+        List<Employee> employees = meeting.get().getEmployees();
         for (Employee employee1 : employees) {
             emailService.sendConfirmationAboutChangedStatusOfMeeting(employee1.getEmailAddress(), employeeNameAndSurname,
                     content, status);

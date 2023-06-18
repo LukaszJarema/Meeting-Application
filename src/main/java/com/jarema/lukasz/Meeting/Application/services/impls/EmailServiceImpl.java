@@ -38,8 +38,8 @@ public class EmailServiceImpl implements EmailService {
     public void sendInformationAboutMeetingToEmployee(String emailAddress, String visitor, String content, LocalDateTime date) {
         String text = "Hello!\n\nYou receive new invitation for a meeting from: " + visitor +
                 "\nMeeting will take place: " + date + "\nContent of the meeting will be: " + content +
-                "\n\nThe meeting is currently rejected but if you or anyone else invited wants it to take place you " +
-                "must log into the Meeting Application portal and accept it.\n" +
+                "\n\nThe meeting is waiting for respond but if you or anyone else invited wants it to take place you " +
+                "must log into the Meeting Application portal and accept it. You can also reject the meeting\n" +
                 "Please note that if a member of staff has already accepted it in the system, you can join the " +
                 "meeting without accepting it.\n\n" +
                 "This email has been sent from Meeting Application of your company.";

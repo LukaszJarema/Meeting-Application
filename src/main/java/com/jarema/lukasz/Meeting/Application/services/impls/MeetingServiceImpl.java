@@ -38,7 +38,7 @@ public class MeetingServiceImpl implements MeetingService {
                 .contentOfMeeting(meetingDto.getContentOfMeeting())
                 .startOfMeeting(meetingDto.getStartOfMeeting())
                 .endOfMeeting(meetingDto.getEndOfMeeting())
-                .status(Status.valueOf(String.valueOf(Status.REJECTED)))
+                .status(Status.valueOf(String.valueOf(Status.WAITING)))
                 .build();
     }
 
