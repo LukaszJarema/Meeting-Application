@@ -113,4 +113,11 @@ public class EmailServiceImpl implements EmailService {
                 " Please wait for accept it by them.\n\nEmail has been sent from Meeting Application of our company.";
         sendMail(emailAddress, "Your meeting has been edited", text);
     }
+
+    @Override
+    public void sendInformationAboutNewTicketToAdmins(String emailAddress) {
+        String text = "Hello.\n\nYou received new ticket in portal. To check it please log in to Meeting Application" +
+                " portal.\n\nThis email has been sent from Meeting Application of our company.";
+        sendMail(emailAddress, "You received new ticket", text);
+    }
 }

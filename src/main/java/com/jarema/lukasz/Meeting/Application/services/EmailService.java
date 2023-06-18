@@ -15,4 +15,5 @@ public interface EmailService {
     void closeTicket(String emailAddress, String answer);
     void sendInformationAboutEditedMeeting(String emailAddress, String visitor, String content, LocalDateTime date);
     void sendInformationToVisitorAboutEditedMeeting(String emailAddress);
+    void sendInformationAboutNewTicketToAdmins(String emailAddress);
 }

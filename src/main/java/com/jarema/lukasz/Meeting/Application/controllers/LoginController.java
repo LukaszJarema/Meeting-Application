@@ -2,6 +2,8 @@ package com.jarema.lukasz.Meeting.Application.controllers;
 
 import com.jarema.lukasz.Meeting.Application.dtos.SupportDto;
 import com.jarema.lukasz.Meeting.Application.models.Support;
+import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
+import com.jarema.lukasz.Meeting.Application.services.EmailService;
 import com.jarema.lukasz.Meeting.Application.services.SupportService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,14 +16,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 @Controller
 public class LoginController {
 
     private SupportService supportService;
+    private EmployeeRepository employeeRepository;
+    private EmailService emailService;
 
     @Autowired
-    public LoginController(SupportService supportService) {
+    public LoginController(SupportService supportService, EmployeeRepository employeeRepository,
+                           EmailService emailService) {
         this.supportService = supportService;
+        this.employeeRepository = employeeRepository;
+        this.emailService = emailService;
     }
 
     @GetMapping("/")
@@ -67,6 +76,10 @@ public class LoginController {
         if (result.hasErrors()) {
             model.addAttribute("support", supportDto);
             return "support";
+        }
+        List<String> administratorsEmailAddresses = employeeRepository.findAllByRoleAdministrator();
+        for (int i = 0; i < administratorsEmailAddresses.size(); i++) {
+            emailService.sendInformationAboutNewTicketToAdmins(administratorsEmailAddresses.get(i));
         }
         supportService.saveSupport(supportDto);
         return "redirect:/";
