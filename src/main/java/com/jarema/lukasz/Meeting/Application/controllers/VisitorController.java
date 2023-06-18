@@ -251,4 +251,16 @@ public class VisitorController {
         meetingService.delete(id);
         return "redirect:/visitors/home";
     }
+
+    @GetMapping("/visitors/myMeetings/{id}/contact")
+    public String employeeContact(@PathVariable Long id, Model model) {
+        Optional<Employee> employee = employeeRepository.findById(id);
+        model.addAttribute("employee", employee);
+        return "employees-contact";
+    }
+
+    @PostMapping("/visitors/myMeetings/{id}/contact")
+    public String viewVisitorMeetings() {
+        return "redirect:/visitors/myMeetings";
+    }
 }

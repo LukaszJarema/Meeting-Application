@@ -42,7 +42,9 @@
             <td>
                 <span th:each="employee, iterStat: ${meeting.employees}">
                     <span th:text="${employee.name} + ' ' + ${employee.surname}"></span>
-                    <span th:if="${!iterStat.last}">,</span>
+                    <form th:action="@{/visitors/myMeetings/{id}/contact(id=${employee.getId()})}" method="get">
+                        <button type="submit">Contact</button>
+                    </form>
                 </span>
             </td>
             <td th:text="${meeting.status}"/>
