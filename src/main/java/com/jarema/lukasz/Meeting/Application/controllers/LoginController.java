@@ -1,6 +1,7 @@
 package com.jarema.lukasz.Meeting.Application.controllers;
 
 import com.jarema.lukasz.Meeting.Application.dtos.SupportDto;
+import com.jarema.lukasz.Meeting.Application.models.Employee;
 import com.jarema.lukasz.Meeting.Application.models.Support;
 import com.jarema.lukasz.Meeting.Application.repositories.EmployeeRepository;
 import com.jarema.lukasz.Meeting.Application.services.EmailService;
@@ -77,9 +78,10 @@ public class LoginController {
             model.addAttribute("support", supportDto);
             return "support";
         }
-        List<String> administratorsEmailAddresses = employeeRepository.findAllByRoleAdministrator();
-        for (int i = 0; i < administratorsEmailAddresses.size(); i++) {
-            emailService.sendInformationAboutNewTicketToAdmins(administratorsEmailAddresses.get(i));
+        List<Employee> employees = employeeRepository.findAllByRoleAdministrator();
+        for (int i = 0; i < employees.size(); i++) {
+            String administratorEmailAddress = employees.get(i).getEmailAddress();
+            emailService.sendInformationAboutNewTicketToAdmins(administratorEmailAddress);
         }
         supportService.saveSupport(supportDto);
         return "redirect:/";
