@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @WebMvcTest(controllers = LoginController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
-class LoginControllerUnitTest {
+class LoginControllerUnitTests {
 
     @Autowired
     private MockMvc mockMvc;
