@@ -1,6 +1,7 @@
 package com.jarema.lukasz.Meeting.Application.controllers;
 
 import com.jarema.lukasz.Meeting.Application.dtos.SupportDto;
+import com.jarema.lukasz.Meeting.Application.enums.SupportStatus;
 import com.jarema.lukasz.Meeting.Application.models.Employee;
 import com.jarema.lukasz.Meeting.Application.models.Role;
 import com.jarema.lukasz.Meeting.Application.models.Support;
@@ -17,7 +18,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -42,30 +42,27 @@ public class LoginControllerIT {
     @MockBean
     @Autowired
     private EmployeeRepository employeeRepository;
-    @MockBean
     @Autowired
     private SupportService supportService;
-    @MockBean
     @Autowired
     private EmailService emailService;
-    @MockBean
     @Autowired
     private SupportRepository supportRepository;
-    @MockBean
     @Autowired
     private RoleRepository roleRepository;
 
     @Test
-    @WithMockUser(username = "wieswie@gmail.com", roles = "EMPLOYEE")
     public void LoginController_SupportSave() throws Exception {
         //given
         SupportDto supportDto = new SupportDto();
         supportDto.setEmailAddress("example@test.com");
         supportDto.setMessage("Dzień dobry.\nCzy mogę prosić o zmianę hasła? Nie pamiętam starego.\nDziękuję");
 
-        Role role1 = roleRepository.findByName("EMPLOYEE");
+        Role role1 = new Role();
+        role1.setName("EMPLOYEE");
         roleRepository.save(role1);
-        Role role2 = roleRepository.findByName("ADMINISTRATOR");
+        Role role2 = new Role();
+        role2.setName("ADMINISTRATOR");
         roleRepository.save(role2);
         Employee employee1 = Employee.builder()
                 .name("Wiesława").surname("Więcek").emailAddress("wieswie@gmail.com")
@@ -104,5 +101,6 @@ public class LoginControllerIT {
         assertNotNull(savedSupport.getId());
         assertEquals(supportDto.getEmailAddress(), savedSupport.getEmailAddress());
         assertEquals(supportDto.getMessage(), savedSupport.getMessage());
+        assertEquals(SupportStatus.OPEN, savedSupport.getSupportStatus());
     }
 }
